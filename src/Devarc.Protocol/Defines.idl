@@ -1,0 +1,15 @@
+public enum ErrorType
+{
+    SUCCESS          = 0,
+    UNKNOWN          = 1,
+    SERVER_ERROR     = 2,
+    SESSION_EXPIRED  = 3,
+    INVALID_PASSWORD = 4,
+    INVALID_SECRET   = 5,
+}
+
+public class Character
+{
+    public string nickName;
+    public int level;
+}

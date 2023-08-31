@@ -25,6 +25,7 @@
 
 # Visual Studio cache directory
 .vs/
+.vscode/
 
 # Gradle cache directory
 .gradle/
@@ -70,3 +71,15 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+#
+src/Devarc.IDL/bin/
+src/Devarc.IDL/obj/
+src/Devarc.IDL/packages/
+src/Devarc.NodeServer/node_modules/
+src/Devarc.UnityClient/Library/
+src/Devarc.UnityClient/Logs/
+src/Devarc.UnityClient/obj/
+src/Devarc.UnityClient/UserSettings/
+src/externals/websocket-sharp/bin/
+src/externals/websocket-sharp/obj/

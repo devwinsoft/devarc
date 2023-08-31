@@ -1,0 +1,18 @@
+﻿namespace C2Auth
+{
+    public class RequestLogin
+    {
+        public string accountID;
+        public string password;
+    }
+}
+
+namespace Auth2C
+{
+    public class NotifyLogin
+    {
+        public ErrorType errorCode;
+        public string sessionID;
+        public int secret;
+    }
+}
