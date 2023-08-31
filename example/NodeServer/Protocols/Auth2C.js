@@ -1,7 +1,8 @@
 const msgpack = require('msgpack');
-const Defines = require('./Defines.js');
-const ErrorType = Defines.ErrorType;
-const Character = Defines.Character;
+const Common = require('./Common.js');
+const ErrorType = Common.ErrorType;
+const GenderType = Common.GenderType;
+const Account = Common.Account;
 const mHandlers = {};
 class NotifyLogin
 {

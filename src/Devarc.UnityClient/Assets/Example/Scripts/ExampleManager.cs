@@ -112,9 +112,16 @@ public class ExampleManager : MonoBehaviour
 
     void onConnected(object sender, EventArgs e)
     {
+        Debug.Log("Connected...");
         C2Game.RequestLogin request = new C2Game.RequestLogin();
         request.sessionID = sessionID;
         request.secret = secret;
         gameNetwork.SendData(request);
     }
+
+    string json = $@"
+[ {{ ""index"": ""1"", ""charName"": ""Mark"", ""age"": ""31"", ""gender"": ""Male"" }}
+, {{ ""index"": ""2"", ""charName"": ""Lora"", ""age"": ""24"", ""gender"": ""Female"" }}
+]
+";
 }

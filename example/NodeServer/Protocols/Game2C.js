@@ -1,28 +1,29 @@
 const msgpack = require('msgpack');
-const Defines = require('./Defines.js');
-const ErrorType = Defines.ErrorType;
-const Character = Defines.Character;
+const Common = require('./Common.js');
+const ErrorType = Common.ErrorType;
+const GenderType = Common.GenderType;
+const Account = Common.Account;
 const mHandlers = {};
 class NotifyLogin
 {
 	/**
 	 * @param {ErrorType} errorCode - ErrorType
-	 * @param {Character} character - Character
+	 * @param {Account} account - Account
 	 */
-	constructor(errorCode, character) {
+	constructor(errorCode, account) {
 		this.errorCode = errorCode;
-		this.character = character;
+		this.account = account;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
-		this.character = new Character();
-		this.character.Init(packet[1]);
+		this.account = new Account();
+		this.account.Init(packet[1]);
 	}
 	ToArray() {
 		const data =
 		[
 			this.errorCode,
-			this.character.ToArray(),
+			this.account.ToArray(),
 		];
 		return data;
 	}

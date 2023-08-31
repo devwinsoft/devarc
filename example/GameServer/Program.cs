@@ -53,7 +53,7 @@ namespace Devarc
             // To resolve to wait for socket in TIME_WAIT state.
             //wssv.ReuseAddress = true;
 
-            wssv.AddWebSocketService<GamePacketHandler>("/Game");
+            wssv.AddWebSocketService<GameNetwork>("/Game");
 
             wssv.Start();
 

@@ -8,7 +8,14 @@ public enum ErrorType
     INVALID_SECRET   = 5,
 }
 
-public class Character
+public enum GenderType
+{
+    None,
+    Male,
+    Female,
+}
+
+public class Account
 {
     public string nickName;
     public int level;

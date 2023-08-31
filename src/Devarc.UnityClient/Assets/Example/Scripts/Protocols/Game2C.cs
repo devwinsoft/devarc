@@ -10,7 +10,7 @@ namespace Game2C
 		[Key(0)]
 		public ErrorType            errorCode;
 		[Key(1)]
-		public Character            character = new Character();
+		public Account              account = new Account();
 	}
 
 };

@@ -8,7 +8,14 @@ const ErrorType = {
 };
 Object.freeze(ErrorType);
 
-class Character
+const GenderType = {
+	None                 : 0,
+	Male                 : 1,
+	Female               : 2,
+};
+Object.freeze(GenderType);
+
+class Account
 {
 	/**
 	 * @param {string} nickName - string
@@ -34,6 +41,7 @@ class Character
 
 module.exports =
 { ErrorType
-, Character
+, GenderType
+, Account
 }
 

@@ -1,7 +1,5 @@
 using System;
-using System.Buffers;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 using WebSocketSharp;
 
@@ -118,7 +116,10 @@ namespace Devarc
         {
             ChangeState(SessionStateType.Connected);
 
-            OnOpen?.Invoke(this, evt);
+            mDispatcher.AddWork((args) =>
+            {
+                OnOpen?.Invoke(this, (EventArgs)args[0]);
+            }, evt);
         }
 
         void onClose(object sender, CloseEventArgs evt)
@@ -133,21 +134,25 @@ namespace Devarc
 
             mDispatcher.AddWork((args) =>
             {
-                OnClose?.Invoke(args[0], (CloseEventArgs)args[1]);
-            }, sender, evt);
+                OnClose?.Invoke(this, (CloseEventArgs)args[0]);
+            }, evt);
         }
 
         void onError(object sender, ErrorEventArgs evt)
         {
             mDispatcher.AddWork((args) =>
             {
-                OnError?.Invoke(this, (ErrorEventArgs)args[1]);
-            }, sender, evt);
+                OnError?.Invoke(this, (ErrorEventArgs)args[0]);
+            }, evt);
         }
 
         void onMessage(object sender, MessageEventArgs evt)
         {
-            ReceiveData(evt.RawData);
+            mDispatcher.AddWork((args) =>
+            {
+                var msg = (MessageEventArgs)args[0];
+                ReceiveData(msg.RawData);
+            }, evt);
         }
     }
 }

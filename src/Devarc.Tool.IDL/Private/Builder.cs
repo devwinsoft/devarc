@@ -362,7 +362,7 @@ namespace Devarc
                 output.AppendLine("const msgpack = require('msgpack');");
                 foreach (var data in mClassDatas)
                 {
-                    output.AppendLine($"const Defines = require('./{data.fileName}.js');");
+                    output.AppendLine($"const {data.fileName} = require('./{data.fileName}.js');");
                     foreach (var tp in data.types)
                     {
                         output.AppendLine($"const {tp.Name} = {data.fileName}.{tp.Name};");

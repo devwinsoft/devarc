@@ -4,7 +4,7 @@ using WebSocketSharp.Server;
 
 namespace Devarc
 {
-    public class GamePacketHandler : WebSocketBehavior
+    public class GameNetwork : WebSocketBehavior
     {
         protected override void OnMessage(MessageEventArgs e)
         {

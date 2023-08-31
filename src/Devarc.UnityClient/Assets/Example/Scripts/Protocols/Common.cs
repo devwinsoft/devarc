@@ -13,8 +13,15 @@ namespace Devarc
 		INVALID_SECRET       = 5,
 	}
 
+	public enum GenderType
+	{
+		None                 = 0,
+		Male                 = 1,
+		Female               = 2,
+	}
+
 	[MessagePackObject]
-	public class Character
+	public class Account
 	{
 		[Key(0)]
 		public string               nickName;

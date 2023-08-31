@@ -35,28 +35,28 @@ const wss = new WebSocket.Server(
 );
 
 // Init protocol.
-const Defines = require('./Protocols/Defines.js');
+const Common = require('./Protocols/Common.js');
 const Game2C = require('./Protocols/Game2C.js');
 const C2Game = require('./Protocols/C2Game.js');
 C2Game.on('RequestLogin', (obj, ws) =>
 {
     redisClient.get(`sess:${obj.sessionID}`).then((json) => {
         var response = new Game2C.NotifyLogin();
-        response.errorCode = Defines.ErrorType.UNKNOWN;
-        response.character = new Defines.Character('', 0);
+        response.errorCode = Common.ErrorType.UNKNOWN;
+        response.account = new Common.Account('', 0);
 
         var record = JSON.parse(json);
         if (record == null)
         {
-            response.errorCode = Defines.ErrorType.SESSION_EXPIRED;
+            response.errorCode = Common.ErrorType.SESSION_EXPIRED;
         }
         else if (record.secret != obj.secret)
         {
-            response.errorCode = Defines.ErrorType.INVALID_SECRET;
+            response.errorCode = Common.ErrorType.INVALID_SECRET;
         }
         else
         {
-            response.errorCode = Defines.ErrorType.SUCCESS;
+            response.errorCode = Common.ErrorType.SUCCESS;
         }
 
         var encoded = Game2C.pack(response);

@@ -69,7 +69,7 @@ app.use(session(
     }));
 
 // Init protocol.
-const Defines = require('./Protocols/Defines.js');
+const Common = require('./Protocols/Common.js');
 const Auth2C = require('./Protocols/Auth2C.js');
 const C2Auth = require('./Protocols/C2Auth.js');
 const { tryAcquire } = require('async-mutex');
@@ -105,24 +105,24 @@ app.post('/msgpack', (req, res) =>
 
 // Message Handlers...
 C2Auth.on('RequestLogin', (obj, req, res) => {
-    var result = new Auth2C.NotifyLogin(Defines.ErrorType.UNKNOWN, '', 0);
+    var result = new Auth2C.NotifyLogin(Common.ErrorType.UNKNOWN, '', 0);
     var password = obj.password;
     mysqlConn.query(`SELECT password FROM account WHERE account_id='${obj.accountID}';`,
         (err, rows, fields) => {
             if (err != null || rows.length == 0)
             {
-                result.errorCode = Defines.ErrorType.SERVER_ERROR;
+                result.errorCode = Common.ErrorType.SERVER_ERROR;
             }
             else if (rows[0]['password'] != password)
             {
-                result.errorCode = Defines.ErrorType.INVALID_PASSWORD;
+                result.errorCode = Common.ErrorType.INVALID_PASSWORD;
             }
             else
             {
                 req.session.secret = Math.floor(2147483647 * Math.random());
                 req.session.save();
 
-                result.errorCode = Defines.ErrorType.SUCCESS;
+                result.errorCode = Common.ErrorType.SUCCESS;
                 result.sessionID = req.sessionID;
                 result.secret = req.session.secret;
             }
