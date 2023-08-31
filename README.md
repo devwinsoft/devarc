@@ -1,4 +1,4 @@
-# devarc
+# Devarc
 
-* Install
-https://github.com/MessagePack-CSharp/MessagePack-CSharp/releases
+* Externals.
+ https://github.com/MessagePack-CSharp/MessagePack-CSharp/releases
