@@ -1,6 +1,7 @@
 using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using WebSocketSharp;
 
@@ -9,49 +10,33 @@ namespace Devarc
 {
     public class SocketClient : MonoBehaviour
     {
-        public long SessionID => mSessionID;
-        long mSessionID = 0;
+        public enum SessionStateType
+        {
+            None,
+            Connecting,
+            Connected,
+            DisConnecting,
+            DisConnected,
+        }
+        volatile SessionStateType mCurrentState = SessionStateType.None;
 
-        public bool IsConnected => mCurrentState != null && mCurrentState.StateType == SessionStateType.Connected;
+        public bool IsConnected => mCurrentState == SessionStateType.Connected;
 
-        public WebSocket Socket => mSocket;
+        Dictionary<string, PacketHandler> mHandlers = new Dictionary<string, PacketHandler>();
+        MainThreadDispatcher mDispatcher = new MainThreadDispatcher();
         WebSocket mSocket;
-
         string mConnString = string.Empty;
 
-        SessionState mCurrentState = null;
-        Dictionary<SessionStateType, SessionState> mStates = new Dictionary<SessionStateType, SessionState>();
-        Dictionary<string, PacketHandler> mHandlers = new Dictionary<string, PacketHandler>();
+        public event EventHandler OnOpen;
+        public event EventHandler<CloseEventArgs> OnClose;
+        public event EventHandler<ErrorEventArgs> OnError;
+        public event EventHandler<MessageEventArgs> OnMessage;
 
-        public void Init(string connStr)
+
+        private void Update()
         {
-            mConnString = connStr;
-
-            mSocket = new WebSocket(connStr);
-
-            mSocket.OnOpen += (sender, evt) =>
-            {
-                ChangeState(SessionStateType.Connected);
-            };
-
-            mSocket.OnClose += (sender, evt) =>
-            {
-                ChangeState(SessionStateType.DisConnected);
-            };
-
-            mSocket.OnMessage += (sender, evt) =>
-            {
-                ReceiveData(evt.RawData);
-            };
-
-            registerState(new SessionState_Connecting(this));
-            registerState(new SessionState_Connected(this));
-            registerState(new SessionState_DisConnecting(this));
-            registerState(new SessionState_DisConnected(this));
-
-            ChangeState(SessionStateType.DisConnected);
+            mDispatcher.DoWork();
         }
-
 
         public void RegisterHandler<T>(PacketCallback<T> callback) where T : class
         {
@@ -68,24 +53,9 @@ namespace Devarc
         }
 
 
-        void registerState<T>(T state) where T : SessionState
+        public void ChangeState(SessionStateType state)
         {
-            mStates.Add(state.StateType, state);
-        }
-
-
-        public bool ChangeState(SessionStateType state)
-        {
-            SessionState nextState = null;
-            if (mStates.TryGetValue(state, out nextState) == false)
-            {
-                return false;
-            }
-
-            mCurrentState?.OnExit();
-            mCurrentState = nextState;
-            mCurrentState.OnEnter();
-            return true;
+            mCurrentState = state;
         }
 
 
@@ -93,7 +63,7 @@ namespace Devarc
         {
             var buf = new PacketEncoder();
             var data = buf.Pack(obj);
-            Socket.Send(data);
+            mSocket.Send(data);
         }
 
 
@@ -120,20 +90,65 @@ namespace Devarc
         }
 
 
-        public void Connect()
+        public void Connect(string connStr)
         {
-            Debug.Log($"Connect:{mConnString}");
-            Socket.ConnectAsync();
+            mConnString = connStr;
+
+            mSocket = new WebSocket(mConnString);
+            mSocket.OnOpen += onOpen;
+            mSocket.OnClose += onClose;
+            mSocket.OnError += onError;
+            mSocket.OnMessage += onMessage;
+
+            mSocket.ConnectAsync();
             ChangeState(SessionStateType.Connecting);
+
+            Debug.Log($"Connect:{mConnString}");
         }
 
 
         public void DisConnect()
         {
-            Socket.CloseAsync();
+            mSocket.CloseAsync();
             ChangeState(SessionStateType.DisConnecting);
         }
 
+
+        void onOpen(object sender, EventArgs evt)
+        {
+            ChangeState(SessionStateType.Connected);
+
+            OnOpen?.Invoke(this, evt);
+        }
+
+        void onClose(object sender, CloseEventArgs evt)
+        {
+            mSocket.OnOpen -= onOpen;
+            mSocket.OnClose -= onClose;
+            mSocket.OnError -= onError;
+            mSocket.OnMessage -= onMessage;
+            mSocket = null;
+
+            ChangeState(SessionStateType.DisConnected);
+
+            mDispatcher.AddWork((args) =>
+            {
+                OnClose?.Invoke(args[0], (CloseEventArgs)args[1]);
+            }, sender, evt);
+        }
+
+        void onError(object sender, ErrorEventArgs evt)
+        {
+            mDispatcher.AddWork((args) =>
+            {
+                OnError?.Invoke(this, (ErrorEventArgs)args[1]);
+            }, sender, evt);
+        }
+
+        void onMessage(object sender, MessageEventArgs evt)
+        {
+            ReceiveData(evt.RawData);
+        }
     }
 }
 

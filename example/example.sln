@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devarc.Tool.TableBuilder", "Devarc.Tool.TableBuilder\Devarc.Tool.TableBuilder.csproj", "{99DF9710-92FB-4CFA-965D-48E5412372F1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "websocket-sharp", "..\externals\websocket-sharp\websocket-sharp.csproj", "{B357BAC7-529E-4D81-A0D2-71041B19C8DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devarc.Tool.IDL", "Devarc.Tool.IDL\Devarc.Tool.IDL.csproj", "{AEC1551B-EC61-434E-8600-250A3EA194FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServer", "GameServer\GameServer.csproj", "{7CFA5E3D-E278-4111-B5EB-8B68DBD0BEFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,14 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{99DF9710-92FB-4CFA-965D-48E5412372F1}.Debug_Ubuntu|Any CPU.ActiveCfg = Debug|Any CPU
-		{99DF9710-92FB-4CFA-965D-48E5412372F1}.Debug_Ubuntu|Any CPU.Build.0 = Debug|Any CPU
-		{99DF9710-92FB-4CFA-965D-48E5412372F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{99DF9710-92FB-4CFA-965D-48E5412372F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{99DF9710-92FB-4CFA-965D-48E5412372F1}.Release_Ubuntu|Any CPU.ActiveCfg = Release|Any CPU
-		{99DF9710-92FB-4CFA-965D-48E5412372F1}.Release_Ubuntu|Any CPU.Build.0 = Release|Any CPU
-		{99DF9710-92FB-4CFA-965D-48E5412372F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{99DF9710-92FB-4CFA-965D-48E5412372F1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B357BAC7-529E-4D81-A0D2-71041B19C8DE}.Debug_Ubuntu|Any CPU.ActiveCfg = Debug_Ubuntu|Any CPU
 		{B357BAC7-529E-4D81-A0D2-71041B19C8DE}.Debug_Ubuntu|Any CPU.Build.0 = Debug_Ubuntu|Any CPU
 		{B357BAC7-529E-4D81-A0D2-71041B19C8DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -33,14 +23,14 @@ Global
 		{B357BAC7-529E-4D81-A0D2-71041B19C8DE}.Release_Ubuntu|Any CPU.Build.0 = Release_Ubuntu|Any CPU
 		{B357BAC7-529E-4D81-A0D2-71041B19C8DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B357BAC7-529E-4D81-A0D2-71041B19C8DE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AEC1551B-EC61-434E-8600-250A3EA194FF}.Debug_Ubuntu|Any CPU.ActiveCfg = Debug|Any CPU
-		{AEC1551B-EC61-434E-8600-250A3EA194FF}.Debug_Ubuntu|Any CPU.Build.0 = Debug|Any CPU
-		{AEC1551B-EC61-434E-8600-250A3EA194FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AEC1551B-EC61-434E-8600-250A3EA194FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AEC1551B-EC61-434E-8600-250A3EA194FF}.Release_Ubuntu|Any CPU.ActiveCfg = Release|Any CPU
-		{AEC1551B-EC61-434E-8600-250A3EA194FF}.Release_Ubuntu|Any CPU.Build.0 = Release|Any CPU
-		{AEC1551B-EC61-434E-8600-250A3EA194FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AEC1551B-EC61-434E-8600-250A3EA194FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CFA5E3D-E278-4111-B5EB-8B68DBD0BEFD}.Debug_Ubuntu|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CFA5E3D-E278-4111-B5EB-8B68DBD0BEFD}.Debug_Ubuntu|Any CPU.Build.0 = Debug|Any CPU
+		{7CFA5E3D-E278-4111-B5EB-8B68DBD0BEFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CFA5E3D-E278-4111-B5EB-8B68DBD0BEFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CFA5E3D-E278-4111-B5EB-8B68DBD0BEFD}.Release_Ubuntu|Any CPU.ActiveCfg = Release|Any CPU
+		{7CFA5E3D-E278-4111-B5EB-8B68DBD0BEFD}.Release_Ubuntu|Any CPU.Build.0 = Release|Any CPU
+		{7CFA5E3D-E278-4111-B5EB-8B68DBD0BEFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CFA5E3D-E278-4111-B5EB-8B68DBD0BEFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

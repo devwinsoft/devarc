@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Devarc;
 using System.Text;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class ExampleManager : MonoBehaviour
 {
@@ -29,14 +30,12 @@ public class ExampleManager : MonoBehaviour
         authAddress.text = "http://localhost:3000/msgpack";
         gameAddress.text = "ws://localhost:4000/Echo";
 
-        gameNetwork.Init(gameAddress.text);
-
-        gameNetwork.Socket.OnOpen += onConnected;
-        gameNetwork.Socket.OnClose += (sender, evt) =>
+        gameNetwork.OnOpen += onConnected;
+        gameNetwork.OnClose += (sender, evt) =>
         {
-            Debug.LogFormat($"Diconnected: code={evt.Code}, reason={evt.Reason}");
+            Debug.Log($"Diconnected: code={evt.Code}, reason={evt.Reason}");
         };
-        gameNetwork.Socket.OnError += (sender, evt) =>
+        gameNetwork.OnError += (sender, evt) =>
         {
             Debug.LogError(evt.Message);
             gameNetwork.DisConnect();
@@ -48,13 +47,13 @@ public class ExampleManager : MonoBehaviour
             switch (type)
             {
                 case LogType.Error:
-                    mLogMessages.Insert(0, $"<color=red>[{DateTime.Now.ToString("HH:mm:ss")}] {log}</color>");
+                    mLogMessages.Add($"<color=red>[{DateTime.Now.ToString("HH:mm:ss")}] {log}</color>");
                     break;
                 case LogType.Warning:
-                    mLogMessages.Insert(0, $"<color=yellow>[{DateTime.Now.ToString("HH:mm:ss")}] {log}</color>");
+                    mLogMessages.Add($"<color=yellow>[{DateTime.Now.ToString("HH:mm:ss")}] {log}</color>");
                     break;
                 default:
-                    mLogMessages.Insert(0, $"[{DateTime.Now.ToString("HH:mm:ss")}] {log}");
+                    mLogMessages.Add($"[{DateTime.Now.ToString("HH:mm:ss")}] {log}");
                     break;
             }
             
@@ -69,7 +68,12 @@ public class ExampleManager : MonoBehaviour
                 mStrBuilder.AppendLine(msg);
             }
             logText.text = mStrBuilder.ToString();
-            scrollRect.verticalNormalizedPosition = 0f;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(logText.GetComponent<RectTransform>());
+        };
+
+        logText.OnPreRenderText += (info) =>
+        {
+            scrollRect.normalizedPosition = new Vector2(0, 0);
         };
     }
 
@@ -103,7 +107,7 @@ public class ExampleManager : MonoBehaviour
         if (gameNetwork.IsConnected)
             onConnected(null, null);
         else
-            gameNetwork.Connect();
+            gameNetwork.Connect(gameAddress.text);
     }
 
     void onConnected(object sender, EventArgs e)

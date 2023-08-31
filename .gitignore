@@ -71,13 +71,20 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 #
-src/Devarc.IDL/bin/
-src/Devarc.IDL/obj/
-src/Devarc.IDL/packages/
-src/Devarc.NodeServer/node_modules/
+example/NodeServer/node_modules/
+example/GameServer/bin/
+example/GameServer/obj/
+externals/websocket-sharp/bin/
+externals/websocket-sharp/obj/
+src/Devarc.Tool.IDL/bin/
+src/Devarc.Tool.IDL/obj/
+src/Devarc.Tool.TableBuilder/bin/
+src/Devarc.Tool.TableBuilder/obj/
+src/Devarc.UnityClient/*.csproj
+src/Devarc.UnityClient/*.sln
 src/Devarc.UnityClient/Library/
 src/Devarc.UnityClient/Logs/
 src/Devarc.UnityClient/obj/
+src/Devarc.UnityClient/Temp/
 src/Devarc.UnityClient/UserSettings/
-src/externals/websocket-sharp/bin/
-src/externals/websocket-sharp/obj/
+src/packages/
