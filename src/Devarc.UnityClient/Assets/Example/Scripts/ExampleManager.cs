@@ -28,7 +28,7 @@ public class ExampleManager : MonoBehaviour
     private void Start()
     {
         authAddress.text = "http://localhost:3000/msgpack";
-        gameAddress.text = "ws://localhost:4000/Echo";
+        gameAddress.text = "ws://localhost:4000/Game";
 
         gameNetwork.OnOpen += onConnected;
         gameNetwork.OnClose += (sender, evt) =>

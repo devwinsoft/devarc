@@ -71,11 +71,16 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 #
-example/NodeServer/node_modules/
-example/GameServer/bin/
-example/GameServer/obj/
-externals/websocket-sharp/bin/
-externals/websocket-sharp/obj/
+example/NodeServers/node_modules/
+example/CSharpServers/packages/
+example/CSharpServers/GameServer/bin/
+example/CSharpServers/GameServer/obj/
+src/Devarc.Net.Client/bin/
+src/Devarc.Net.Client/obj/
+src/Devarc.Net.Common/bin/
+src/Devarc.Net.Common/obj/
+src/Devarc.Net.Server/bin/
+src/Devarc.Net.Server/obj/
 src/Devarc.Tool.IDL/bin/
 src/Devarc.Tool.IDL/obj/
 src/Devarc.Tool.TableBuilder/bin/
