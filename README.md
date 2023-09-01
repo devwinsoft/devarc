@@ -6,3 +6,4 @@
   * MessagePack
     * https://github.com/MessagePack-CSharp/MessagePack-CSharp/releases
   * WebSocket
+    * https://github.com/sta/websocket-sharp
