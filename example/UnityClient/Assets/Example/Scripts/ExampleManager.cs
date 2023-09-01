@@ -6,7 +6,8 @@ using System.Collections.Generic;
 using Devarc;
 using System.Text;
 using UnityEngine.UI;
-using System.Threading.Tasks;
+using MessagePack.Resolvers;
+using MessagePack;
 
 public class ExampleManager : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class ExampleManager : MonoBehaviour
 
     string sessionID = string.Empty;
     int secret = 0;
+
     StringBuilder mStrBuilder = new StringBuilder();
     List<string> mLogMessages = new List<string>();
 
@@ -29,6 +31,14 @@ public class ExampleManager : MonoBehaviour
     {
         authAddress.text = "http://localhost:3000/msgpack";
         gameAddress.text = "ws://localhost:4000/Game";
+
+        StaticCompositeResolver.Instance.Register(
+            MessagePack.Resolvers.GeneratedResolver.Instance,
+            MessagePack.Resolvers.StandardResolver.Instance,
+            MessagePack.Unity.UnityResolver.Instance
+        );
+        authNetwork.Init(authAddress.text, "packet", StaticCompositeResolver.Instance);
+        gameNetwork.Init(StaticCompositeResolver.Instance);
 
         gameNetwork.OnOpen += onConnected;
         gameNetwork.OnClose += (sender, evt) =>
@@ -40,6 +50,7 @@ public class ExampleManager : MonoBehaviour
             Debug.LogError(evt.Message);
             gameNetwork.DisConnect();
         };
+
 
         logText.text = string.Empty;
         Application.logMessageReceived += (log, stack, type) =>
@@ -80,8 +91,6 @@ public class ExampleManager : MonoBehaviour
 
     public void OnClick_RequestLogin()
     {
-        authNetwork.Init(authAddress.text, "packet");
-
         var request = new C2Auth.RequestLogin();
         request.accountID = inputID.text;
         request.password = EncryptUtil.Encrypt_MD5(inputPW.text);

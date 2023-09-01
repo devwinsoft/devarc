@@ -5,14 +5,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "adac8435a66db5267b880ed0d94f9a844cac4677"
+      "hash": "85e1980482db6433e893e7bbe42fe8df23a0f14b"
     },
     "com.devwinsoft.devarc.encrypt": {
       "version": "https://github.com/devwinsoft/devarc.encrypt.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "5921f93e6ca6ba9c1699345b4eab42458112d5fd"
+      "hash": "bcff2b6f8eb29a1b739d377682aeaf9e618509ba"
     },
     "com.unity.addressables": {
       "version": "1.21.17",
