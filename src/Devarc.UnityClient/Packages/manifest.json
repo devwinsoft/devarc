@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.devwinsoft.devarc.encrypt": "https://github.com/devwinsoft/devarc.encrypt.git",
     "com.unity.addressables": "1.21.17",
     "com.unity.ide.rider": "3.0.24",
     "com.unity.ide.visualstudio": "2.0.18",

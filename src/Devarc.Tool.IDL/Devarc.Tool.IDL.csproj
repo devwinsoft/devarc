@@ -56,7 +56,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builder\BaseBuilder.cs" />
-    <Compile Include="Builder\Builder.cs" />
+    <Compile Include="Builder\CS\BaseCsBuilder.cs" />
+    <Compile Include="Builder\CS\CsBuilder.cs" />
+    <Compile Include="Builder\CS\CsDefBuilder.cs" />
+    <Compile Include="Builder\JS\BaseJsBuilder.cs" />
+    <Compile Include="Builder\JS\JsBuilder.cs" />
+    <Compile Include="Builder\JS\JsDefBuilder.cs" />
     <Compile Include="Builder\PropertyAttribute.cs" />
     <Compile Include="Builder\ProtocolAttribute.cs" />
     <Compile Include="Program.cs" />

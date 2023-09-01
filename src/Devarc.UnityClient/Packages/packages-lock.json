@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.devwinsoft.devarc.encrypt": {
-      "version": "https://github.com/devwinsoft/devarc.encrypt.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "5921f93e6ca6ba9c1699345b4eab42458112d5fd"
-    },
     "com.unity.addressables": {
       "version": "1.21.17",
       "depth": 0,

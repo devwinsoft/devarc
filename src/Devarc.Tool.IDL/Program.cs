@@ -14,13 +14,23 @@ namespace Devarc
 
                 if (args.Contains<string>("-cs"))
                 {
-                    Builder compiler = new Builder();
-                    compiler.Build_CS(args[1], files);
+                    var builder = new CsBuilder();
+                    builder.Build(args[1], files);
                 }
                 else if (args.Contains<string>("-js"))
                 {
-                    Builder compiler = new Builder();
-                    compiler.Build_JS(args[1], files);
+                    var builder = new JsBuilder();
+                    builder.Build(args[1], files);
+                }
+                else if (args.Contains<string>("-cs-def"))
+                {
+                    var builder = new CsDefBuilder();
+                    builder.Build(args[1]);
+                }
+                else if (args.Contains<string>("-js-def"))
+                {
+                    var builder = new JsDefBuilder();
+                    builder.Build(args[1]);
                 }
                 else
                 {
@@ -35,7 +45,7 @@ namespace Devarc
 
         static void usage()
         {
-            Console.WriteLine("[command] -[cs/js] [protocol.idl] [class.idl, ...]");
+            Console.WriteLine("[command] -[cs/js/cs-def/js-def] [protocol.idl] [class.idl, ...]");
         }
     }
 }

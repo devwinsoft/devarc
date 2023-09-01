@@ -75,8 +75,14 @@ example/NodeServers/node_modules/
 example/CSharpServers/packages/
 example/CSharpServers/GameServer/bin/
 example/CSharpServers/GameServer/obj/
-src/Devarc.Net.Client/bin/
-src/Devarc.Net.Client/obj/
+example/UnityClient/*.csproj
+example/UnityClient/*.sln
+example/UnityClient/Library/
+example/UnityClient/Logs/
+example/UnityClient/obj/
+example/UnityClient/Temp/
+example/UnityClient/UserSettings/
+
 src/Devarc.Net.Common/bin/
 src/Devarc.Net.Common/obj/
 src/Devarc.Net.Server/bin/
@@ -85,6 +91,7 @@ src/Devarc.Tool.IDL/bin/
 src/Devarc.Tool.IDL/obj/
 src/Devarc.Tool.TableBuilder/bin/
 src/Devarc.Tool.TableBuilder/obj/
+src/Devarc.UnityClient/Assets/Devarc/
 src/Devarc.UnityClient/*.csproj
 src/Devarc.UnityClient/*.sln
 src/Devarc.UnityClient/Library/
