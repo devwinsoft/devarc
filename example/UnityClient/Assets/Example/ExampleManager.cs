@@ -93,8 +93,7 @@ public class ExampleManager : MonoBehaviour
     {
         var request = new C2Auth.RequestLogin();
         request.accountID = inputID.text;
-        request.password = EncryptUtil.Encrypt_MD5(inputPW.text);
-
+        request.password = EncryptUtil.Encrypt_Base64(inputPW.text);
         authNetwork.RequestLogin(request, (response, errorType, errorMsg) =>
         {
             switch (errorType)
@@ -126,6 +125,7 @@ public class ExampleManager : MonoBehaviour
         request.sessionID = sessionID;
         request.secret = secret;
         gameNetwork.SendData(request);
+        Debug.Log(JsonUtility.ToJson(request));
     }
 
     string json = $@"

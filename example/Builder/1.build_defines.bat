@@ -1,7 +1,8 @@
 set IDL=..\..\bin\IDL.exe
 
 ..\..\bin\IDL.exe -cs-def  .\Defines\Common.def
-move /Y   *.cs    ..\UnityClient\Assets\Example\Scripts\Defines\
+copy /Y   *.cs    ..\CSharpServers\GameServer\Generated\Defines\
+move /Y   *.cs    ..\UnityClient\Assets\Example\Generated\Defines\
 
 ..\..\bin\IDL.exe -js-def  .\Defines\Common.def
 move /Y   *.js    ..\NodeServers\Protocols\

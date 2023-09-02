@@ -45,6 +45,9 @@
     <Reference Include="Microsoft.NET.StringTools, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.NET.StringTools.17.6.3\lib\net472\Microsoft.NET.StringTools.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -76,12 +79,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Network\GameNetwork.cs" />
+    <Compile Include="Generated\Defines\Common.cs" />
+    <Compile Include="Generated\MsgPack\MessagePack_Formatters_C2Game_RequestLoginFormatter.cs" />
+    <Compile Include="Generated\MsgPack\MessagePack_Formatters_Devarc_AccountFormatter.cs" />
+    <Compile Include="Generated\MsgPack\MessagePack_Formatters_Devarc_CharacterFormatter.cs" />
+    <Compile Include="Generated\MsgPack\MessagePack_Formatters_Devarc_ErrorTypeFormatter.cs" />
+    <Compile Include="Generated\MsgPack\MessagePack_Formatters_Devarc_GenderTypeFormatter.cs" />
+    <Compile Include="Generated\MsgPack\MessagePack_Formatters_Game2C_NotifyLoginFormatter.cs" />
+    <Compile Include="Generated\MsgPack\MessagePack_Resolvers_GeneratedResolver.cs" />
+    <Compile Include="Generated\Tables\GameDB.cs" />
+    <Compile Include="Network\GameUser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Protocols\C2Game.cs" />
-    <Compile Include="Protocols\Common.cs" />
-    <Compile Include="Protocols\Game2C.cs" />
+    <Compile Include="Generated\Protocols\C2Game.cs" />
+    <Compile Include="Generated\Protocols\Game2C.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -92,6 +103,11 @@
       <Project>{cdb89a44-00da-4adb-9c7a-b2caebaf82fa}</Project>
       <Name>Devarc.Net.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Devarc.Net.Server\Devarc.Net.Server.csproj">
+      <Project>{f40242f5-a1b2-4efd-b7df-ced6547607ac}</Project>
+      <Name>Devarc.Net.Server</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

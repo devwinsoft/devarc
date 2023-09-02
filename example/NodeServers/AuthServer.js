@@ -34,6 +34,7 @@ redisClient.on('error', (err) =>
 
 
 // Init crypto
+const cryptUtil = require("./Util/CryptUtil.js");
 const crypto = require('crypto');
 const hash = crypto.createHash('sha256');
 
@@ -105,15 +106,12 @@ app.post('/msgpack', (req, res) =>
 
 // Message Handlers...
 C2Auth.on('RequestLogin', (obj, req, res) => {
-    var result = new Auth2C.NotifyLogin(Common.ErrorType.UNKNOWN, '', 0);
-    var password = obj.password;
-    mysqlConn.query(`SELECT password FROM account WHERE account_id='${obj.accountID}';`,
+    var password = cryptUtil.decrypt(obj.password);
+    var queryStr = `SELECT account_id FROM account WHERE account_id='${obj.accountID}' AND password=MD5('${password}');`;
+    mysqlConn.query(queryStr,
         (err, rows, fields) => {
+            var result = new Auth2C.NotifyLogin(Common.ErrorType.UNKNOWN, '', 0);
             if (err != null || rows.length == 0)
-            {
-                result.errorCode = Common.ErrorType.SERVER_ERROR;
-            }
-            else if (rows[0]['password'] != password)
             {
                 result.errorCode = Common.ErrorType.INVALID_PASSWORD;
             }

@@ -1,4 +1,5 @@
-﻿using MessagePack;
+using MessagePack;
+using MessagePack.Resolvers;
 using System;
 using System.Buffers;
 using System.IO;
@@ -8,16 +9,23 @@ namespace Devarc
 {
     public class PacketEncoder
     {
+        public MessagePackSerializerOptions Options => mOptions;
+        MessagePackSerializerOptions mOptions = null;
+
         MemoryStream mStream = new MemoryStream();
         ReadOnlySequence<byte> mBuffer;
         int mPosition = 0;
 
+        public void Init(IFormatterResolver formatterResolver)
+        {
+            mOptions = MessagePackSerializerOptions.Standard.WithResolver(formatterResolver);
+        }
 
         public byte[] Pack<T>(T obj)
         {
             var type = typeof(T);
             write(type.Name);
-            write(MessagePackSerializer.Serialize<T>(obj));
+            write(MessagePackSerializer.Serialize<T>(obj, mOptions));
             return mStream.ToArray();
         }
 
@@ -27,17 +35,11 @@ namespace Devarc
             mBuffer = new ReadOnlySequence<byte>(rawData);
             mPosition = 0;
 
-            //var resolvers = MessagePack.Resolvers.CompositeResolver.Create(
-            //     new[] { MessagePack.Formatters.TypelessFormatter.Instance },
-            //     new[] { MessagePack.Resolvers.ContractlessStandardResolver.Instance }
-            // );
-            //var options = MessagePackSerializerOptions.Standard.WithResolver(resolvers);
-            //var obj = MessagePackSerializer.Deserialize<object>(encoded, options);
-
             var typeName = read_String();
             var encoded = read_Remain();
-            var obj = MessagePackSerializer.Deserialize<T>(encoded);
-            return (T)obj;
+            var obj = MessagePackSerializer.Deserialize<T>(encoded, mOptions);
+
+            return obj;
         }
 
 
@@ -57,13 +59,13 @@ namespace Devarc
 
             var typeName = read_String();
             var encoded = read_Remain();
-            var obj = MessagePackSerializer.Deserialize<T>(encoded);
+            var obj = MessagePackSerializer.Deserialize<T>(encoded, mOptions);
 
             return obj;
         }
 
 
-        public (string typeName, byte[] encoded) Parse(byte[] rawData)
+        public (string typeName, byte[] packetData) Parse(byte[] rawData)
         {
             mBuffer = new ReadOnlySequence<byte>(rawData);
             mPosition = 0;

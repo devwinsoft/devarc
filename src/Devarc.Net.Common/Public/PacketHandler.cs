@@ -1,4 +1,4 @@
-﻿using MessagePack;
+using MessagePack;
 
 namespace Devarc
 {
@@ -8,16 +8,16 @@ namespace Devarc
     {
         public string typeName;
 
-        public abstract void Invoke(byte[] encoded);
+        public abstract void Invoke(byte[] packetData, MessagePackSerializerOptions options);
     }
 
     public class PacketHandler<T> : PacketHandler
     {
         public PacketCallback<T> callback;
 
-        public override void Invoke(byte[] encoded)
+        public override void Invoke(byte[] packetData, MessagePackSerializerOptions options)
         {
-            var obj = MessagePackSerializer.Deserialize<T>(encoded);
+            var obj = MessagePackSerializer.Deserialize<T>(packetData, options);
             callback.Invoke(obj);
         }
     }
