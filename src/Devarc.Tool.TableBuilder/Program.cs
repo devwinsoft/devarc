@@ -25,6 +25,11 @@ namespace Devarc.TableBuilder
                 else if (args.Contains<string>("-js"))
                 {
                 }
+                else if (args.Contains<string>("-sql"))
+                {
+                    var builder = new MySqlBuilder();
+                    builder.Build(fileName);
+                }
                 else if (args.Contains<string>("-unity"))
                 {
                     string bundlePath = null;

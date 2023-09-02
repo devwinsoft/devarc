@@ -2,6 +2,10 @@
 copy /Y   *.json    ..\..\src\Devarc.UnityClient\Assets\Example\Bundles\Tables\
 move /Y   *.json    ..\UnityClient\Assets\Example\Bundles\Tables\
 
+..\..\bin\TableBuilder.exe -sql .\Tables\GameDB.xlsx
+move /Y   *.ddl    ..\Database\Tables\
+move /Y   *.sql    ..\Database\Tables\
+
 ..\..\bin\TableBuilder.exe -cs .\Tables\GameDB.xlsx
 copy /Y   *.cs    ..\CSharpServers\GameServer\Generated\Tables\
 copy /Y   *.cs    ..\..\src\Devarc.UnityClient\Assets\Example\Generated\Tables\

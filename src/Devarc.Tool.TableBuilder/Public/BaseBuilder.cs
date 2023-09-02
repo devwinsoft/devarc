@@ -1,13 +1,8 @@
 ﻿using NPOI.HSSF.UserModel;
-using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Devarc
 {

@@ -3,12 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using NPOI;
-using NPOI.HSSF;
-using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-using NPOI.XSSF;
-using NPOI.XSSF.UserModel;
 
 namespace Devarc
 {
