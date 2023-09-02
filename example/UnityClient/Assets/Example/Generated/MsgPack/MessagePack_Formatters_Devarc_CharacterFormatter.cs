@@ -16,10 +16,10 @@
 
 namespace MessagePack.Formatters.Devarc
 {
-    public sealed class CharacterFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Devarc.Character>
+    public sealed class CHARACTERFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Devarc.CHARACTER>
     {
 
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Devarc.Character value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Devarc.CHARACTER value, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (value == null)
             {
@@ -29,13 +29,13 @@ namespace MessagePack.Formatters.Devarc
 
             global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
             writer.WriteArrayHeader(4);
-            writer.Write(value.index);
+            writer.Write(value.character_id);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.charName, options);
             writer.Write(value.age);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.GenderType>(formatterResolver).Serialize(ref writer, value.gender, options);
         }
 
-        public global::Devarc.Character Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Devarc.CHARACTER Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -45,14 +45,14 @@ namespace MessagePack.Formatters.Devarc
             options.Security.DepthStep(ref reader);
             global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var ____result = new global::Devarc.Character();
+            var ____result = new global::Devarc.CHARACTER();
 
             for (int i = 0; i < length; i++)
             {
                 switch (i)
                 {
                     case 0:
-                        ____result.index = reader.ReadInt32();
+                        ____result.character_id = reader.ReadInt32();
                         break;
                     case 1:
                         ____result.charName = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);

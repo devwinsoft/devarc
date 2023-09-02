@@ -40,13 +40,15 @@ namespace Devarc
 
         void onReadSheet(ISheet sheet, StreamWriter sw)
         {
+            sw.WriteLine("\t[System.Serializable]");
             sw.WriteLine("\t[MessagePackObject]");
-            sw.WriteLine($"\tpublic class {sheet.SheetName}");
+            sw.WriteLine($"\tpublic class {sheet.SheetName} : ITableData<{mCurrentHeader.KeyTypeName}>");
             sw.WriteLine("\t{");
+            sw.WriteLine($"\t\tpublic {mCurrentHeader.KeyTypeName} GetKey() {{ return {mCurrentHeader.KeyFieldName}; }}");
             int index = 0;
-            for (int c = 0; c < mHeaderInfo.MaxColumn; c++)
+            for (int c = 0; c < mCurrentHeader.MaxColumn; c++)
             {
-                var data = mHeaderInfo.Get(c);
+                var data = mCurrentHeader.Get(c);
                 if (data == null)
                     continue;
                 sw.WriteLine($"\t\t[Key({index++})]");
@@ -56,6 +58,7 @@ namespace Devarc
                     sw.WriteLine(string.Format("\t\tpublic {0,-20} {1};", data.fieldType, data.fieldName));
             }
             sw.WriteLine("\t}");
+            sw.WriteLine("");
         }
     }
 }

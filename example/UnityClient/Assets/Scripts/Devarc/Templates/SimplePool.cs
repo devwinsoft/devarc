@@ -85,7 +85,7 @@ namespace Devarc
             if (mPrefabs.TryGetValue(name, out prefab) == false)
             {
                 if (_bundle)
-                    prefab = AssetManager.Instance.GetPrefab(_path);
+                    prefab = AssetManager.LoadPrefabAtPath(_path);
                 else
                     prefab = Resources.Load<GameObject>(_path);
                 if (prefab == null)

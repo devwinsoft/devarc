@@ -1,16 +1,21 @@
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 using TMPro;
 using System;
 using System.Collections.Generic;
 using Devarc;
 using System.Text;
-using UnityEngine.UI;
 using MessagePack.Resolvers;
-using MessagePack;
+using System.Collections;
+using Newtonsoft.Json;
+using UnityEngine.ResourceManagement;
 
 public class ExampleManager : MonoBehaviour
 {
+    public CHARACTER_ID charID;
+    public SKILL_ID skillID;
+
     public AuthNetwork authNetwork;
     public GameNetwork gameNetwork;
 
@@ -27,19 +32,21 @@ public class ExampleManager : MonoBehaviour
     StringBuilder mStrBuilder = new StringBuilder();
     List<string> mLogMessages = new List<string>();
 
-    private void Start()
+    IEnumerator Start()
     {
-        authAddress.text = "http://localhost:3000/msgpack";
-        gameAddress.text = "ws://localhost:4000/Game";
-
+        /*
+         * Init Network
+         * 
+         */
         StaticCompositeResolver.Instance.Register(
             MessagePack.Resolvers.GeneratedResolver.Instance,
             MessagePack.Resolvers.StandardResolver.Instance,
             MessagePack.Unity.UnityResolver.Instance
         );
-        authNetwork.Init(authAddress.text, "packet", StaticCompositeResolver.Instance);
-        gameNetwork.Init(StaticCompositeResolver.Instance);
 
+        authNetwork.Init(authAddress.text, "packet", StaticCompositeResolver.Instance);
+ 
+        gameNetwork.Init(StaticCompositeResolver.Instance);
         gameNetwork.OnOpen += onConnected;
         gameNetwork.OnClose += (sender, evt) =>
         {
@@ -51,6 +58,14 @@ public class ExampleManager : MonoBehaviour
             gameNetwork.DisConnect();
         };
 
+
+
+        /*
+         * Init UI
+         * 
+         */
+        authAddress.text = "http://localhost:3000/msgpack";
+        gameAddress.text = "ws://localhost:4000/Game";
 
         logText.text = string.Empty;
         Application.logMessageReceived += (log, stack, type) =>
@@ -86,6 +101,17 @@ public class ExampleManager : MonoBehaviour
         {
             scrollRect.normalizedPosition = new Vector2(0, 0);
         };
+
+
+
+        /*
+         * Load Assets...
+         * 
+         */
+        yield return AssetManager.Instance.LoadTextAssets("table");
+
+        var textAsset = AssetManager.Instance.GetTextAsset("CHARACTER");
+        Table.CHARACTER.LoadJson(textAsset.text);
     }
 
 
@@ -118,6 +144,7 @@ public class ExampleManager : MonoBehaviour
             gameNetwork.Connect(gameAddress.text);
     }
 
+
     void onConnected(object sender, EventArgs e)
     {
         Debug.Log("Connected...");
@@ -128,9 +155,4 @@ public class ExampleManager : MonoBehaviour
         Debug.Log(JsonUtility.ToJson(request));
     }
 
-    string json = $@"
-[ {{ ""index"": ""1"", ""charName"": ""Mark"", ""age"": ""31"", ""gender"": ""Male"" }}
-, {{ ""index"": ""2"", ""charName"": ""Lora"", ""age"": ""24"", ""gender"": ""Female"" }}
-]
-";
 }

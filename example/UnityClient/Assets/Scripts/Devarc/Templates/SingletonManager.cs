@@ -26,24 +26,18 @@ namespace Devarc
     {
         public static T Instance
         {
-            get { return mInstance; }
+            get
+            {
+                if (mInstance == null)
+                {
+                    GameObject obj = new GameObject(typeof(T).Name);
+                    mInstance = obj.AddComponent<T>();
+                }
+                return mInstance;
+            }
         }
         static T mInstance;
 
-        public static T Create(Transform _parent)
-        {
-            GameObject obj = new GameObject(typeof(T).Name);
-            obj.transform.parent = _parent;
-            return obj.AddComponent<T>();
-        }
-
-        public static void Destroy()
-        {
-            if (mInstance != null)
-            {
-                GameObject.Destroy(mInstance.gameObject);
-            }
-        }
 
         protected abstract void onAwake();
         protected virtual void onStart() { }
@@ -54,14 +48,18 @@ namespace Devarc
 
         private void Awake()
         {
-            //DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
             mInstance = this as T;
             onAwake();
         }
+
         private void OnDestroy()
         {
             onDestroy();
-            mInstance = null;
+            if (mInstance == this)
+            {
+                mInstance = null;
+            }
         }
 
         private void Start()

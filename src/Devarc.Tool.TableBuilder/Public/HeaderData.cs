@@ -21,12 +21,16 @@ namespace Devarc
         public string description;
         public string fieldName;
         public string fieldType;
-        public bool isClass;
+        public bool needQuotes;
         public bool isList;
     }
 
     public class HeaderData
     {
+        public string SheetName = string.Empty;
+        public string KeyTypeName = string.Empty;
+        public string KeyFieldName = string.Empty;
+        public string DisplayName = string.Empty;
         public int MaxColumn => mMaxColumn;
         int mMaxColumn = 0;
 
@@ -74,9 +78,17 @@ namespace Devarc
                         field.fieldType = cell.ToString().Trim();
                         break;
                     case RowType.ClassType:
-                        string types = cell.ToString().ToLower();
-                        field.isClass = types.Contains("class");
-                        field.isList = types.Contains("list");
+                        string options = cell.ToString().ToLower();
+                        field.isList = options.Contains("list");
+                        if (options.Contains("key"))
+                        {
+                            KeyTypeName = field.fieldType;
+                            KeyFieldName = field.fieldName;
+                        }
+                        else if (options.Contains("display"))
+                        {
+                            DisplayName = field.fieldName;
+                        }
                         break;
                 }
             }

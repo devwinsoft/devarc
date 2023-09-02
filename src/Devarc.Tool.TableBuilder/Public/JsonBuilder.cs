@@ -32,6 +32,7 @@ namespace Devarc
 
             using (var sw = File.CreateText(filePath))
             {
+                sw.Write("{\"list\":[");
                 bool isFirstLine = true;
                 for (int r = (int)RowType.Data; r <= sheet.LastRowNum; r++)
                 {
@@ -39,7 +40,7 @@ namespace Devarc
                     onReadRow(row, sw, isFirstLine);
                     isFirstLine = false;
                 }
-                sw.WriteLine("]");
+                sw.WriteLine("]}");
                 sw.Close();
             }
             Console.WriteLine($"Generate file: {filePath}");
@@ -50,27 +51,35 @@ namespace Devarc
         {
             var cells = row.Cells;
             if (isFirstLine)
-                sw.Write("[ { ");
+                sw.Write("{");
             else
-                sw.Write(", { ");
+                sw.Write(",{ ");
             bool started = false;
             for (int c = 0; c < cells.Count; c++)
             {
-                var header = mHeaderInfo.Get(c);
+                var header = mCurrentHeader.Get(c);
                 if (header == null)
                     continue;
                 var value = cells[c].ToString();
                 if (started == false)
-                {
                     started = true;
-                    sw.Write($"\"{header.fieldName}\": \"{value}\"");
-                }
                 else
-                {
-                    sw.Write($", \"{header.fieldName}\": \"{value}\"");
-                }
+                    sw.Write($",");
+
+                var typeName = header.fieldName.ToLower();
+                if (needQuotes(value))
+                    sw.Write($"\"{header.fieldName}\":\"{value}\"");
+                else
+                    sw.Write($"\"{header.fieldName}\":{value}");
             }
-            sw.WriteLine(" }");
+            sw.WriteLine("}");
+        }
+
+
+        bool needQuotes(string value)
+        {
+            float temp;
+            return !float.TryParse(value, out temp);
         }
     }
 }

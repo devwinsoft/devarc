@@ -13,7 +13,8 @@ namespace Devarc
 {
     public abstract class BaseBuilder
     {
-        protected HeaderData mHeaderInfo = new HeaderData();
+        protected HeaderData mCurrentHeader = null;
+        protected List<HeaderData> mHeaderList = new List<HeaderData>();
 
         protected IWorkbook open(string filePath)
         {
@@ -32,10 +33,21 @@ namespace Devarc
 
         protected void readHeader(ISheet sheet)
         {
+            mCurrentHeader = new HeaderData();
+            mCurrentHeader.SheetName = sheet.SheetName;
+            mHeaderList.Add(mCurrentHeader);
+
             for (int r = 0; r < (int)RowType.Data; r++)
             {
                 var row = sheet.GetRow(r);
-                mHeaderInfo.Set(row, (RowType)r);
+                mCurrentHeader.Set(row, (RowType)r);
+            }
+
+            if (string.IsNullOrEmpty(mCurrentHeader.KeyFieldName))
+            {
+                var field = mCurrentHeader.Get(0);
+                mCurrentHeader.KeyFieldName = field.fieldName;
+                mCurrentHeader.KeyTypeName = field.fieldType;
             }
         }
     }

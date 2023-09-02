@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Devarc.TableBuilder
 {
@@ -25,6 +24,21 @@ namespace Devarc.TableBuilder
                 }
                 else if (args.Contains<string>("-js"))
                 {
+                }
+                else if (args.Contains<string>("-unity"))
+                {
+                    string bundlePath = null;
+                    for (int i = 0; i < args.Length; i++)
+                    {
+                        if (args[i] == "-path" && args.Length > i + 1)
+                        {
+                            bundlePath = args[i + 1];
+                            break;
+                        }
+                    }
+
+                    var builder = new UnityBuilder();
+                    builder.Build(fileName, bundlePath);
                 }
                 else
                 {

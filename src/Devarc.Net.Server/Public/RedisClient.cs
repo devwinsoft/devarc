@@ -85,10 +85,19 @@ namespace Devarc
             connection.Database.HashSet(key, value);
         }
 
-        public string GetHash(string key, string field, RedisConnection connection)
+        public bool GetHash(string key, string field, RedisConnection connection, out string value)
         {
+            value = string.Empty;
             var result = connection.Database.HashGet(key, field);
-            return result.ToString();
+
+            if (result.HasValue)
+            {
+                value = result.ToString();
+                return true;
+            }
+            {
+                return false;
+            }
         }
 
 
@@ -121,10 +130,18 @@ namespace Devarc
             return connection.Database.SetScan(key, pattern);
         }
 
-        public string PopContent(string key, RedisConnection connection)
+        public bool PopContent(string key, RedisConnection connection, out string value)
         {
+            value = string.Empty;
             var result = connection.Database.SetPop(key);
-            return result.ToString();
+            if (result.HasValue)
+            {
+                value = result.ToString();
+                return true;
+            }
+            {
+                return false;
+            }
         }
     }
 
