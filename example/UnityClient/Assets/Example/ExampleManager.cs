@@ -14,6 +14,7 @@ using UnityEngine.ResourceManagement;
 public class ExampleManager : MonoBehaviour
 {
     public CHARACTER_ID charID;
+    public SKILL_ID skillID;
 
     public AuthNetwork authNetwork;
     public GameNetwork gameNetwork;

@@ -105,7 +105,7 @@ namespace Devarc
                     sw.WriteLine("");
                     sw.WriteLine("\t\tprotected override void reload()");
                     sw.WriteLine("\t\t{");
-                    sw.WriteLine($"\t\t\tvar textAsset = AssetManager.LoadAssetAtPath<TextAsset>(\"{subFolderPath}/{info.SheetName}.json\");");
+                    sw.WriteLine($"\t\t\tvar textAsset = AssetManager.LoadAssetAtPath<TextAsset>(\"{subFolderPath}/{info.SheetName}\");");
                     sw.WriteLine("\t\t\tif (textAsset == null) return;");
                     sw.WriteLine($"\t\t\tTable.{info.SheetName}.Clear();");
                     sw.WriteLine($"\t\t\tTable.{info.SheetName}.LoadJson(textAsset.text);");

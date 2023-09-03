@@ -25,7 +25,7 @@ namespace Devarc
 
 		protected override void reload()
 		{
-			var textAsset = AssetManager.LoadAssetAtPath<TextAsset>("Example/Bundles/Tables/CHARACTER.json");
+			var textAsset = AssetManager.LoadAssetAtPath<TextAsset>("Example/Bundles/Tables/CHARACTER");
 			if (textAsset == null) return;
 			Table.CHARACTER.Clear();
 			Table.CHARACTER.LoadJson(textAsset.text);
