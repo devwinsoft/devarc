@@ -22,7 +22,7 @@ namespace Devarc
             {
                 sw.WriteLine("namespace Devarc");
                 sw.WriteLine("{");
-                sw.WriteLine("\tpublic partial class Table");
+                sw.WriteLine($"\tpublic partial class {fileName}");
                 sw.WriteLine("\t{");
                 foreach (var info in mHeaderList)
                 {
@@ -107,15 +107,15 @@ namespace Devarc
                     sw.WriteLine("\t\t{");
                     sw.WriteLine($"\t\t\tvar textAsset = AssetManager.LoadAssetAtPath<TextAsset>(\"{subFolderPath}/{info.SheetName}\");");
                     sw.WriteLine("\t\t\tif (textAsset == null) return;");
-                    sw.WriteLine($"\t\t\tTable.{info.SheetName}.Clear();");
-                    sw.WriteLine($"\t\t\tTable.{info.SheetName}.LoadJson(textAsset.text);");
+                    sw.WriteLine($"\t\t\t{fileName}.{info.SheetName}.Clear();");
+                    sw.WriteLine($"\t\t\t{fileName}.{info.SheetName}.LoadJson(textAsset.text);");
                     if (string.IsNullOrEmpty(info.DisplayName))
                     {
-                        sw.WriteLine($"\t\t\tforeach (var obj in Table.{info.SheetName}.List) add(obj.{info.KeyFieldName});");
+                        sw.WriteLine($"\t\t\tforeach (var obj in {fileName}.{info.SheetName}.List) add(obj.{info.KeyFieldName});");
                     }
                     else
                     {
-                        sw.WriteLine($"\t\t\tforeach (var obj in Table.{info.SheetName}.List) add($\"{{obj.{info.KeyFieldName}}}:{{obj.{info.DisplayName}}}\");");
+                        sw.WriteLine($"\t\t\tforeach (var obj in {fileName}.{info.SheetName}.List) add($\"{{obj.{info.KeyFieldName}}}:{{obj.{info.DisplayName}}}\");");
                     }
                     sw.WriteLine("\t\t}");
                     sw.WriteLine("\t}");

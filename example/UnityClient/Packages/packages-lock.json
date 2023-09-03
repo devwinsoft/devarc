@@ -5,14 +5,21 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "85e1980482db6433e893e7bbe42fe8df23a0f14b"
+      "hash": "0905213ab2097c5400c0079ed64b2c7d53801901"
+    },
+    "com.devwinsoft.devarc.client.sound": {
+      "version": "https://github.com/devwinsoft/devarc.client.sound.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "5c0e97e2637eb4e02a15b04da1931ca9a440827d"
     },
     "com.devwinsoft.devarc.encrypt": {
       "version": "https://github.com/devwinsoft/devarc.encrypt.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "3bcd1c147734bcb8c0362f9c35931a629a285781"
+      "hash": "5091a346815f661bcdaf1860cffd838433da224d"
     },
     "com.unity.addressables": {
       "version": "1.21.17",

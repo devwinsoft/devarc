@@ -15,6 +15,7 @@ public class ExampleManager : MonoBehaviour
 {
     public CHARACTER_ID charID;
     public SKILL_ID skillID;
+    public SOUND_ID soundID;
 
     public AuthNetwork authNetwork;
     public GameNetwork gameNetwork;
@@ -111,7 +112,7 @@ public class ExampleManager : MonoBehaviour
         yield return AssetManager.Instance.LoadTextAssets("table");
 
         var textAsset = AssetManager.Instance.GetTextAsset("CHARACTER");
-        Table.CHARACTER.LoadJson(textAsset.text);
+        GameTable.CHARACTER.LoadJson(textAsset.text);
     }
 
 

@@ -27,9 +27,9 @@ namespace Devarc
 		{
 			var textAsset = AssetManager.LoadAssetAtPath<TextAsset>("Example/Bundles/Tables/CHARACTER");
 			if (textAsset == null) return;
-			Table.CHARACTER.Clear();
-			Table.CHARACTER.LoadJson(textAsset.text);
-			foreach (var obj in Table.CHARACTER.List) add($"{obj.character_id}:{obj.charName}");
+			GameTable.CHARACTER.Clear();
+			GameTable.CHARACTER.LoadJson(textAsset.text);
+			foreach (var obj in GameTable.CHARACTER.List) add($"{obj.character_id}:{obj.charName}");
 		}
 	}
 }
