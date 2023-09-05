@@ -30,6 +30,7 @@ namespace Devarc
         {
             mCurrentHeader = new HeaderData();
             mCurrentHeader.SheetName = sheet.SheetName;
+            mCurrentHeader.IsDataSheet = sheet.SheetName.Contains("@") || sheet.SheetName.Contains(".");
             mHeaderList.Add(mCurrentHeader);
 
             for (int r = 0; r < (int)RowType.Data; r++)

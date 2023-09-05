@@ -10,7 +10,14 @@ copy /Y   *.Editor.cs    ..\..\src\Devarc.UnityClient\Assets\Example\Generated\T
 move /Y   *.Editor.cs    ..\UnityClient\Assets\Example\Generated\Tables\Editor\
 
 ..\..\bin\TableBuilder.exe -json .\Tables\GameTable.xlsx
+copy /Y   *@*.json  ..\..\src\Devarc.UnityClient\Assets\Example\Resources\Tables\
+move /Y   *@*.json  ..\UnityClient\Assets\Example\Resources\Tables\
+copy /Y   *.json    ..\..\src\Devarc.UnityClient\Assets\Example\Bundles\Tables\
+move /Y   *.json    ..\UnityClient\Assets\Example\Bundles\Tables\
+
 ..\..\bin\TableBuilder.exe -json .\Tables\SoundTable.xlsx
+copy /Y   *@*.json  ..\..\src\Devarc.UnityClient\Assets\Example\Resources\Tables\
+move /Y   *@*.json  ..\UnityClient\Assets\Example\Resources\Tables\
 copy /Y   *.json    ..\..\src\Devarc.UnityClient\Assets\Example\Bundles\Tables\
 move /Y   *.json    ..\UnityClient\Assets\Example\Bundles\Tables\
 

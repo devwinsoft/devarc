@@ -23,6 +23,9 @@ namespace Devarc
                 {
                     var sheet = doc.GetSheetAt(i);
                     readHeader(sheet);
+
+                    if (mCurrentHeader.IsDataSheet)
+                        continue;
                     onReadSheet(sheet, sw);
                 }
                 sw.WriteLine("}");

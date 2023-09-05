@@ -16,6 +16,7 @@ public class ExampleManager : MonoBehaviour
     public CHARACTER_ID charID;
     public SKILL_ID skillID;
     public SOUND_ID soundID;
+    public EFFECT_ID effectID;
 
     public AuthNetwork authNetwork;
     public GameNetwork gameNetwork;
@@ -109,10 +110,14 @@ public class ExampleManager : MonoBehaviour
          * Load Assets...
          * 
          */
-        yield return AssetManager.Instance.LoadTextAssets("table");
+        AssetManager.Instance.LoadResource_Assets<TextAsset>("Tables");
+        SoundManager.Instance.LoadResource();
 
-        var textAsset = AssetManager.Instance.GetTextAsset("CHARACTER");
-        GameTable.CHARACTER.LoadJson(textAsset.text);
+        yield return AssetManager.Instance.LoadBundle_TextAssets("table");
+        GameTable.CHARACTER.LoadFile("CHARACTER");
+
+        yield return SoundManager.Instance.LoadBundle();
+
     }
 
 
@@ -156,4 +161,8 @@ public class ExampleManager : MonoBehaviour
         Debug.Log(JsonUtility.ToJson(request));
     }
 
+
+    public void OnClick_TestFunction()
+    {
+    }
 }

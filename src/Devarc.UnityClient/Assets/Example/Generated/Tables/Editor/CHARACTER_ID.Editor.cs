@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using System.Collections;
 
 namespace Devarc
 {
@@ -23,12 +24,17 @@ namespace Devarc
 			}
 		}
 
-		protected override void reload()
+		public override void Reload()
 		{
-			var textAsset = AssetManager.LoadAssetAtPath<TextAsset>("Example/Bundles/Tables/CHARACTER");
-			if (textAsset == null) return;
 			GameTable.CHARACTER.Clear();
-			GameTable.CHARACTER.LoadJson(textAsset.text);
+			foreach (var textAsset in AssetManager.LoadDatabase_Assets<TextAsset>("CHARACTER", DEV_Settings.GetTable_BundlePath()))
+			{
+				GameTable.CHARACTER.LoadJson(textAsset.text);
+			}
+			foreach (var textAsset in AssetManager.LoadDatabase_Assets<TextAsset>("CHARACTER", DEV_Settings.GetTable_BuiltinPath()))
+			{
+				GameTable.CHARACTER.LoadJson(textAsset.text);
+			}
 			foreach (var obj in GameTable.CHARACTER.List) add($"{obj.character_id}:{obj.charName}");
 		}
 	}

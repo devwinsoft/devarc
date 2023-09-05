@@ -1,6 +1,6 @@
 namespace Devarc
 {
-	public partial class GameTable
+	public class GameTable
 	{
 		public static TableManager<CHARACTER, int> CHARACTER = new TableManager<CHARACTER, int>();
 		public static TableManager<SKILL, string> SKILL = new TableManager<SKILL, string>();

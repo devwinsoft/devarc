@@ -30,7 +30,9 @@ namespace Devarc
         public string SheetName = string.Empty;
         public string KeyTypeName = string.Empty;
         public string KeyFieldName = string.Empty;
+        public bool ShowKey = false;
         public string DisplayName = string.Empty;
+        public bool IsDataSheet = false;
         public int MaxColumn => mMaxColumn;
         int mMaxColumn = 0;
 
@@ -84,6 +86,8 @@ namespace Devarc
                         {
                             KeyTypeName = field.fieldType;
                             KeyFieldName = field.fieldName;
+                            if (options.Contains("show"))
+                                ShowKey = true;
                         }
                         else if (options.Contains("display"))
                         {

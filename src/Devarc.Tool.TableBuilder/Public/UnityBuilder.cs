@@ -22,10 +22,12 @@ namespace Devarc
             {
                 sw.WriteLine("namespace Devarc");
                 sw.WriteLine("{");
-                sw.WriteLine($"\tpublic partial class {fileName}");
+                sw.WriteLine($"\tpublic class {fileName}");
                 sw.WriteLine("\t{");
                 foreach (var info in mHeaderList)
                 {
+                    if (info.IsDataSheet)
+                        continue;
                     sw.WriteLine($"\t\tpublic static TableManager<{info.SheetName}, {info.KeyTypeName}> {info.SheetName} = new TableManager<{info.SheetName}, {info.KeyTypeName}>();");
                 }
                 sw.WriteLine("\t}");
@@ -33,6 +35,9 @@ namespace Devarc
 
                 foreach (var info in mHeaderList)
                 {
+                    if (info.IsDataSheet)
+                        continue;
+
                     sw.WriteLine($"\t[System.Serializable]");
                     sw.WriteLine($"\tpublic class {info.SheetName}_ID");
                     sw.WriteLine("\t{");
@@ -56,6 +61,8 @@ namespace Devarc
                 sw.WriteLine("\t{");
                 foreach (var info in mHeaderList)
                 {
+                    if (info.IsDataSheet)
+                        continue;
                     sw.WriteLine($"\t\tpublic static bool IsValid(this {info.SheetName}_ID obj)");
                     sw.WriteLine("\t\t{");
                     sw.WriteLine("\t\t\treturn obj != null && !string.IsNullOrEmpty(obj.Value);");
@@ -75,11 +82,15 @@ namespace Devarc
 
             foreach (var info in mHeaderList)
             {
+                if (info.IsDataSheet)
+                    continue;
+
                 var editorCodePath = Path.Combine(workingDir, $"{info.SheetName}_ID.Editor.cs");
                 using (var sw = File.CreateText(editorCodePath))
                 {
                     sw.WriteLine("using UnityEngine;");
                     sw.WriteLine("using UnityEditor;");
+                    sw.WriteLine("using System.Collections;");
                     sw.WriteLine("");
                     sw.WriteLine("namespace Devarc");
                     sw.WriteLine("{");
@@ -103,19 +114,28 @@ namespace Devarc
                     sw.WriteLine("\t\t\t}");
                     sw.WriteLine("\t\t}");
                     sw.WriteLine("");
-                    sw.WriteLine("\t\tprotected override void reload()");
+                    sw.WriteLine("\t\tpublic override void Reload()");
                     sw.WriteLine("\t\t{");
-                    sw.WriteLine($"\t\t\tvar textAsset = AssetManager.LoadAssetAtPath<TextAsset>(\"{subFolderPath}/{info.SheetName}\");");
-                    sw.WriteLine("\t\t\tif (textAsset == null) return;");
                     sw.WriteLine($"\t\t\t{fileName}.{info.SheetName}.Clear();");
-                    sw.WriteLine($"\t\t\t{fileName}.{info.SheetName}.LoadJson(textAsset.text);");
+                    sw.WriteLine($"\t\t\tforeach (var textAsset in AssetManager.LoadDatabase_Assets<TextAsset>(\"{info.SheetName}\", DEV_Settings.GetTable_BundlePath()))");
+                    sw.WriteLine("\t\t\t{");
+                    sw.WriteLine($"\t\t\t\t{fileName}.{info.SheetName}.LoadJson(textAsset.text);");
+                    sw.WriteLine("\t\t\t}");
+                    sw.WriteLine($"\t\t\tforeach (var textAsset in AssetManager.LoadDatabase_Assets<TextAsset>(\"{info.SheetName}\", DEV_Settings.GetTable_BuiltinPath()))");
+                    sw.WriteLine("\t\t\t{");
+                    sw.WriteLine($"\t\t\t\t{fileName}.{info.SheetName}.LoadJson(textAsset.text);");
+                    sw.WriteLine("\t\t\t}");
                     if (string.IsNullOrEmpty(info.DisplayName))
                     {
                         sw.WriteLine($"\t\t\tforeach (var obj in {fileName}.{info.SheetName}.List) add(obj.{info.KeyFieldName});");
                     }
-                    else
+                    else if (info.ShowKey)
                     {
                         sw.WriteLine($"\t\t\tforeach (var obj in {fileName}.{info.SheetName}.List) add($\"{{obj.{info.KeyFieldName}}}:{{obj.{info.DisplayName}}}\");");
+                    }
+                    else
+                    {
+                        sw.WriteLine($"\t\t\tforeach (var obj in {fileName}.{info.SheetName}.List) add(obj.{info.DisplayName});");
                     }
                     sw.WriteLine("\t\t}");
                     sw.WriteLine("\t}");
