@@ -8,9 +8,6 @@ using Devarc;
 using System.Text;
 using MessagePack.Resolvers;
 using System.Collections;
-using Newtonsoft.Json;
-using UnityEngine.ResourceManagement;
-using UnityEditor.iOS;
 
 public class ExampleManager : MonoBehaviour
 {
@@ -105,8 +102,6 @@ public class ExampleManager : MonoBehaviour
             scrollRect.normalizedPosition = new Vector2(0, 0);
         };
 
-
-
         /*
          * Load Assets...
          * 
@@ -116,7 +111,7 @@ public class ExampleManager : MonoBehaviour
     }
 
 
-    public void OnClick_RequestLogin()
+        public void OnClick_RequestLogin()
     {
         var request = new C2Auth.RequestLogin();
         request.accountID = inputID.text;
@@ -156,17 +151,13 @@ public class ExampleManager : MonoBehaviour
         Debug.Log(JsonUtility.ToJson(request));
     }
 
-    AudioClip clip = null;
-    public void OnClick_TestFunction()
+    public void OnClick_Test1()
     {
-        if (clip == null)
-        {
-            clip = AssetManager.Instance.GetAsset<AudioClip>("snd_explosion");
-        }
-        AssetManager.Instance.UnLoadAsset<AudioClip>("snd_explosion");
-        Resources.UnloadUnusedAssets();
-        //SoundManager.Instance.PlaySound(CHANNEL.UI, soundID);
+        SoundManager.Instance.PlaySound(CHANNEL.UI, soundID);
+    }
 
-        SoundManager.Instance.Channels[(int)CHANNEL.UI].Play(0, clip, 1f, false, 0f, 0f);
+    public void OnClick_Test2()
+    {
+        AssetManager.Instance.UnLoadAssets("sound");
     }
 }

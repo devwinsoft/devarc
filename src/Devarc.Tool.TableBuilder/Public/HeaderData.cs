@@ -22,6 +22,7 @@ namespace Devarc
         public string fieldName;
         public string fieldType;
         public bool needQuotes;
+        public bool isClass;
         public bool isList;
     }
 

@@ -3,8 +3,21 @@ using MessagePack;
 namespace Devarc
 {
 	[System.Serializable]
+	public partial class _CHARACTER : RawTableData
+	{
+		public string               character_id;
+		public string               charName;
+		public string               age;
+		public string               gender;
+
+		public virtual int          get_character_id() => GetInt(character_id);
+		public virtual string       get_charName() => (charName);
+		public virtual int          get_age() => GetInt(age);
+		public virtual GenderType   get_gender() => GetEnum<GenderType>(gender);
+	}
+	[System.Serializable]
 	[MessagePackObject]
-	public class CHARACTER : ITableData<int>
+	public class CHARACTER : ITableData<_CHARACTER, int>
 	{
 		public int GetKey() { return character_id; }
 		[Key(0)]
@@ -15,11 +28,32 @@ namespace Devarc
 		public int                  age;
 		[Key(3)]
 		public GenderType           gender;
+
+		public void Initialize(_CHARACTER data)
+		{
+			character_id = data.get_character_id();
+			charName = data.get_charName();
+			age = data.get_age();
+			gender = data.get_gender();
+		}
 	}
 
 	[System.Serializable]
+	public partial class _SKILL : RawTableData
+	{
+		public string               skill_id;
+		public string               skillName;
+		public string               level;
+		public string               power;
+
+		public virtual string       get_skill_id() => (skill_id);
+		public virtual string       get_skillName() => (skillName);
+		public virtual int          get_level() => GetInt(level);
+		public virtual int          get_power() => GetInt(power);
+	}
+	[System.Serializable]
 	[MessagePackObject]
-	public class SKILL : ITableData<string>
+	public class SKILL : ITableData<_SKILL, string>
 	{
 		public string GetKey() { return skill_id; }
 		[Key(0)]
@@ -30,6 +64,14 @@ namespace Devarc
 		public int                  level;
 		[Key(3)]
 		public int                  power;
+
+		public void Initialize(_SKILL data)
+		{
+			skill_id = data.get_skill_id();
+			skillName = data.get_skillName();
+			level = data.get_level();
+			power = data.get_power();
+		}
 	}
 
 }

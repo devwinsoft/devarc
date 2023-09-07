@@ -28,7 +28,7 @@ namespace Devarc
                 {
                     if (info.IsDataSheet)
                         continue;
-                    sw.WriteLine($"\t\tpublic static TableData<{info.SheetName}, {info.KeyTypeName}> {info.SheetName} = new TableData<{info.SheetName}, {info.KeyTypeName}>();");
+                    sw.WriteLine($"\t\tpublic static TableData<{info.SheetName}, _{info.SheetName}, {info.KeyTypeName}> {info.SheetName} = new TableData<{info.SheetName}, _{info.SheetName}, {info.KeyTypeName}>();");
                 }
                 sw.WriteLine("\t}");
                 sw.WriteLine("");
