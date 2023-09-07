@@ -1,26 +1,5 @@
 {
   "dependencies": {
-    "com.devwinsoft.devarc.client": {
-      "version": "https://github.com/devwinsoft/devarc.client.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "0905213ab2097c5400c0079ed64b2c7d53801901"
-    },
-    "com.devwinsoft.devarc.client.sound": {
-      "version": "https://github.com/devwinsoft/devarc.client.sound.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "5c0e97e2637eb4e02a15b04da1931ca9a440827d"
-    },
-    "com.devwinsoft.devarc.encrypt": {
-      "version": "https://github.com/devwinsoft/devarc.encrypt.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "5091a346815f661bcdaf1860cffd838433da224d"
-    },
     "com.unity.addressables": {
       "version": "1.21.17",
       "depth": 0,
@@ -33,6 +12,13 @@
         "com.unity.modules.unitywebrequest": "1.0.0",
         "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
       },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.editorcoroutines": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.ext.nunit": {
@@ -62,6 +48,13 @@
     },
     "com.unity.ide.vscode": {
       "version": "1.2.5",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.profiling.core": {
+      "version": "1.0.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {},

@@ -10,6 +10,7 @@ using MessagePack.Resolvers;
 using System.Collections;
 using Newtonsoft.Json;
 using UnityEngine.ResourceManagement;
+using UnityEditor.iOS;
 
 public class ExampleManager : MonoBehaviour
 {
@@ -110,14 +111,8 @@ public class ExampleManager : MonoBehaviour
          * Load Assets...
          * 
          */
-        AssetManager.Instance.LoadResource_Assets<TextAsset>("Tables");
-        SoundManager.Instance.LoadResource();
-
-        yield return AssetManager.Instance.LoadBundle_TextAssets("table");
-        GameTable.CHARACTER.LoadFile("CHARACTER");
-
-        yield return SoundManager.Instance.LoadBundle();
-
+        TableManager.Instance.LoadResources();
+        yield return TableManager.Instance.LoadBundles();
     }
 
 
@@ -161,8 +156,17 @@ public class ExampleManager : MonoBehaviour
         Debug.Log(JsonUtility.ToJson(request));
     }
 
-
+    AudioClip clip = null;
     public void OnClick_TestFunction()
     {
+        if (clip == null)
+        {
+            clip = AssetManager.Instance.GetAsset<AudioClip>("snd_explosion");
+        }
+        AssetManager.Instance.UnLoadAsset<AudioClip>("snd_explosion");
+        Resources.UnloadUnusedAssets();
+        //SoundManager.Instance.PlaySound(CHANNEL.UI, soundID);
+
+        SoundManager.Instance.Channels[(int)CHANNEL.UI].Play(0, clip, 1f, false, 0f, 0f);
     }
 }

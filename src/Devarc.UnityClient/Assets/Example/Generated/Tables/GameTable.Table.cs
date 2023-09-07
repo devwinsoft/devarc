@@ -2,8 +2,8 @@ namespace Devarc
 {
 	public class GameTable
 	{
-		public static TableManager<CHARACTER, int> CHARACTER = new TableManager<CHARACTER, int>();
-		public static TableManager<SKILL, string> SKILL = new TableManager<SKILL, string>();
+		public static TableData<CHARACTER, int> CHARACTER = new TableData<CHARACTER, int>();
+		public static TableData<SKILL, string> SKILL = new TableData<SKILL, string>();
 	}
 
 	[System.Serializable]

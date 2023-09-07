@@ -1,3 +1,3 @@
-{"list":[{"index":1,"sound_id":"BGM_INTRO","path":"Sound/BGM/intro","loop":"TRUE","volume":1,"bundle":"FALSE"}
-,{ "index":2,"sound_id":"UI_CLICK","path":"Sound/UI/click","loop":"FALSE","volume":1,"bundle":"FALSE"}
+{"list":[{"index":1,"sound_id":"BGM_INTRO","path":"Sounds/snd_explosion","loop":"TRUE","volume":1,"bundle":"FALSE"}
+,{ "index":2,"sound_id":"UI_CLICK","path":"Sounds/snd_explosion","loop":"FALSE","volume":1,"bundle":"FALSE"}
 ]}
