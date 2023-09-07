@@ -84,7 +84,7 @@ namespace Devarc
         void onReadSheet(ISheet sheet, StreamWriter sw)
         {
             sw.WriteLine("\t[System.Serializable]");
-            sw.WriteLine($"\tpublic partial class _{sheet.SheetName} : RawTableData");
+            sw.WriteLine($"\tpublic partial class RawTableData_{sheet.SheetName} : RawTableData");
             sw.WriteLine("\t{");
             for (int c = 0; c < mCurrentHeader.MaxColumn; c++)
             {
@@ -105,8 +105,12 @@ namespace Devarc
                     sw.WriteLine(string.Format("\t\tpublic virtual {0,-12} get_{1}() => {2};", data.fieldType, data.fieldName, getFunctionStr(data)));
             }
             sw.WriteLine("\t}");
-
-
+            sw.WriteLine("");
+            sw.WriteLine("\t[System.Serializable]");
+            sw.WriteLine($"\tpublic partial class _{sheet.SheetName} : RawTableData_{sheet.SheetName}");
+            sw.WriteLine("\t{");
+            sw.WriteLine("\t}");
+            sw.WriteLine("");
             sw.WriteLine("\t[System.Serializable]");
             sw.WriteLine("\t[MessagePackObject]");
             sw.WriteLine($"\tpublic class {sheet.SheetName} : ITableData<_{sheet.SheetName}, {mCurrentHeader.KeyTypeName}>");

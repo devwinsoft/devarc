@@ -1,4 +1,5 @@
-﻿using NPOI.SS.UserModel;
+﻿using NPOI.OpenXmlFormats;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,6 @@ namespace Devarc
         public string description;
         public string fieldName;
         public string fieldType;
-        public bool needQuotes;
         public bool isClass;
         public bool isList;
     }
@@ -52,11 +52,13 @@ namespace Devarc
 
             mMaxColumn = Math.Max(mMaxColumn, cells.Count);
 
-            for (int col = 0; col < cells.Count; col++) 
+            int cnt = 0;
+            for (int col = 0; cnt < cells.Count; col++) 
             {
                 var cell = row.GetCell(col);
                 if (cell == null)
                     continue;
+                cnt++;
 
                 FieldData field = null;
                 if (rowType == RowType.Description)
@@ -78,11 +80,20 @@ namespace Devarc
                         field.fieldName = cell.ToString().Trim();
                         break;
                     case RowType.FieldType:
-                        field.fieldType = cell.ToString().Trim();
+                        var typeName = cell.ToString().Trim();
+                        if (typeName.EndsWith("[]"))
+                        {
+                            field.fieldType = typeName.Substring(0, typeName.Length - 2);
+                            field.isList = true;
+                        }
+                        else
+                        {
+                            field.fieldType = cell.ToString().Trim();
+                        }
                         break;
                     case RowType.ClassType:
                         string options = cell.ToString().ToLower();
-                        field.isList = options.Contains("list");
+                        field.isClass = options.Contains("class");
                         if (options.Contains("key"))
                         {
                             KeyTypeName = field.fieldType;

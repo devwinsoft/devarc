@@ -3,7 +3,7 @@ using MessagePack;
 namespace Devarc
 {
 	[System.Serializable]
-	public partial class _CHARACTER : RawTableData
+	public partial class RawTableData_CHARACTER : RawTableData
 	{
 		public string               character_id;
 		public string               charName;
@@ -15,6 +15,12 @@ namespace Devarc
 		public virtual int          get_age() => GetInt(age);
 		public virtual GenderType   get_gender() => GetEnum<GenderType>(gender);
 	}
+
+	[System.Serializable]
+	public partial class _CHARACTER : RawTableData_CHARACTER
+	{
+	}
+
 	[System.Serializable]
 	[MessagePackObject]
 	public class CHARACTER : ITableData<_CHARACTER, int>
@@ -39,18 +45,28 @@ namespace Devarc
 	}
 
 	[System.Serializable]
-	public partial class _SKILL : RawTableData
+	public partial class RawTableData_SKILL : RawTableData
 	{
 		public string               skill_id;
 		public string               skillName;
 		public string               level;
 		public string               power;
+		public string               account;
+		public string               args;
 
 		public virtual string       get_skill_id() => (skill_id);
 		public virtual string       get_skillName() => (skillName);
 		public virtual int          get_level() => GetInt(level);
 		public virtual int          get_power() => GetInt(power);
+		public virtual Account      get_account() => GetClass<Account>(account);
+		public virtual int[]        get_args() => GetIntArray(args);
 	}
+
+	[System.Serializable]
+	public partial class _SKILL : RawTableData_SKILL
+	{
+	}
+
 	[System.Serializable]
 	[MessagePackObject]
 	public class SKILL : ITableData<_SKILL, string>
@@ -64,6 +80,10 @@ namespace Devarc
 		public int                  level;
 		[Key(3)]
 		public int                  power;
+		[Key(4)]
+		public Account              account;
+		[Key(5)]
+		public int[]                args;
 
 		public void Initialize(_SKILL data)
 		{
@@ -71,6 +91,8 @@ namespace Devarc
 			skillName = data.get_skillName();
 			level = data.get_level();
 			power = data.get_power();
+			account = data.get_account();
+			args = data.get_args();
 		}
 	}
 

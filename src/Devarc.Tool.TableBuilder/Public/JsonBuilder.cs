@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using NPOI.SS.UserModel;
+using System.Text.RegularExpressions;
 
 namespace Devarc
 {
     public class JsonBuilder : BaseBuilder
     {
+        Regex mRegex = new Regex(@"^[0-9]*(?:\.[0-9]*)?$");
+
         public void Build(string inputPath)
         {
             var doc = open(inputPath);
@@ -73,8 +76,7 @@ namespace Devarc
 
         bool needQuotes(string value)
         {
-            float temp;
-            return !float.TryParse(value, out temp);
+            return !mRegex.IsMatch(value);
         }
     }
 }

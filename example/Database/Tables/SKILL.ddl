@@ -4,5 +4,7 @@ CREATE TABLE `SKILL` (
 	`skillName` varchar(255) NOT NULL,
 	`level` INT NOT NULL,
 	`power` INT NOT NULL,
+	`account` varchar(255) NOT NULL,
+	`args` INT NOT NULL,
 	PRIMARY KEY (`skill_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci

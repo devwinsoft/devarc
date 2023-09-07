@@ -111,7 +111,7 @@ public class ExampleManager : MonoBehaviour
     }
 
 
-        public void OnClick_RequestLogin()
+    public void OnClick_RequestLogin()
     {
         var request = new C2Auth.RequestLogin();
         request.accountID = inputID.text;
