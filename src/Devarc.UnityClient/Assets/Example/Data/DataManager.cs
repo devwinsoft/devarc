@@ -4,7 +4,7 @@ using UnityEngine;
 using Devarc;
 
 
-public class TableManager : MonoSingleton<TableManager>
+public class DataManager : MonoSingleton<DataManager>
 {
     public void LoadResources()
     {

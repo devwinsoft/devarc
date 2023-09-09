@@ -12,7 +12,7 @@ public class TableManager : MonoSingleton<TableManager>
         AssetManager.Instance.LoadResource_Assets<TextAsset>("Tables");
 
         // Load sounds.
-        SoundManager.Instance.LoadResource("SOUND@builtin");
+        SoundManager.Instance.LoadResources("SOUND@builtin");
     }
 
 
@@ -29,6 +29,6 @@ public class TableManager : MonoSingleton<TableManager>
 
 
         // Load sounds.
-        yield return SoundManager.Instance.LoadBundle("SOUND", "sound");
+        yield return SoundManager.Instance.LoadBundles("SOUND", "sound");
     }
 }

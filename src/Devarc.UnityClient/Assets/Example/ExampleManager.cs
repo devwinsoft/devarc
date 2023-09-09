@@ -8,6 +8,8 @@ using Devarc;
 using System.Text;
 using MessagePack.Resolvers;
 using System.Collections;
+using System.Drawing.Drawing2D;
+using System.Security.Policy;
 
 public class ExampleManager : MonoBehaviour
 {
@@ -32,7 +34,7 @@ public class ExampleManager : MonoBehaviour
     StringBuilder mStrBuilder = new StringBuilder();
     List<string> mLogMessages = new List<string>();
 
-    IEnumerator Start()
+    void Start()
     {
         /*
          * Init Network
@@ -45,7 +47,7 @@ public class ExampleManager : MonoBehaviour
         );
 
         authNetwork.Init(authAddress.text, "packet", StaticCompositeResolver.Instance);
- 
+
         gameNetwork.Init(StaticCompositeResolver.Instance);
         gameNetwork.OnOpen += onConnected;
         gameNetwork.OnClose += (sender, evt) =>
@@ -82,7 +84,7 @@ public class ExampleManager : MonoBehaviour
                     mLogMessages.Add($"[{DateTime.Now.ToString("HH:mm:ss")}] {log}");
                     break;
             }
-            
+
             if (mLogMessages.Count > 50)
             {
                 mLogMessages.RemoveAt(0);
@@ -106,8 +108,7 @@ public class ExampleManager : MonoBehaviour
          * Load Assets...
          * 
          */
-        TableManager.Instance.LoadResources();
-        yield return TableManager.Instance.LoadBundles();
+        DataManager.Instance.LoadResources();
     }
 
 
@@ -153,11 +154,38 @@ public class ExampleManager : MonoBehaviour
 
     public void OnClick_Test1()
     {
+        StartCoroutine(test1());
+    }
+
+    IEnumerator test1()
+    {
+        long totalSize = 0;
+        Dictionary<string, long> patchList = null;
+        yield return DownloadManager.Instance.GetPatchList((_size, _list) =>
+        {
+            totalSize = _size;
+            patchList = _list;
+        });
+
+        yield return DownloadManager.Instance.Download(patchList, (process) =>
+        {
+        }, (success) =>
+        {
+        });
+        yield return DataManager.Instance.LoadBundles();
         SoundManager.Instance.PlaySound(CHANNEL.UI, soundID);
     }
 
+
     public void OnClick_Test2()
     {
-        AssetManager.Instance.UnLoadAssets("sound");
+        StartCoroutine(test2());
+    }
+
+    IEnumerator test2()
+    {
+        UnityWebRequest www = UnityWebRequest.Get("https://s3.ap-northeast-2.amazonaws.com/com.devwinsoft.devarc/v1.0.0/StandAlone/effects_assets_all.bundle");
+        yield return www.SendWebRequest();
+        Debug.Log(www.result);
     }
 }

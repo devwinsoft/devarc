@@ -97,6 +97,7 @@ src/Devarc.UnityClient/*.sln
 src/Devarc.UnityClient/Library/
 src/Devarc.UnityClient/Logs/
 src/Devarc.UnityClient/obj/
+src/Devarc.UnityClient/ServerData/
 src/Devarc.UnityClient/Temp/
 src/Devarc.UnityClient/UserSettings/
 src/packages/
