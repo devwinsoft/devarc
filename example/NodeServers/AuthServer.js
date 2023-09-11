@@ -76,6 +76,11 @@ const Common = require('./Protocols/Common.js');
 const Auth2C = require('./Protocols/Auth2C.js');
 const C2Auth = require('./Protocols/C2Auth.js');
 
+app.get('/', (req, res) =>
+{
+    res.send('This is AuthServer.');
+});
+
 app.get('/msgpack', (req, res) =>
 {
     var packet = req.query.packet;
@@ -145,23 +150,13 @@ async function init()
 }
 init();
 
+const serverOption = {
+    key: fs.readFileSync(process.env.SSL_KEY, 'utf8'),
+    cert: fs.readFileSync(process.env.SSL_CERT, 'utf8')
+};
+const server = https.createServer(serverOption, app);
+server.listen(process.env.HTTP_PORT, () =>
+{
+    console.log(`Server running at http://localhost:${process.env.HTTP_PORT}/`);
+});
 
-if (process.env.PRODUCTION)
-{
-    const serverOption = {
-        key: fs.readFileSync(process.env.SSL_KEY),
-        cert: fs.readFileSync(process.env.SSL_CERT)
-    };
-    const server = https.createServer(serverOption, app);
-    server.listen(process.env.HTTP_PORT, () =>
-    {
-        console.log(`Server running at http://localhost:${process.env.HTTP_PORT}/`);
-    });
-}
-else
-{
-    app.listen(process.env.HTTP_PORT, () =>
-    {
-        console.log(`Server running at http://localhost:${process.env.HTTP_PORT}/`);
-    });
-}

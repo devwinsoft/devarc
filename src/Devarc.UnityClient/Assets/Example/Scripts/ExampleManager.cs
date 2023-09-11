@@ -63,7 +63,7 @@ public class ExampleManager : MonoBehaviour
          * Init UI
          * 
          */
-        authAddress.text = "http://localhost:3000/msgpack";
+        authAddress.text = "https://localhost:3000/msgpack";
         gameAddress.text = "ws://localhost:4000/Game";
 
         logText.text = string.Empty;

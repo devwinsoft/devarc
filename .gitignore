@@ -92,7 +92,7 @@ src/Devarc.Tool.IDL/bin/
 src/Devarc.Tool.IDL/obj/
 src/Devarc.Tool.TableBuilder/bin/
 src/Devarc.Tool.TableBuilder/obj/
-src/Devarc.UnityClient/Assets/Devarc
+src/Devarc.UnityClient/Assets/Devarc/devarc.*
 src/Devarc.UnityClient/Assets/Scripts/Devarc
 src/Devarc.UnityClient/*.csproj
 src/Devarc.UnityClient/*.sln
