@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 3f7eb0b0492a6754eb75a995cbfb3401
   m_currentHash:
     serializedVersion: 2
-    Hash: 2a6ffed17adc3c7805ceb8f5d79bc0b1
+    Hash: c59c111d80e3271a07b5d885138b755e
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -66,9 +66,9 @@ MonoBehaviour:
       - m_Id: cb7944f5ab5a16143903226f980dfa58
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: f740d8dea652bf44889304684ca639c3
-        m_Value: ServerData/[BuildTarget]
+        m_Value: ServerData/v[UnityEditor.PlayerSettings.bundleVersion]/[BuildTarget]
       - m_Id: bf202ea0cf7cf6d4b9697aedf3ad3c8b
-        m_Value: http://[PrivateIpAddress]:[HostingServicePort]
+        m_Value: https://d3pyf3eydly59u.cloudfront.net/v[UnityEditor.PlayerSettings.bundleVersion]/[BuildTarget]
     m_ProfileEntryNames:
     - m_Id: 8a40992344b87f448bfe973a445fb9b9
       m_Name: BuildTarget

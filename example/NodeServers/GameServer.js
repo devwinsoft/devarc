@@ -78,15 +78,14 @@ wss.on('connection', (ws, request) =>
 });
  
 
-async function StartSerer()
+async function init()
 {
     // Connect
     await redisClient.connect();
-
-    wss.on('listening', () =>
-    {
-        console.log(`Server running at http://localhost:${process.env.SOCKET_PORT}/`);
-    });
 }
+init();
 
-StartSerer();
+wss.on('listening', () =>
+{
+    console.log(`Server running at http://localhost:${process.env.SOCKET_PORT}/`);
+});

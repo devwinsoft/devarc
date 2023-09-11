@@ -65,7 +65,7 @@ namespace Devarc
                 string fileName = temp.Key;
                 string outputPath = $"{mWorkingDir}\\{fileName}.js";
 
-                output.AppendLine("const msgpack = require('msgpack');");
+                output.AppendLine("const msgpack = require('msgpack-lite');");
                 foreach (var data in mClassDatas)
                 {
                     output.AppendLine($"const {data.fileName} = require('./{data.fileName}.js');");
@@ -141,7 +141,7 @@ function unpack(buf)
     var type_len = new Uint32Array(buf.slice(0, 2))[0];
     var type_name = buf.slice(2, 2 + type_len).toString();
     var data = buf.slice(2 + type_len);
-    var content = msgpack.unpack(data);
+    var content = msgpack.decode(data);
 
     return createPacket(type_name, content);
 }}
@@ -151,7 +151,7 @@ module.exports.pack = (obj) =>
     var type_name = obj.constructor.name;
     var buf_length = Buffer.alloc(2);
     var buf_name = Buffer.alloc(type_name.length);
-    var buf_data = msgpack.pack(obj.ToArray());
+    var buf_data = msgpack.encode(obj.ToArray());
 
     buf_length.writeUInt16LE(type_name.length, 0);
     //buf_length.writeUInt16BE(type_name.length, 0);

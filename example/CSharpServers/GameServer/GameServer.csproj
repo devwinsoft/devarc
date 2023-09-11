@@ -85,9 +85,10 @@
     <Compile Include="Generated\MsgPack\MessagePack_Formatters_Devarc_CharacterFormatter.cs" />
     <Compile Include="Generated\MsgPack\MessagePack_Formatters_Devarc_ErrorTypeFormatter.cs" />
     <Compile Include="Generated\MsgPack\MessagePack_Formatters_Devarc_GenderTypeFormatter.cs" />
+    <Compile Include="Generated\MsgPack\MessagePack_Formatters_Devarc_SKILLFormatter.cs" />
     <Compile Include="Generated\MsgPack\MessagePack_Formatters_Game2C_NotifyLoginFormatter.cs" />
     <Compile Include="Generated\MsgPack\MessagePack_Resolvers_GeneratedResolver.cs" />
-    <Compile Include="Generated\Tables\GameDB.cs" />
+    <Compile Include="Generated\Tables\GameTable.cs" />
     <Compile Include="Network\GameUser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

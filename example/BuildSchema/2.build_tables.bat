@@ -1,13 +1,13 @@
 ..\..\bin\TableBuilder.exe -cs .\Tables\GameTable.xlsx
 copy /Y   *.cs    ..\CSharpServers\GameServer\Generated\Tables\
-copy /Y   *.cs    ..\..\src\Devarc.UnityClient\Assets\Example\Generated\Tables\
-move /Y   *.cs    ..\UnityClient\Assets\Example\Generated\Tables\
+copy /Y   *.cs    ..\..\src\Devarc.UnityClient\Assets\Example\Scripts\Generated\Tables\
+move /Y   *.cs    ..\UnityClient\Assets\Example\Scripts\Generated\Tables\
 
 ..\..\bin\TableBuilder.exe -unity .\Tables\GameTable.xlsx -path Example/Bundles/Tables/
-copy /Y   *.Table.cs    ..\..\src\Devarc.UnityClient\Assets\Example\Generated\Tables\
-move /Y   *.Table.cs    ..\UnityClient\Assets\Example\Generated\Tables\
-copy /Y   *.Editor.cs    ..\..\src\Devarc.UnityClient\Assets\Example\Generated\Tables\Editor\
-move /Y   *.Editor.cs    ..\UnityClient\Assets\Example\Generated\Tables\Editor\
+copy /Y   *.Table.cs    ..\..\src\Devarc.UnityClient\Assets\Example\Scripts\Generated\Tables\
+move /Y   *.Table.cs    ..\UnityClient\Assets\Example\Scripts\Generated\Tables\
+copy /Y   *.Editor.cs    ..\..\src\Devarc.UnityClient\Assets\Example\Scripts\Generated\Tables\Editor\
+move /Y   *.Editor.cs    ..\UnityClient\Assets\Example\Scripts\Generated\Tables\Editor\
 
 ..\..\bin\TableBuilder.exe -json .\Tables\GameTable.xlsx
 copy /Y   *@*.json  ..\..\src\Devarc.UnityClient\Assets\Example\Resources\Tables\

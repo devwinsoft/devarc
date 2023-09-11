@@ -22,7 +22,7 @@ namespace Devarc
             {
                 sw.WriteLine("namespace Devarc");
                 sw.WriteLine("{");
-                sw.WriteLine($"\tpublic class {fileName}");
+                sw.WriteLine($"\tpublic partial class Table");
                 sw.WriteLine("\t{");
                 foreach (var info in mHeaderList)
                 {
@@ -116,26 +116,26 @@ namespace Devarc
                     sw.WriteLine("");
                     sw.WriteLine("\t\tpublic override void Reload()");
                     sw.WriteLine("\t\t{");
-                    sw.WriteLine($"\t\t\t{fileName}.{info.SheetName}.Clear();");
+                    sw.WriteLine($"\t\t\tTable.{info.SheetName}.Clear();");
                     sw.WriteLine($"\t\t\tforeach (var textAsset in AssetManager.LoadDatabase_Assets<TextAsset>(\"{info.SheetName}\", DEV_Settings.GetTable_BundlePath()))");
                     sw.WriteLine("\t\t\t{");
-                    sw.WriteLine($"\t\t\t\t{fileName}.{info.SheetName}.LoadJson(textAsset.text);");
+                    sw.WriteLine($"\t\t\t\tTable.{info.SheetName}.LoadJson(textAsset.text);");
                     sw.WriteLine("\t\t\t}");
                     sw.WriteLine($"\t\t\tforeach (var textAsset in AssetManager.LoadDatabase_Assets<TextAsset>(\"{info.SheetName}\", DEV_Settings.GetTable_BuiltinPath()))");
                     sw.WriteLine("\t\t\t{");
-                    sw.WriteLine($"\t\t\t\t{fileName}.{info.SheetName}.LoadJson(textAsset.text);");
+                    sw.WriteLine($"\t\t\t\tTable.{info.SheetName}.LoadJson(textAsset.text);");
                     sw.WriteLine("\t\t\t}");
                     if (string.IsNullOrEmpty(info.DisplayName))
                     {
-                        sw.WriteLine($"\t\t\tforeach (var obj in {fileName}.{info.SheetName}.List) add(obj.{info.KeyFieldName});");
+                        sw.WriteLine($"\t\t\tforeach (var obj in Table.{info.SheetName}.List) add(obj.{info.KeyFieldName});");
                     }
                     else if (info.ShowKey)
                     {
-                        sw.WriteLine($"\t\t\tforeach (var obj in {fileName}.{info.SheetName}.List) add($\"{{obj.{info.KeyFieldName}}}:{{obj.{info.DisplayName}}}\");");
+                        sw.WriteLine($"\t\t\tforeach (var obj in Table.{info.SheetName}.List) add($\"{{obj.{info.KeyFieldName}}}:{{obj.{info.DisplayName}}}\");");
                     }
                     else
                     {
-                        sw.WriteLine($"\t\t\tforeach (var obj in {fileName}.{info.SheetName}.List) add(obj.{info.DisplayName});");
+                        sw.WriteLine($"\t\t\tforeach (var obj in Table.{info.SheetName}.List) add(obj.{info.DisplayName});");
                     }
                     sw.WriteLine("\t\t}");
                     sw.WriteLine("\t}");

@@ -1,0 +1,9 @@
+curl -o- https://github.com/nvm-sh/nvm/blob/master/install.sh | bash
+
+nvm install v20.6.1
+
+apt-get install libmsgpack*
+
+
+apt-get install pip3
+apt install python3-pip

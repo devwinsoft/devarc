@@ -73,7 +73,6 @@ app.use(session(
 const Common = require('./Protocols/Common.js');
 const Auth2C = require('./Protocols/Auth2C.js');
 const C2Auth = require('./Protocols/C2Auth.js');
-const { tryAcquire } = require('async-mutex');
 
 app.get('/msgpack', (req, res) =>
 {
@@ -132,7 +131,7 @@ C2Auth.on('RequestLogin', (obj, req, res) => {
 
 
 // Connect to MySQL & Redis.
-async function StartSerer()
+async function init()
 {
     // Connect
     mysqlConn.connect((err) =>
@@ -141,11 +140,10 @@ async function StartSerer()
         console.log('Mysql connected.');
     });
     await redisClient.connect();
-
-    app.listen(process.env.HTTP_PORT, process.env.HTTP_HOST, () =>
-    {
-        console.log(`Server running at http://${process.env.HTTP_HOST}:${process.env.HTTP_POST}/`);
-    });
 }
+init();
 
-StartSerer();
+app.listen(process.env.HTTP_PORT, process.env.HTTP_HOST, () =>
+{
+    console.log(`Server running at http://${process.env.HTTP_HOST}:${process.env.HTTP_PORT}/`);
+});
