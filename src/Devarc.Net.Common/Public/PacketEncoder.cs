@@ -23,6 +23,8 @@ namespace Devarc
 
         public byte[] Pack<T>(T obj)
         {
+            mStream.SetLength(0);
+
             var type = typeof(T);
             write(type.Name);
             write(MessagePackSerializer.Serialize<T>(obj, mOptions));

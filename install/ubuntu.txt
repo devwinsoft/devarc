@@ -1,9 +1,35 @@
-curl -o- https://github.com/nvm-sh/nvm/blob/master/install.sh | bash
+sudo su
 
+<<NodeJS>>
+apt-get install curl gnupg2 -y
+curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+source ~/.bashrc
 nvm install v20.6.1
 
+
+<<Redis>>
+apt-get install redis-server
+
+
 apt-get install libmsgpack*
+apt-get install libssl-dev g++ make
 
-
-apt-get install pip3
 apt install python3-pip
+
+
+<<MYSQL>>
+apt-get install mysql-server
+ufw allow mysql
+systemctl start mysql
+systemctl enable mysql
+>mysql CREATE USER 'develop'@'%' IDENTIFIED BY '비번';
+>mysql grant all privileges on testdb.* to 'develop'@'%';
+>mysql ALTER USER 'develop'@'%' IDENTIFIED WITH mysql_native_password BY '비번';
+
+vi /etc/mysql/my.cnf
+[mysqld]
+bind-address = 0.0.0.0
+
+
+
+<<https>>

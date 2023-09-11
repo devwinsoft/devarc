@@ -71,6 +71,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 #
+example/NodeServers/Cert/
 example/NodeServers/node_modules/
 example/CSharpServers/packages/
 example/CSharpServers/GameServer/bin/

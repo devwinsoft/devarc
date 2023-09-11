@@ -39,6 +39,8 @@ const crypto = require('crypto');
 const hash = crypto.createHash('sha256');
 
 // Init express server
+const https = require('https');
+const fs = require('fs');
 const express = require('express');
 const session = require('express-session');
 const ConnectRedis = require('connect-redis').default;
@@ -143,7 +145,23 @@ async function init()
 }
 init();
 
-app.listen(process.env.HTTP_PORT, process.env.HTTP_HOST, () =>
+
+if (process.env.PRODUCTION)
 {
-    console.log(`Server running at http://${process.env.HTTP_HOST}:${process.env.HTTP_PORT}/`);
-});
+    const serverOption = {
+        key: fs.readFileSync(process.env.SSL_KEY),
+        cert: fs.readFileSync(process.env.SSL_CERT)
+    };
+    const server = https.createServer(serverOption, app);
+    server.listen(process.env.HTTP_PORT, () =>
+    {
+        console.log(`Server running at http://localhost:${process.env.HTTP_PORT}/`);
+    });
+}
+else
+{
+    app.listen(process.env.HTTP_PORT, () =>
+    {
+        console.log(`Server running at http://localhost:${process.env.HTTP_PORT}/`);
+    });
+}
