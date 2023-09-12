@@ -38,9 +38,19 @@ const cryptUtil = require("./Util/CryptUtil.js");
 const crypto = require('crypto');
 const hash = crypto.createHash('sha256');
 
+// Init google secret
+const axios = require('axios');
+const fs = require('fs');
+const google_web_secret = JSON.parse(fs.readFileSync(process.env.GOOGLE_WEB_SECRET, 'utf8'));
+const GOOGLE_CLIENT_ID = google_web_secret['web']['client_id'];
+const GOOGLE_CLIENT_SECRET = google_web_secret['web']['client_secret'];
+const GOOGLE_AUTH_URI = google_web_secret['web']['auth_uri'];
+const GOOGLE_TOKEN_URL = google_web_secret['web']['token_uri'];
+const GOOGLE_LOGIN_REDIRECT_URI = google_web_secret['web']['redirect_uris'][0];
+const GOOGLE_USERINFO_URL = 'https://www.googleapis.com/oauth2/v2/userinfo';
+
 // Init express server
 const https = require('https');
-const fs = require('fs');
 const express = require('express');
 const session = require('express-session');
 const ConnectRedis = require('connect-redis').default;
@@ -81,6 +91,49 @@ app.get('/', (req, res) =>
     res.send('This is AuthServer.');
 });
 
+
+/*
+ * Google Login
+ *
+ */
+app.get('/login', (req, res) => {
+    let url = GOOGLE_AUTH_URI;
+    url += `?client_id=${GOOGLE_CLIENT_ID}`
+    url += `&redirect_uri=${GOOGLE_LOGIN_REDIRECT_URI}`
+    url += '&response_type=code'
+    url += '&scope=email profile'    
+	res.redirect(url);
+});
+
+app.get('/login/redirect', async (req, res) => {
+    const { code } = req.query;
+    const resp = await axios.post(GOOGLE_TOKEN_URL, {
+      	code,
+        client_id: GOOGLE_CLIENT_ID,
+        client_secret: GOOGLE_CLIENT_SECRET,
+        redirect_uri: GOOGLE_LOGIN_REDIRECT_URI,
+        grant_type: 'authorization_code',
+    });
+
+    console.log(`access_token: ${resp.data.access_token}`);
+    const resp2 = await axios.get(GOOGLE_USERINFO_URL, {
+        headers: { Authorization: `Bearer ${resp.data.access_token}` }
+    });
+    res.send('ok');
+});
+
+app.get('/signup/redirect', async (req, res) => {
+    const { code } = req.query;
+    console.log(`code: ${code}`);
+
+    res.json(resp.data);
+});
+
+
+/*
+ * AuthServer API
+ *
+ */
 app.get('/msgpack', (req, res) =>
 {
     var packet = req.query.packet;

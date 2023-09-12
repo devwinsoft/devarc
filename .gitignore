@@ -57,7 +57,7 @@ sysinfo.txt
 # Builds
 *.apk
 *.aab
-*.unitypackage
+#*.unitypackage
 *.app
 
 # Crashlytics generated file
@@ -71,8 +71,8 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 #
-example/NodeServers/Cert/
 example/NodeServers/node_modules/
+example/NodeServers/secret/
 example/CSharpServers/packages/
 example/CSharpServers/GameServer/bin/
 example/CSharpServers/GameServer/obj/
