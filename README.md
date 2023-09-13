@@ -28,6 +28,7 @@ public enum ErrorType
 ```
 #### Step 2: Create shared tables with Excel. ####
 #### Step 3: Create shared protocols with C#. ####
+```csharp
 namespace C2Auth
 {
     public class RequestLogin
