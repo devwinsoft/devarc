@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Configuration;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using WebSocketSharp.Server;
 
@@ -33,8 +35,8 @@ namespace Devarc
             /*
             var cert = ConfigurationManager.AppSettings["ServerCertFile"];
             var passwd = ConfigurationManager.AppSettings["CertFilePassword"];
-            wssv.SslConfiguration.ServerCertificate = new X509Certificate2 (cert, passwd);
-             */
+            wssv.SslConfiguration.ServerCertificate = new X509Certificate2(cert, passwd);
+            */
 
             // To provide the HTTP Authentication (Basic/Digest).
             /*

@@ -1,5 +1,6 @@
 // Init config.
 const dotenv = require('dotenv');
+const fs = require('fs');
 dotenv.config();
 
 
@@ -24,15 +25,38 @@ redisClient.on('error', (err) =>
 
 
 // Init WebSocket Server
+const https = require('https');
 const WebSocket = require('ws');
+const serverOption = {
+    ca: fs.readFileSync(process.env.SSL_CA, 'utf8'),
+    key: fs.readFileSync(process.env.SSL_KEY, 'utf8'),
+    cert: fs.readFileSync(process.env.SSL_CERT, 'utf8')
+};
+
+const httpsServer = https.createServer(serverOption, function(req, res)
+{
+    res.writeHead(404);
+    res.end();
+});
+
 const wss = new WebSocket.Server(
     {
-        port: process.env.SOCKET_PORT
-    },
-    () => { 
-        console.log('Server starting.');
+        server: httpsServer,
+        autoAcceptConnections: true
     }
 );
+
+wss.on('connection', (ws, request) =>
+{
+    ws.on('close', (code) => {
+        console.log('Disconnected.');
+    });
+
+    ws.on('message', (packet) => {
+        C2Game.dispatch(packet, ws);
+    })
+});
+
 
 // Init protocol.
 const Common = require('./Protocols/Common.js');
@@ -61,22 +85,8 @@ C2Game.on('RequestLogin', (obj, ws) =>
 
         var encoded = Game2C.pack(response);
         ws.send(encoded);
-        // wss.clients.forEach(temp => {
-        // });
         });
 });
-
-wss.on('connection', (ws, request) =>
-{
-    ws.on('close', (code) => {
-        console.log('Disconnected.');
-    });
-
-    ws.on('message', (packet) => {
-        C2Game.dispatch(packet, ws);
-    })
-});
- 
 
 async function init()
 {
@@ -85,7 +95,8 @@ async function init()
 }
 init();
 
-wss.on('listening', () =>
+httpsServer.listen(process.env.SOCKET_PORT, () =>
 {
-    console.log(`Server running at http://localhost:${process.env.SOCKET_PORT}/`);
+    console.log(`GameServer running at http://localhost:${process.env.SOCKET_PORT}/`);
 });
+

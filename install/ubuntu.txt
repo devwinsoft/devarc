@@ -33,9 +33,22 @@ bind-address = 0.0.0.0
 
 
 <<ssl>>
-openssl req -newkey rsa:2048 -new -nodes -keyout key.pem -out csr.pem
-openssl x509 -req -days 365 -in csr.pem -signkey key.pem -out server.crt
+openssl req -newkey rsa:2048 -new -nodes -keyout devwin.key -out devwin.csr
+openssl x509 -req -days 365 -in devwin.csr -signkey devwin.key -out devwin.crt
 
+
+<<web>>
+"Access-Control-Allow-Credentials": "true",
+"Access-Control-Allow-Headers": "Accept, X-Access-Token, X-Application-Name, X-Request-Sent-Time",
+"Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+"Access-Control-Allow-Origin": "*",
+
+
+<<crossdomain.xml>>
+<?xml version="1.0"?>
+<cross-domain-policy>
+   <allow-access-from domain="*" to-ports="1200-1220"/> 
+</cross-domain-policy>"
 
 
 <<WinSCP Root Login>>
