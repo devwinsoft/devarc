@@ -78,6 +78,7 @@ example/CSharpServers/GameServer/bin/
 example/CSharpServers/GameServer/obj/
 example/UnityClient/*.csproj
 example/UnityClient/*.sln
+example/UnityClient/Assets/Devarc/devarc.*
 example/UnityClient/Library/
 example/UnityClient/Logs/
 example/UnityClient/obj/
@@ -92,14 +93,4 @@ src/Devarc.Tool.IDL/bin/
 src/Devarc.Tool.IDL/obj/
 src/Devarc.Tool.TableBuilder/bin/
 src/Devarc.Tool.TableBuilder/obj/
-src/Devarc.UnityClient/Assets/Devarc/devarc.*
-src/Devarc.UnityClient/Assets/Scripts/Devarc
-src/Devarc.UnityClient/*.csproj
-src/Devarc.UnityClient/*.sln
-src/Devarc.UnityClient/Library/
-src/Devarc.UnityClient/Logs/
-src/Devarc.UnityClient/obj/
-src/Devarc.UnityClient/ServerData/
-src/Devarc.UnityClient/Temp/
-src/Devarc.UnityClient/UserSettings/
 src/packages/

@@ -20,8 +20,7 @@ public class ExampleManager : MonoBehaviour
     public AuthNetwork authNetwork;
     public GameNetwork gameNetwork;
 
-    public TMP_InputField authAddress;
-    public TMP_InputField gameAddress;
+    public TMP_Dropdown domains;
     public TMP_InputField inputID;
     public TMP_InputField inputPW;
     public ScrollRect scrollRect;
@@ -32,6 +31,8 @@ public class ExampleManager : MonoBehaviour
 
     StringBuilder mStrBuilder = new StringBuilder();
     List<string> mLogMessages = new List<string>();
+
+    string gameAddress => $"ws://{domains.captionText.text}:4000/Game";
 
     void Start()
     {
@@ -45,7 +46,7 @@ public class ExampleManager : MonoBehaviour
             MessagePack.Unity.UnityResolver.Instance
         );
 
-        authNetwork.Init(authAddress.text, "packet", StaticCompositeResolver.Instance);
+        authNetwork.Init(domains.captionText.text, 3000, "msgpack", "packet", StaticCompositeResolver.Instance);
 
         gameNetwork.Init(StaticCompositeResolver.Instance);
         gameNetwork.OnOpen += onConnected;
@@ -63,9 +64,6 @@ public class ExampleManager : MonoBehaviour
          * Init UI
          * 
          */
-        authAddress.text = "http://localhost:3000/msgpack";
-        gameAddress.text = "ws://localhost:4000/Game";
-
         logText.text = string.Empty;
         Application.logMessageReceived += (log, stack, type) =>
         {
@@ -115,7 +113,7 @@ public class ExampleManager : MonoBehaviour
         request.accountID = inputID.text;
         request.password = EncryptUtil.Encrypt_Base64(inputPW.text);
 
-        authNetwork.URL = authAddress.text;
+        authNetwork.Domain = domains.captionText.text;
         authNetwork.RequestLogin(request, (response, errorType, errorMsg) =>
         {
             switch (errorType)
@@ -137,7 +135,7 @@ public class ExampleManager : MonoBehaviour
         if (gameNetwork.IsConnected)
             onConnected(null, null);
         else
-            gameNetwork.Connect(gameAddress.text);
+            gameNetwork.Connect(gameAddress);
     }
 
 
@@ -153,10 +151,10 @@ public class ExampleManager : MonoBehaviour
 
     public void OnClick_Test1()
     {
-        StartCoroutine(download());
+        StartCoroutine(test1());
     }
 
-    IEnumerator download()
+    IEnumerator test1()
     {
         long totalSize = 0;
         Dictionary<string, long> patchList = null;
@@ -183,7 +181,16 @@ public class ExampleManager : MonoBehaviour
 
     public void OnClick_Test2()
     {
-        SoundManager.Instance.PlaySound(CHANNEL.EFFECT, soundID);
+        //SoundManager.Instance.PlaySound(CHANNEL.EFFECT, soundID);
+        StartCoroutine(test2());
+    }
+
+
+    IEnumerator test2()
+    {
+        var www = UnityWebRequest.Get($"https://{domains.captionText.text}/");
+        yield return www.SendWebRequest();
+        Debug.Log(www.downloadHandler.text);
     }
 
 }
