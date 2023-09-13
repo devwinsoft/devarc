@@ -10,7 +10,7 @@ Devarc supports:
 * Download & import packages into unity project.
   * https://github.com/devwinsoft/devarc/blob/main/install
   * https://github.com/MessagePack-CSharp/MessagePack-CSharp/releases
-  * https://github.com/jirihybek/unity-websocket-webgl
+  * https://github.com/psygames/UnityWebSocket
     
 * Download websocket-sharp.dll or source codes for CSharp server.
   * https://github.com/sta/websocket-sharp
