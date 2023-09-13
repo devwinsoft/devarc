@@ -1,5 +1,5 @@
 # Devarc (v1.0.0)
-Devarc is development templates for Unity.
+Devarc is development templates for Unity project.
 
 Devarc supports:
 - PC, Mobile, WebGL clients.
@@ -25,16 +25,28 @@ public enum ErrorType
     SERVER_ERROR     = 2,
     SESSION_EXPIRED  = 3,
 }
-
-public enum GenderType
-{
-    None,
-    Male,
-    Female,
-}
 ```
 #### Step 2: Create shared tables with Excel. ####
 #### Step 3: Create shared protocols with C#. ####
+namespace C2Auth
+{
+    public class RequestLogin
+    {
+        public string accountID;
+        public string password;
+    }
+}
+
+namespace Auth2C
+{
+    public class NotifyLogin
+    {
+        public ErrorType errorCode;
+        public string sessionID;
+        public int secret;
+    }
+}
+```
 #### Step 4: Create batch files to build. ####
 
 
