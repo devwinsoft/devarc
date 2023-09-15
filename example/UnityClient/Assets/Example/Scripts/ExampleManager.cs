@@ -9,6 +9,7 @@ using System.Text;
 using MessagePack.Resolvers;
 using System.Collections;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using System.Threading.Tasks;
 
 public class ExampleManager : MonoBehaviour
 {
@@ -34,7 +35,7 @@ public class ExampleManager : MonoBehaviour
 
     string gameAddress => $"ws://{domains.captionText.text}:4000/Game";
 
-    void Start()
+    IEnumerator Start()
     {
         /*
          * Init Network
@@ -60,11 +61,17 @@ public class ExampleManager : MonoBehaviour
             gameNetwork.DisConnect();
         };
 
+
         /*
-         * Init UI
+         * Init Debugging
          * 
          */
-        logText.text = string.Empty;
+        Debugging.OnAssert += (condition, message) => { Debug.Assert(condition, message); };
+        Debugging.OnLog += (message) => { Debug.Log(message); };
+        Debugging.OnLogWarning += (message) => { Debug.LogWarning(message); };
+        Debugging.OnLogError += (message) => { Debug.LogError(message); };
+        Debugging.OnLogException += (ex) => { Debug.LogException(ex); };
+
         Application.logMessageReceived += (log, stack, type) =>
         {
             switch (type)
@@ -94,6 +101,13 @@ public class ExampleManager : MonoBehaviour
             LayoutRebuilder.ForceRebuildLayoutImmediate(logText.GetComponent<RectTransform>());
         };
 
+
+
+        /*
+         * Init UI
+         * 
+         */
+        logText.text = string.Empty;
         logText.OnPreRenderText += (info) =>
         {
             scrollRect.normalizedPosition = new Vector2(0, 0);
@@ -103,7 +117,18 @@ public class ExampleManager : MonoBehaviour
          * Load Assets...
          * 
          */
-        InfoManager.Instance.LoadResources();
+        DataManager.Instance.LoadResources();
+        yield return DataManager.Instance.LoadTables();
+        yield return SoundManager.Instance.LoadBundleSounds("SOUND", "sound");
+    }
+
+
+    public void OnClick_Clear()
+    {
+        mStrBuilder.Clear();
+        mLogMessages.Clear();
+        logText.text = string.Empty;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(logText.GetComponent<RectTransform>());
     }
 
 
@@ -174,23 +199,14 @@ public class ExampleManager : MonoBehaviour
         Debug.Log($"Download completed: success={success}");
         if (success)
         {
-            yield return InfoManager.Instance.LoadBundles();
+            yield return AssetManager.Instance.LoadPrefabs_Bundle("effect");
         }
     }
 
 
     public void OnClick_Test2()
     {
-        //SoundManager.Instance.PlaySound(CHANNEL.EFFECT, soundID);
-        StartCoroutine(test2());
-    }
-
-
-    IEnumerator test2()
-    {
-        var www = UnityWebRequest.Get($"https://{domains.captionText.text}/");
-        yield return www.SendWebRequest();
-        Debug.Log(www.downloadHandler.text);
+        SoundManager.Instance.PlaySound(CHANNEL.EFFECT, soundID);
     }
 
 }

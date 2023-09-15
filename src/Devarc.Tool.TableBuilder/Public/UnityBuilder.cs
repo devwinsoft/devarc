@@ -5,7 +5,7 @@ namespace Devarc
 {
     public class UnityBuilder : BaseBuilder
     {
-        public void Build(string inputPath, string bundlePath)
+        public void Build(string inputPath)
         {
             var doc = open(inputPath);
             var workingDir = Path.GetFullPath(".\\");
@@ -76,10 +76,6 @@ namespace Devarc
             Console.WriteLine($"Generate file: {tableCodePath}");
 
 
-            string subFolderPath = bundlePath;
-            if (subFolderPath.EndsWith("/") || subFolderPath.EndsWith("\\"))
-                subFolderPath = subFolderPath.Substring(0, subFolderPath.Length - 1);
-
             foreach (var info in mHeaderList)
             {
                 if (info.IsDataSheet)
@@ -117,11 +113,11 @@ namespace Devarc
                     sw.WriteLine("\t\tpublic override void Reload()");
                     sw.WriteLine("\t\t{");
                     sw.WriteLine($"\t\t\tTable.{info.SheetName}.Clear();");
-                    sw.WriteLine($"\t\t\tforeach (var textAsset in AssetManager.LoadDatabase_Assets<TextAsset>(\"{info.SheetName}\", DEV_Settings.GetTable_BundlePath()))");
+                    sw.WriteLine($"\t\t\tforeach (var textAsset in AssetManager.LoadAssets_Database<TextAsset>(\"{info.SheetName}\", DEV_Settings.GetTable_BundlePath()))");
                     sw.WriteLine("\t\t\t{");
                     sw.WriteLine($"\t\t\t\tTable.{info.SheetName}.LoadJson(textAsset.text);");
                     sw.WriteLine("\t\t\t}");
-                    sw.WriteLine($"\t\t\tforeach (var textAsset in AssetManager.LoadDatabase_Assets<TextAsset>(\"{info.SheetName}\", DEV_Settings.GetTable_BuiltinPath()))");
+                    sw.WriteLine($"\t\t\tforeach (var textAsset in AssetManager.LoadAssets_Database<TextAsset>(\"{info.SheetName}\", DEV_Settings.GetTable_BuiltinPath()))");
                     sw.WriteLine("\t\t\t{");
                     sw.WriteLine($"\t\t\t\tTable.{info.SheetName}.LoadJson(textAsset.text);");
                     sw.WriteLine("\t\t\t}");

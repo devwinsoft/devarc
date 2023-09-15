@@ -1,4 +1,4 @@
-{"list":[{"index":10001,"sound_id":"SKILL_ATTACK","path":"Sounds/snd_explosion","loop":"FALSE","volume":1,"bundle":"TRUE"}
-,{ "index":10002,"sound_id":"SKILL_SHOOT","path":"Sounds/snd_explosion","loop":"FALSE","volume":1,"bundle":"TRUE"}
-,{ "index":10003,"sound_id":"VOICE_DAMAGE","path":"Sounds/snd_explosion","loop":"FALSE","volume":1,"bundle":"TRUE"}
+{"list":[{"index":10001,"sound_id":"SKILL_ATTACK","path":"Sounds/snd_explosion","loop":"FALSE","volume":1}
+,{ "index":10002,"sound_id":"SKILL_HEAL","path":"Sounds/snd_heal","loop":"FALSE","volume":1}
+,{ "index":10003,"sound_id":"VOICE_DAMAGE","path":"Sounds/snd_explosion","loop":"FALSE","volume":1}
 ]}

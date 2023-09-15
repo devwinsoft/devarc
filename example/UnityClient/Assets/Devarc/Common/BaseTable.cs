@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+#if UNITY_2019_1_OR_NEWER
 using UnityEngine;
+#else
+using Newtonsoft.Json;
+#endif
 
 namespace Devarc
 {
@@ -129,7 +133,7 @@ namespace Devarc
         {
             if (mList.ContainsKey(key)) 
             {
-                Debug.LogError($"Duplicated table id: type={typeof(T).Name}, key={key}");
+                Debugging.LogError($"Duplicated table id: type={typeof(T).Name}, key={key}");
                 return false;
             }
             mList.Add(key, value);
@@ -143,6 +147,8 @@ namespace Devarc
             return obj;
         }
 
+
+#if UNITY_2019_1_OR_NEWER
         public void LoadJson(string json, System.Action<T> callback = null)
         {
             var contents = JsonUtility.FromJson<TableContents<RAW>>(json);
@@ -154,16 +160,18 @@ namespace Devarc
                 callback?.Invoke(obj);
             }
         }
-
-        public void LoadFile(string fileName, System.Action<T> callback = null)
+#else
+        public void LoadJson(string json, System.Action<T> callback = null)
         {
-            var textAsset = AssetManager.Instance.GetTextAsset(fileName);
-            if (textAsset == null)
+            var contents = JsonConvert.DeserializeObject<TableContents<RAW>>(json);
+            foreach (var raw in contents.list)
             {
-                Debug.LogError($"[Table::LoadFile] Cannot find TextAsset: {fileName}");
-                return;
+                T obj = new T();
+                obj.Initialize(raw);
+                Add(obj.GetKey(), obj);
+                callback?.Invoke(obj);
             }
-            LoadJson(textAsset.text, callback);
         }
+#endif
     }
 }

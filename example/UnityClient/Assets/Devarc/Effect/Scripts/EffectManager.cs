@@ -23,7 +23,7 @@ namespace Devarc
 
         public IEnumerator Preload(string addressable)
         {
-            yield return AssetManager.Instance.LoadBundle_Prefabs<BaseEffect>(addressable, (obj) =>
+            yield return AssetManager.Instance.LoadPrefabs_Bundle<BaseEffect>(addressable, (obj) =>
             {
                 mPrefabs.Add(obj.name, obj);
             });

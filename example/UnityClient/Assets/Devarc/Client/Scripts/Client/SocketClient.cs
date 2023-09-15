@@ -34,7 +34,7 @@ namespace Devarc
 
         private void Update()
         {
-            mDispatcher.DoWork();
+            mDispatcher.MainThreadTick();
         }
 
         public void Init(IFormatterResolver formatterResolver)
@@ -149,7 +149,7 @@ namespace Devarc
         {
             ChangeState(SessionStateType.Connected);
 
-            mDispatcher.AddWork((args) =>
+            mDispatcher.Invoke((args) =>
             {
                 OnOpen?.Invoke(this, (EventArgs)args[0]);
             }, evt);
@@ -165,7 +165,7 @@ namespace Devarc
 
             ChangeState(SessionStateType.DisConnected);
 
-            mDispatcher.AddWork((args) =>
+            mDispatcher.Invoke((args) =>
             {
                 OnClose?.Invoke(this, (CloseEventArgs)args[0]);
             }, evt);
@@ -173,7 +173,7 @@ namespace Devarc
 
         void onError(object sender, ErrorEventArgs evt)
         {
-            mDispatcher.AddWork((args) =>
+            mDispatcher.Invoke((args) =>
             {
                 OnError?.Invoke(this, (ErrorEventArgs)args[0]);
             }, evt);
@@ -181,7 +181,7 @@ namespace Devarc
 
         void onMessage(object sender, MessageEventArgs evt)
         {
-            mDispatcher.AddWork((args) =>
+            mDispatcher.Invoke((args) =>
             {
                 var msg = (MessageEventArgs)args[0];
                 ReceiveData(msg.RawData);

@@ -76,6 +76,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Public\BaseTable.cs" />
+    <Compile Include="Public\Debugging.cs" />
+    <Compile Include="Public\MainThreadDispatcher.cs" />
     <Compile Include="Public\PacketEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Public\PacketHandler.cs" />

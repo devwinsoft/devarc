@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-
+using System.Threading.Tasks;
 
 namespace Devarc
 {
@@ -18,7 +18,7 @@ namespace Devarc
         Queue<DelayedAction> mDelayedActions = new Queue<DelayedAction>();
 
 
-        public void AddWork(Action<object[]> work, params object[] args)
+        public void Invoke(Action<object[]> work, params object[] args)
         {
             if (IsMainThread)
             {
@@ -33,7 +33,8 @@ namespace Devarc
             }
         }
 
-        public void DoWork()
+
+        public void MainThreadTick()
         {
             while (mDelayedActions.Count > 0)
             {

@@ -32,18 +32,8 @@ namespace Devarc.TableBuilder
                 }
                 else if (args.Contains<string>("-unity"))
                 {
-                    string bundlePath = null;
-                    for (int i = 0; i < args.Length; i++)
-                    {
-                        if (args[i] == "-path" && args.Length > i + 1)
-                        {
-                            bundlePath = args[i + 1];
-                            break;
-                        }
-                    }
-
                     var builder = new UnityBuilder();
-                    builder.Build(fileName, bundlePath);
+                    builder.Build(fileName);
                 }
                 else
                 {

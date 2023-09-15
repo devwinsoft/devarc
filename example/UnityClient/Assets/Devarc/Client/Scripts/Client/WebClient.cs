@@ -6,13 +6,13 @@ using UnityEngine.Networking;
 using Devarc;
 using MessagePack;
 
-public class CertificateHandler_AcceptAll : CertificateHandler
-{
-    protected override bool ValidateCertificate(byte[] certificateData)
-    {
-        return true;
-    }
-}
+//public class CertificateHandler_AcceptAll : CertificateHandler
+//{
+//    protected override bool ValidateCertificate(byte[] certificateData)
+//    {
+//        return true;
+//    }
+//}
 
 public abstract class WebClient : MonoBehaviour
 {
@@ -98,7 +98,6 @@ public abstract class WebClient : MonoBehaviour
             case RequestType.Get:
                 {
                     var url = $"{BaseURL}/{mLocation}?{mArgName}={sendData}";
-                    www.certificateHandler = new CertificateHandler_AcceptAll();
                     www = UnityWebRequest.Get(url);
                     Debug.Log($"Request Get: {url}");
                 }
@@ -109,8 +108,6 @@ public abstract class WebClient : MonoBehaviour
                     form.AddField(mArgName, sendData);
 
                     www = UnityWebRequest.Post($"{BaseURL}/{mLocation}", form);
-                    www.certificateHandler = new CertificateHandler_AcceptAll();
-
                     var url = $"{BaseURL}/{mLocation}?{mArgName}={sendData}";
                     Debug.Log($"Request Post: {url}");
                 }
@@ -118,7 +115,6 @@ public abstract class WebClient : MonoBehaviour
         }
 
         yield return www.SendWebRequest();
-        www.certificateHandler.Dispose();
 
         if (www.result != UnityWebRequest.Result.Success)
         {

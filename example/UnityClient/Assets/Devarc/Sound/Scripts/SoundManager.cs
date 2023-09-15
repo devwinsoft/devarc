@@ -11,12 +11,11 @@ public enum CHANNEL
     MAX,
 }
 
-[System.Serializable]
 public class SoundData
 {
-    public SOUND_ID soundID;
-    public float waitTime;
-    public float fadeTime;
+    public string path;
+    public float volume;
+    public bool loop;
 }
 
 public class SoundManager : MonoSingleton<SoundManager>
@@ -24,7 +23,7 @@ public class SoundManager : MonoSingleton<SoundManager>
     public SoundChannel[] Channels => mChannels;
     SoundChannel[] mChannels = new SoundChannel[(int)CHANNEL.MAX];
 
-    Dictionary<string, List<SOUND>> mSoundDatas = new Dictionary<string, List<SOUND>>();
+    Dictionary<string, List<SoundData>> mSoundDatas = new Dictionary<string, List<SoundData>>();
     Dictionary<string, AudioClip> mClips = new Dictionary<string, AudioClip>();
 
     protected override void onAwake()
@@ -39,7 +38,7 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
 
 
-    public IEnumerator LoadBundles(string tableFileName, string addressKey)
+    public IEnumerator LoadBundleSounds(string tableFileName, string addressKey)
     {
         var textAsset = AssetManager.Instance.GetAsset<TextAsset>(tableFileName);
         if (textAsset != null)
@@ -51,33 +50,37 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
 
         // Load AudioClips...
-        yield return AssetManager.Instance.LoadBundle_Assets<AudioClip>(addressKey);
+        yield return AssetManager.Instance.LoadAssets_Bundle<AudioClip>(addressKey);
     }
 
-    public void LoadResources(string tableFileName)
+    public void LoadResourceSounds(string tableFileName)
     {
-        var textAsset = AssetManager.Instance.GetAsset<TextAsset>(tableFileName);
-        if (textAsset != null)
+        var tableAsset = AssetManager.Instance.GetAsset<TextAsset>(tableFileName);
+        if (tableAsset != null)
         {
-            Table.SOUND.LoadJson(textAsset.text, (data) =>
+            Table.SOUND.LoadJson(tableAsset.text, (data) =>
             {
                 register(data);
 
                 // Load AudioClips...
-                AssetManager.Instance.LoadResource_Asset<AudioClip>(data.path);
+                AssetManager.Instance.LoadAsset_Resource<AudioClip>(data.path);
             });
         }
     }
 
     void register(SOUND data)
     {
-        List<SOUND> list;
+        List<SoundData> list;
         if (mSoundDatas.TryGetValue(data.sound_id, out list) == false)
         {
-            list = new List<SOUND>();
+            list = new List<SoundData>();
             mSoundDatas.Add(data.sound_id, list);
         }
-        list.Add(data);
+        SoundData obj = new SoundData();
+        obj.path = data.path;
+        obj.volume = data.volume;
+        obj.loop = data.loop;
+        list.Add(obj);
     }
 
 
@@ -93,7 +96,7 @@ public class SoundManager : MonoSingleton<SoundManager>
 
     public int PlaySound(CHANNEL channel, string soundID, int groupID, float fadeIn)
     {
-        List<SOUND> list = null;
+        List<SoundData> list = null;
         if (mSoundDatas.TryGetValue(soundID, out list) == false || list.Count == 0)
         {
             Debug.LogError($"[SoundManager] Cannot find sound_id: {soundID}");
@@ -101,7 +104,7 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
 
         var soundData = list[Random.Range(0, list.Count - 1)];
-        var clip = AssetManager.Instance.GetAudioClip(soundData.path);
+        var clip = AssetManager.Instance.GetAsset<AudioClip>(soundData.path);
         if (clip == null)
         {
             Debug.LogError($"[SoundManager] Cannot find audio clip: sound_id={soundID}, path={soundData.path}");
