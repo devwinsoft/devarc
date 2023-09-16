@@ -2,6 +2,7 @@
 Devarc is cross-platform development templates.
 
 Devarc supports:
+- Windows development evironment.
 - PC, Mobile, WebGL clients.
 - NodeJS, CSharp servers.
 - MySQL database.
