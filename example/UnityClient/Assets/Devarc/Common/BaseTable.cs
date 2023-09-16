@@ -115,6 +115,18 @@ namespace Devarc
 
     public abstract class TableDataBase
     {
+#if UNITY_2019_1_OR_NEWER
+        protected string getTextFromTextAsset(string fileName)
+        {
+            var textAsset = AssetManager.Instance.GetAsset<TextAsset>(fileName);
+            if (textAsset == null)
+            {
+                Debug.LogError($"[Table::LoadFile] Cannot find TextAsset: {fileName}");
+                return string.Empty;
+            }
+            return textAsset.text;
+        }
+#endif
     }
 
     public class TableData<T, RAW, KEY> : TableDataBase
@@ -159,6 +171,11 @@ namespace Devarc
                 Add(obj.GetKey(), obj);
                 callback?.Invoke(obj);
             }
+        }
+
+        public void LoadFromFile(string fileName, System.Action<T> callback = null)
+        {
+            LoadJson(getTextFromTextAsset(fileName), callback);
         }
 #else
         public void LoadJson(string json, System.Action<T> callback = null)

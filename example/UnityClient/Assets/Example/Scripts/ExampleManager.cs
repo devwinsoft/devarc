@@ -35,37 +35,17 @@ public class ExampleManager : MonoBehaviour
 
     string gameAddress => $"ws://{domains.captionText.text}:4000/Game";
 
+
     IEnumerator Start()
     {
-        /*
-         * Init Network
-         * 
-         */
-        StaticCompositeResolver.Instance.Register(
-            MessagePack.Resolvers.GeneratedResolver.Instance,
-            MessagePack.Resolvers.StandardResolver.Instance,
-            MessagePack.Unity.UnityResolver.Instance
-        );
-
-        authNetwork.Init(domains.captionText.text, 3000, "msgpack", "packet", StaticCompositeResolver.Instance);
-
-        gameNetwork.Init(StaticCompositeResolver.Instance);
-        gameNetwork.OnOpen += onConnected;
-        gameNetwork.OnClose += (sender, evt) =>
-        {
-            Debug.Log($"Diconnected: code={evt.Code}, reason={evt.Reason}");
-        };
-        gameNetwork.OnError += (sender, evt) =>
-        {
-            Debug.LogError(evt.Message);
-            gameNetwork.DisConnect();
-        };
+        initDebugging();
+        initNetwork();
+        yield return loadAssets();
+    }
 
 
-        /*
-         * Init Debugging
-         * 
-         */
+    void initDebugging()
+    {
         Debugging.OnAssert += (condition, message) => { Debug.Assert(condition, message); };
         Debugging.OnLog += (message) => { Debug.Log(message); };
         Debugging.OnLogWarning += (message) => { Debug.LogWarning(message); };
@@ -101,26 +81,54 @@ public class ExampleManager : MonoBehaviour
             LayoutRebuilder.ForceRebuildLayoutImmediate(logText.GetComponent<RectTransform>());
         };
 
-
-
-        /*
-         * Init UI
-         * 
-         */
         logText.text = string.Empty;
         logText.OnPreRenderText += (info) =>
         {
             scrollRect.normalizedPosition = new Vector2(0, 0);
         };
+    }
 
-        /*
-         * Load Assets...
-         * 
-         */
-        DataManager.Instance.LoadResources();
-        yield return DataManager.Instance.LoadTables();
+
+
+    void initNetwork()
+    {
+        StaticCompositeResolver.Instance.Register(
+            MessagePack.Resolvers.GeneratedResolver.Instance,
+            MessagePack.Resolvers.StandardResolver.Instance,
+            MessagePack.Unity.UnityResolver.Instance
+        );
+
+        authNetwork.Init(domains.captionText.text, 3000, "msgpack", "packet", StaticCompositeResolver.Instance);
+
+        gameNetwork.Init(StaticCompositeResolver.Instance);
+        gameNetwork.OnOpen += onConnected;
+        gameNetwork.OnClose += (sender, evt) =>
+        {
+            Debug.Log($"Diconnected: code={evt.Code}, reason={evt.Reason}");
+        };
+        gameNetwork.OnError += (sender, evt) =>
+        {
+            Debug.LogError(evt.Message);
+            gameNetwork.DisConnect();
+        };
+    }
+
+
+    IEnumerator loadAssets()
+    {
+        // Load Resources...
+        AssetManager.Instance.LoadAssets_Resource<TextAsset>("Tables");
+        SoundManager.Instance.LoadResourceSounds("SOUND@builtin");
+
+        // Load Local Bundle Tables...
+        yield return AssetManager.Instance.LoadAssets_Bundle<TextAsset>("table");
+        Table.CHARACTER.LoadFromFile("CHARACTER");
+        Table.SKILL.LoadFromFile("SKILL");
+
+        // Load Sound Table & AudioClips...
         yield return SoundManager.Instance.LoadBundleSounds("SOUND", "sound");
     }
+
 
 
     public void OnClick_Clear()
@@ -155,12 +163,17 @@ public class ExampleManager : MonoBehaviour
         });
     }
 
+
     public void OnClick_ConnectLogin()
     {
         if (gameNetwork.IsConnected)
-            onConnected(null, null);
+        {
+            Debug.LogWarning("Already connected.");
+        }
         else
+        {
             gameNetwork.Connect(gameAddress);
+        }
     }
 
 
@@ -174,12 +187,14 @@ public class ExampleManager : MonoBehaviour
         Debug.Log(JsonUtility.ToJson(request));
     }
 
+
     public void OnClick_Test1()
     {
-        StartCoroutine(test1());
+        gameNetwork.DisConnect();
     }
 
-    IEnumerator test1()
+
+    IEnumerator download()
     {
         long totalSize = 0;
         Dictionary<string, long> patchList = null;

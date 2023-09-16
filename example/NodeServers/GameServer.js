@@ -85,7 +85,7 @@ C2Game.on('RequestLogin', (obj, ws) =>
 
         var encoded = Game2C.pack(response);
         ws.send(encoded);
-        });
+    });
 });
 
 async function init()
