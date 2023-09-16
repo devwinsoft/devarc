@@ -1,12 +1,14 @@
 # Devarc (v1.0.0)
 Devarc is cross-platform development templates.
 
-[WebGL version test build](http://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com/a/index.html)
-
 Devarc supports:
 - PC, Mobile, WebGL clients.
 - NodeJS, CSharp servers.
 - MySQL database.
+
+Test Release:
+- [WebGL version](http://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com/a/index.html)
+
 
 ## Install Client ##
 * Download & import packages into unity project.
