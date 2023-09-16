@@ -1,0 +1,20 @@
+{
+    "name": "Devarc.Encrypt.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a1d0f0f327ea58347988cc66f92b1a73"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "System.Buffers.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
