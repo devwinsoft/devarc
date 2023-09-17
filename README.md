@@ -93,7 +93,7 @@ move /Y   *.sql    ..\Database\Tables\
 ## Unity Asset Management ##
 
 #### Step 1: Create localizing table. ####
-<img src="screenshot/example_lstring.png" width="70%" height="70%"/>
+![img](screenshot/example_lstring.png)
 
 #### Step 2: Edit addressable configuration. ####
 ![img](screenshot/example_addressable.png)
