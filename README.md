@@ -92,10 +92,13 @@ move /Y   *.sql    ..\Database\Tables\
 
 ## Unity Asset Management ##
 
-#### Localizing: Addressable configuration. ####
+#### Step 1: Create localizing table. ####
+![img](screenshot/example_lstring.png)
+
+#### Step 2: Edit addressable configuration. ####
 ![img](screenshot/example_addressable.png)
 
-#### Localizing: Script for loading. ####
+#### Step 3: Make loading scripts. ####
 ```
     IEnumerator loadAssets()
     {
