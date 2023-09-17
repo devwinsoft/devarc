@@ -11,6 +11,7 @@ Devarc supports:
 - Unity: Simple effect management.
 - Unity: Simple animation management.
 - Unity: Simple sound management.
+- Unity: Simple data encryption.
 
 Test Release:
 - [WebGL version](http://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com/b/index.html)
@@ -27,7 +28,7 @@ Test Release:
 * Download websocket-sharp.dll or source codes for CSharp server.
   * https://github.com/sta/websocket-sharp
     
-## Getting Started ##
+## Protocol Builder ##
 #### Step 1: Create shared definitions with C#. ####
 ```csharp
 public enum ErrorType
@@ -38,8 +39,7 @@ public enum ErrorType
     SESSION_EXPIRED  = 3,
 }
 ```
-#### Step 2: Create shared tables with Excel. ####
-#### Step 3: Create shared protocols with C#. ####
+#### Step 2: Create shared protocols with C#. ####
 ```csharp
 // Protocol from:Client to:AuthServer
 namespace C2Auth
@@ -62,12 +62,29 @@ namespace Auth2C
     }
 }
 ```
-#### Step 4: Create batch files to build. ####
+#### Step 3: Create batch files to build. ####
 ```
 IDL.exe -cs-def  {SchemaFolder}\Common.def
 IDL.exe -js  {SchemaFolder}\AuthProtocol.idl  {SchemaFolder}\Common.def
 TableBuilder.exe -cs {SchemaFolder}\SoundTable.xlsx
 move /Y   *.cs    {UnityProjectFolder}\Assets\Scripts\Generated\
+```
+
+## Table Builder ##
+
+#### Step 1: Create Excel Tables. ####
+
+#### Step 2: Create batch files to build. ####
+```
+..\..\bin\TableBuilder.exe -cs .\Tables\GameTable.xlsx
+move /Y   *.cs    ..\UnityClient\Assets\Example\Scripts\Generated\Tables\
+
+..\..\bin\TableBuilder.exe -json .\Tables\GameTable.xlsx
+move /Y   *.json    ..\UnityClient\Assets\Example\Bundles\Tables\
+
+..\..\bin\TableBuilder.exe -sql .\Tables\GameTable.xlsx
+move /Y   *.ddl    ..\Database\Tables\
+move /Y   *.sql    ..\Database\Tables\
 ```
 
 ## Unity Asset Management ##
@@ -87,6 +104,14 @@ move /Y   *.cs    {UnityProjectFolder}\Assets\Scripts\Generated\
         }
     }
 ```
+
+## Unity Effect Management. ##
+
+## Unity Animation Management. ##
+
+## Unity Sound Management. ##
+  
+## Unity Data Encryption ##
 
 ## License ##
 
