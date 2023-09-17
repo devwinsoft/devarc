@@ -48,8 +48,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fba4c1ec89ada7c4ca2e4775b807e7c1, type: 2}
   - {fileID: 11400000, guid: b9578e45fefb9fb4197a78182405641b, type: 2}
   - {fileID: 11400000, guid: 1388ecb6c24c2794385b477c613c677e, type: 2}
+  - {fileID: 11400000, guid: 73b2ecf37dfed28468252c6148a38046, type: 2}
+  - {fileID: 11400000, guid: d36ac0a3852d6b047b30e62b8016bc82, type: 2}
+  - {fileID: 11400000, guid: eecbd160b22e7134b85c7417b5fc46eb, type: 2}
+  - {fileID: 11400000, guid: 954c04cdb8563ad4ab3974ae0e435c6a, type: 2}
+  - {fileID: 11400000, guid: 887b4be2e97d1b443aff99f0950f22af, type: 2}
   - {fileID: 11400000, guid: a2d0664baa304b04e88ffffae9e79862, type: 2}
-  - {fileID: 11400000, guid: e8370ace0cd0a6b42a97e5f14eca8dd3, type: 2}
+  - {fileID: 11400000, guid: 0f1cc40f37026c34885f59f5b23c78a4, type: 2}
+  - {fileID: 11400000, guid: 10ff5f2df7b7cd142b4ec999f843fb0c, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -94,10 +100,11 @@ MonoBehaviour:
     - table
     - effect
     - sound
-    - string
-    - kor
-    - eng
-    - jpn
+    - lstring
+    - Chinese
+    - English
+    - Japanese
+    - Korean
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 123b0e445398f4e4f8732a94210f1504, type: 2}

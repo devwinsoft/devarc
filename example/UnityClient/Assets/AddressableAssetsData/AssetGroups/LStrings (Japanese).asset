@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: String (eng)
+  m_Name: LStrings (Japanese)
   m_EditorClassIdentifier: 
-  m_GroupName: String (eng)
+  m_GroupName: LStrings (Japanese)
   m_Data:
     m_SerializedData: []
-  m_GUID: 27ac5aa438b3bc249934e4630b27832c
+  m_GUID: 6c387f0384c3aa44bbe5bd0046dac0a9
   m_SerializeEntries:
-  - m_GUID: d59c32eb4f1f5604fb95ae997e9019ba
-    m_Address: Assets/Example/Bundles/String/eng
+  - m_GUID: 5ba66999a8b189c4db001b3ee38001b4
+    m_Address: Assets/Example/Bundles/Strings/Japanese
     m_ReadOnly: 0
     m_SerializedLabels:
-    - string
-    - eng
+    - lstring
+    - Japanese
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5ea220b076c175b4abe2b1c42f6d4daa, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 21ad666700143bf4c9d393ee25bbb52b, type: 2}
-    - {fileID: 11400000, guid: 25ddfccde70dc4a479af64ccd88f273e, type: 2}
+    - {fileID: 11400000, guid: 9cf759a5b33cd3743ace9f0d95955a6c, type: 2}
+    - {fileID: 11400000, guid: 15fee8ec8d565064aa4b74e318f06585, type: 2}

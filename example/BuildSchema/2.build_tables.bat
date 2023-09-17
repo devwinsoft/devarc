@@ -28,7 +28,9 @@ move /Y   *.sql    ..\Database\Tables\
 
 
 ..\..\bin\TableBuilder.exe -lstr .\Tables\StringTable.xlsx
-move /Y   .\Tables\eng\*   ..\UnityClient\Assets\Example\Bundles\Strings\eng
-move /Y   .\Tables\kor\*   ..\UnityClient\Assets\Example\Bundles\Strings\kor
+move /Y   .\Tables\Korean\*   ..\UnityClient\Assets\Example\Bundles\LStrings\Korean
+move /Y   .\Tables\English\*   ..\UnityClient\Assets\Example\Bundles\LStrings\English
+move /Y   .\Tables\Japanese\*   ..\UnityClient\Assets\Example\Bundles\LStrings\Japanese
+move /Y   .\Tables\Chinese\*   ..\UnityClient\Assets\Example\Bundles\LStrings\Chinese
 
 pause

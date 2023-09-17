@@ -108,7 +108,7 @@ namespace Devarc
         }
 
 
-        public void UnloadAssets_Bundle(string key)
+        public void UnloadAssets_Bundle(string key, System.Action<string> callback = null)
         {
             BundleData bundleData;
             if (mBundles.TryGetValue(key, out bundleData))
@@ -118,6 +118,7 @@ namespace Devarc
                     foreach (var list in mBundleAssets.Values)
                     {
                         list.Remove(name);
+                        callback?.Invoke(name);
                     }
                 }
                 bundleData.list.Clear();
@@ -154,6 +155,20 @@ namespace Devarc
         }
 
 
+        public IEnumerator LoadAssets_Bundle<T>(string key, SystemLanguage lang, System.Action<T> callback = null) where T : UnityEngine.Object
+        {
+            List<string> keys = new List<string> { key, lang.ToString() };
+            var task = Addressables.LoadAssetsAsync<T>(keys, (obj) =>
+            {
+                registerAsset_Bundle(obj);
+                getBundleData(key)?.Add(obj.name);
+                callback?.Invoke(obj);
+            }, Addressables.MergeMode.Intersection);
+            createBundleData(key, task);
+            yield return task;
+        }
+
+
         public IEnumerator LoadPrefab_Bundle(string key, System.Action<GameObject> callback = null)
         {
             var task = Addressables.LoadAssetAsync<GameObject>(key);
@@ -177,6 +192,19 @@ namespace Devarc
                 getBundleData(key)?.Add(obj.name);
                 callback?.Invoke(obj);
             });
+            yield return task;
+            createBundleData(key, task);
+        }
+
+        public IEnumerator LoadPrefabs_Bundle(string key, SystemLanguage lang, System.Action<GameObject> callback = null)
+        {
+            List<string> keys = new List<string> { key, lang.ToString() };
+            var task = Addressables.LoadAssetsAsync<GameObject>(keys, (obj) =>
+            {
+                registerPrefab_Bundle(obj);
+                getBundleData(key)?.Add(obj.name);
+                callback?.Invoke(obj);
+            }, Addressables.MergeMode.Intersection);
             yield return task;
             createBundleData(key, task);
         }

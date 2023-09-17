@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Voices (Chinese)
+  m_EditorClassIdentifier: 
+  m_GroupName: Voices (Chinese)
+  m_Data:
+    m_SerializedData: []
+  m_GUID: fa8c9e2d4e08c9d499ecdd1c8b67b1ab
+  m_SerializeEntries: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 5ea220b076c175b4abe2b1c42f6d4daa, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 1c204fb30da442b4e9c1dcd441df95fc, type: 2}
+    - {fileID: 11400000, guid: c211a9881000a6647af0d9ef2a3670a8, type: 2}

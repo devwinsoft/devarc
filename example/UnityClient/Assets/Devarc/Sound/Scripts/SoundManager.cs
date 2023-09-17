@@ -13,6 +13,7 @@ public enum CHANNEL
 
 public class SoundData
 {
+    public string addressKey;
     public string path;
     public float volume;
     public bool loop;
@@ -38,29 +39,40 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
 
 
-    public IEnumerator LoadBundleSounds(string tableFileName, string addressKey)
+    public IEnumerator LoadSounds_Bundle(string tableFileName, string addressKey, SystemLanguage lang = SystemLanguage.Unknown)
     {
         var textAsset = AssetManager.Instance.GetAsset<TextAsset>(tableFileName);
         if (textAsset != null)
         {
             Table.SOUND.LoadJson(textAsset.text, (data) =>
             {
-                register(data);
+                register(data, addressKey);
             });
         }
 
         // Load AudioClips...
-        yield return AssetManager.Instance.LoadAssets_Bundle<AudioClip>(addressKey);
+        if (lang == SystemLanguage.Unknown)
+            yield return AssetManager.Instance.LoadAssets_Bundle<AudioClip>(addressKey);
+        else
+            yield return AssetManager.Instance.LoadAssets_Bundle<AudioClip>(addressKey, lang);
     }
 
-    public void LoadResourceSounds(string tableFileName)
+
+    public void UnloadSounds_Bundle(string addressKey)
+    {
+        AssetManager.Instance.UnloadAssets_Bundle(addressKey);
+        unRegister(addressKey);
+    }
+
+
+    public void LoadSounds_Resource(string tableFileName)
     {
         var tableAsset = AssetManager.Instance.GetAsset<TextAsset>(tableFileName);
         if (tableAsset != null)
         {
             Table.SOUND.LoadJson(tableAsset.text, (data) =>
             {
-                register(data);
+                register(data, null);
 
                 // Load AudioClips...
                 AssetManager.Instance.LoadAsset_Resource<AudioClip>(data.path);
@@ -68,7 +80,8 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
     }
 
-    void register(SOUND data)
+
+    void register(SOUND data, string addressKey)
     {
         List<SoundData> list;
         if (mSoundDatas.TryGetValue(data.sound_id, out list) == false)
@@ -77,10 +90,24 @@ public class SoundManager : MonoSingleton<SoundManager>
             mSoundDatas.Add(data.sound_id, list);
         }
         SoundData obj = new SoundData();
+        obj.addressKey = addressKey;
         obj.path = data.path;
         obj.volume = data.volume;
         obj.loop = data.loop;
         list.Add(obj);
+    }
+
+
+    void unRegister(string addressKey)
+    {
+        foreach (var list in mSoundDatas.Values)
+        {
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                if (list[i].addressKey == addressKey)
+                    list.RemoveAt(i);
+            }
+        }
     }
 
 

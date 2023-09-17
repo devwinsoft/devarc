@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5834b5087d578d24c926ce20cd31e6d6, type: 3}
-  m_Name: String (eng)_ContentUpdateGroupSchema
+  m_Name: LStrings (Japanese)_ContentUpdateGroupSchema
   m_EditorClassIdentifier: 
-  m_Group: {fileID: 11400000, guid: a2d0664baa304b04e88ffffae9e79862, type: 2}
+  m_Group: {fileID: 11400000, guid: 0f1cc40f37026c34885f59f5b23c78a4, type: 2}
   m_StaticContent: 0

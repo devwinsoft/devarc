@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5d17a21594effb4e9591490b009e7aa, type: 3}
-  m_Name: String (kor)_BundledAssetGroupSchema
+  m_Name: Voices (Japanese)_BundledAssetGroupSchema
   m_EditorClassIdentifier: 
-  m_Group: {fileID: 11400000, guid: e8370ace0cd0a6b42a97e5f14eca8dd3, type: 2}
+  m_Group: {fileID: 11400000, guid: eecbd160b22e7134b85c7417b5fc46eb, type: 2}
   m_InternalBundleIdMode: 1
   m_Compression: 1
   m_IncludeAddressInCatalog: 1

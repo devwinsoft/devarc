@@ -49,7 +49,7 @@ namespace Devarc
                 }
             }
 
-            int maxColumn = -1;
+            int maxColumnNum = -1;
             for (int r = 1; r <= sheet.LastRowNum; r++)
             {
                 var cells = sheet.GetRow(r).Cells;
@@ -62,17 +62,17 @@ namespace Devarc
                         continue;
 
                     data.list.Add(key, value);
-                    maxColumn = Math.Max(c, maxColumn);
+                    maxColumnNum = Math.Max(c, maxColumnNum);
                 }
             }
 
-            for (int c = 1; c < maxColumn; c++)
+            for (int c = 1; c <= maxColumnNum; c++)
             {
                 Data data;
                 if (mDatas.TryGetValue(c, out data) == false)
                     continue;
 
-                var code = ToISO639_2(data.language);
+                var code = data.language;
                 var saveDir = Path.Combine(mOutputDir, code);
                 if (Directory.Exists(saveDir) == false)
                 {

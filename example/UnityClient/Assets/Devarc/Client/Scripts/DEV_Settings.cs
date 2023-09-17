@@ -59,7 +59,7 @@ namespace Devarc
 #endif
 
 
-        public LanguageType editorLanguage;
+        public SystemLanguage editorLanguage;
 
 
         [Serializable]
@@ -90,12 +90,12 @@ namespace Devarc
 
         public static string GetStringTablePath_Bundle()
         {
-            string subDir = LStringExt.ToISO639_2(Instance.editorLanguage);
+            string subDir = Instance.editorLanguage.ToString();
             return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.stringSubDirectory}/{subDir}";
         }
         public static string GetStringTablePath_Builtin()
         {
-            string subDir = LStringExt.ToISO639_2(Instance.editorLanguage);
+            string subDir = Instance.editorLanguage.ToString();
             return $"{Instance.defaultDirectory.builtinPath}/{Instance.defaultDirectory.stringSubDirectory}/{subDir}";
         }
 

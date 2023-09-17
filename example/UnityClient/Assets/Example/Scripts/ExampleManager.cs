@@ -117,9 +117,11 @@ public class ExampleManager : MonoBehaviour
 
     IEnumerator loadAssets()
     {
+        SystemLanguage lang = SystemLanguage.Korean;
+
         // Load Resources...
         AssetManager.Instance.LoadAssets_Resource<TextAsset>("Tables");
-        SoundManager.Instance.LoadResourceSounds("SOUND@builtin");
+        SoundManager.Instance.LoadSounds_Resource("SOUND@builtin");
 
         // Load Local Bundle Tables...
         yield return AssetManager.Instance.LoadAssets_Bundle<TextAsset>("table");
@@ -127,12 +129,11 @@ public class ExampleManager : MonoBehaviour
         Table.SKILL.LoadFromFile("SKILL");
 
         // Load String Table.
-        LanguageType lang = LanguageType.Korean;
-        yield return AssetManager.Instance.LoadAssets_Bundle<TextAsset>(lang.ToISO639_2());
+        yield return AssetManager.Instance.LoadAssets_Bundle<TextAsset>("lstring", lang);
         Table.LString.LoadFromFile("LString");
 
         // Load Sound Table & AudioClips...
-        yield return SoundManager.Instance.LoadBundleSounds("SOUND", "sound");
+        yield return SoundManager.Instance.LoadSounds_Bundle("SOUND", "sound");
     }
 
 

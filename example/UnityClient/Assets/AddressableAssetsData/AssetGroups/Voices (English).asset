@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Voices (English)
+  m_EditorClassIdentifier: 
+  m_GroupName: Voices (English)
+  m_Data:
+    m_SerializedData: []
+  m_GUID: d5b385edae3939248842c9e8c943efcb
+  m_SerializeEntries: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 5ea220b076c175b4abe2b1c42f6d4daa, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 9e44e89691fd156498c72239cc66bf80, type: 2}
+    - {fileID: 11400000, guid: 24a66ac8fcd10e9408241d3a28d702c2, type: 2}
