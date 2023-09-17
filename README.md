@@ -4,13 +4,13 @@ Devarc is cross-platform development templates.
 Devarc supports:
 - Windows development evironment.
 - PC, Mobile, WebGL clients.
-- NodeJS, CSharp servers.
-- MySQL: SQL generator.
+- NodeJS, CSharp, MySQL servers.
+- Protocol builder.
+- Table builder.
 - Unity: Addressable management.
-- Unity: Localization management.
-- Unity: Effect management.
-- Unity: Playing animation without mechanim.
-- Unity: Sound management.
+- Unity: Simple effect management.
+- Unity: Simple animation management.
+- Unity: Simple sound management.
 
 Test Release:
 - [WebGL version](http://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com/b/index.html)
