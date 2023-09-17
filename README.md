@@ -7,7 +7,7 @@ Devarc supports:
 - NodeJS, CSharp, MySQL servers.
 - Protocol builder.
 - Table builder.
-- Unity: Addressable management.
+- Unity: Asset management.
 - Unity: Simple effect management.
 - Unity: Simple animation management.
 - Unity: Simple sound management.
@@ -79,8 +79,12 @@ move /Y   *.cs    {UnityProjectFolder}\Assets\Scripts\Generated\
 ```
     IEnumerator loadAssets()
     {
-        yield return AssetManager.Instance.LoadAssets_Bundle<TextAsset>("lstring", SystemLanguage.English);
-        Table.LString.LoadFromFile("LString");
+        var handle = AssetManager.Instance.LoadAssets_Bundle<TextAsset>("lstring", SystemLanguage.English);
+        yield return handle;
+        if (handle.IsValid())
+        {
+            Table.LString.LoadFromFile("LString");
+        }
     }
 ```
 
