@@ -1,4 +1,4 @@
 {"list":[
- {"id":"skillname_attack", "value":"Normal Attack"}
-,{"id":"skillname_shoot", "value":"Shooting"}
+ {"id":"skill_attack", "value":"攻撃"}
+,{"id":"skill_counter", "value":"反撃"}
 ]}

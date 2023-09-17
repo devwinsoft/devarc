@@ -1,4 +1,4 @@
 {"list":[
- {"id":"skillname_attack", "value":"평타"}
-,{"id":"skillname_shoot", "value":"사격"}
+ {"id":"skill_attack", "value":"공격"}
+,{"id":"skill_counter", "value":"반격"}
 ]}

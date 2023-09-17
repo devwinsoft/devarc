@@ -1,4 +1,4 @@
 {"list":[
- {"id":"skillname_attack", "value":"Normal Attack"}
-,{"id":"skillname_shoot", "value":"Shooting"}
+ {"id":"skill_attack", "value":"Attack"}
+,{"id":"skill_counter", "value":"Counter Attack"}
 ]}

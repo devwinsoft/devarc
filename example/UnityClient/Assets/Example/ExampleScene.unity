@@ -3675,9 +3675,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4532a77dde93a84683b1befa2f8fc64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abc:
-    data1: 1253
-    data2: 1254
   charID:
     Value: 1:Mark
   skillID:

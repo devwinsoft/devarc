@@ -215,6 +215,12 @@ public class ExampleManager : MonoBehaviour
     }
 
 
+    public void OnClick_Test2()
+    {
+        SoundManager.Instance.PlaySound(CHANNEL.EFFECT, soundID);
+    }
+
+
     IEnumerator download()
     {
         long totalSize = 0;
@@ -238,11 +244,4 @@ public class ExampleManager : MonoBehaviour
             yield return AssetManager.Instance.LoadPrefabs_Bundle("effect");
         }
     }
-
-
-    public void OnClick_Test2()
-    {
-        SoundManager.Instance.PlaySound(CHANNEL.EFFECT, soundID);
-    }
-
 }
