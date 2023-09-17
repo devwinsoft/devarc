@@ -21,14 +21,16 @@ Devarc is cross-platform development templates.
 
 
 ## Install Client ##
-* Download & import packages into unity project.
+#### Step 1: Create unity project. ####
+#### Step 2: Download packages, and import into unity project. ####
   * https://github.com/devwinsoft/devarc/blob/main/install
   * https://github.com/MessagePack-CSharp/MessagePack-CSharp/releases
   * https://github.com/psygames/UnityWebSocket
     
 
 ## Install Server ##
-* Download websocket-sharp.dll or source codes for CSharp server.
+#### Step 1: Create csharp project. ####
+#### Step 2: Download websocket-sharp project, and import into csharp project. ####
   * https://github.com/sta/websocket-sharp
     
 ## Protocol Builder ##
