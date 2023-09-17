@@ -1,10 +1,13 @@
 # Devarc (v1.0.0)
 Devarc is cross-platform development templates.
 
-Devarc supports:
+#### Devarc supports ####
 - Windows development evironment.
 - PC, Mobile, WebGL clients.
-- NodeJS, CSharp, MySQL servers.
+- NodeJS, CSharp servers.
+- MySQL database.
+
+#### Devarc includes ####
 - Protocol builder.
 - Table builder.
 - Unity: Asset management.
@@ -13,7 +16,7 @@ Devarc supports:
 - Unity: Simple sound management.
 - Unity: Simple data encryption.
 
-Test Release:
+#### Test Release ####
 - [WebGL version](http://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com/b/index.html)
 
 
