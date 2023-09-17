@@ -30,6 +30,11 @@ namespace Devarc.TableBuilder
                     var builder = new MySqlBuilder();
                     builder.Build(fileName);
                 }
+                else if (args.Contains<string>("-lstr"))
+                {
+                    var builder = new LStrBuilder();
+                    builder.Build(fileName);
+                }
                 else if (args.Contains<string>("-unity"))
                 {
                     var builder = new UnityBuilder();

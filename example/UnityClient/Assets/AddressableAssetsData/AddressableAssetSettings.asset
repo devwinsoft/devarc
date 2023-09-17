@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 3f7eb0b0492a6754eb75a995cbfb3401
   m_currentHash:
     serializedVersion: 2
-    Hash: c59c111d80e3271a07b5d885138b755e
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -48,6 +48,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fba4c1ec89ada7c4ca2e4775b807e7c1, type: 2}
   - {fileID: 11400000, guid: b9578e45fefb9fb4197a78182405641b, type: 2}
   - {fileID: 11400000, guid: 1388ecb6c24c2794385b477c613c677e, type: 2}
+  - {fileID: 11400000, guid: a2d0664baa304b04e88ffffae9e79862, type: 2}
+  - {fileID: 11400000, guid: e8370ace0cd0a6b42a97e5f14eca8dd3, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -92,6 +94,10 @@ MonoBehaviour:
     - table
     - effect
     - sound
+    - string
+    - kor
+    - eng
+    - jpn
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 123b0e445398f4e4f8732a94210f1504, type: 2}

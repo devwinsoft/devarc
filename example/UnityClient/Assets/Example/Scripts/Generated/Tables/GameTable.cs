@@ -23,7 +23,7 @@ namespace Devarc
 
 	[System.Serializable]
 	[MessagePackObject]
-	public class CHARACTER : ITableData<_CHARACTER, int>
+	public partial class CHARACTER : ITableData<_CHARACTER, int>
 	{
 		public int GetKey() { return character_id; }
 		[Key(0)]
@@ -69,7 +69,7 @@ namespace Devarc
 
 	[System.Serializable]
 	[MessagePackObject]
-	public class SKILL : ITableData<_SKILL, string>
+	public partial class SKILL : ITableData<_SKILL, string>
 	{
 		public string GetKey() { return skill_id; }
 		[Key(0)]

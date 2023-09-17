@@ -25,7 +25,7 @@ namespace Devarc
 
 	[System.Serializable]
 	[MessagePackObject]
-	public class SOUND : ITableData<_SOUND, int>
+	public partial class SOUND : ITableData<_SOUND, int>
 	{
 		public int GetKey() { return index; }
 		[Key(0)]

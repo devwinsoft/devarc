@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: String (kor)
+  m_EditorClassIdentifier: 
+  m_GroupName: String (kor)
+  m_Data:
+    m_SerializedData: []
+  m_GUID: f1500f1a7545e874080f6c4d11dc6df7
+  m_SerializeEntries:
+  - m_GUID: 9457d3c961f313a409ded7ef9812f666
+    m_Address: Assets/Example/Bundles/String/kor
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - string
+    - kor
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 5ea220b076c175b4abe2b1c42f6d4daa, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 58ef5409ce5303648b03db7408889a6b, type: 2}
+    - {fileID: 11400000, guid: cc68cc0a1b7f1c040aa0262348661cd2, type: 2}

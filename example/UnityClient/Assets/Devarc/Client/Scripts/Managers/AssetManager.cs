@@ -149,14 +149,15 @@ namespace Devarc
                 getBundleData(key)?.Add(obj.name);
                 callback?.Invoke(obj);
             });
-            yield return task;
             createBundleData(key, task);
+            yield return task;
         }
 
 
         public IEnumerator LoadPrefab_Bundle(string key, System.Action<GameObject> callback = null)
         {
             var task = Addressables.LoadAssetAsync<GameObject>(key);
+            createBundleData(key, task);
             yield return task;
             if (task.Status == AsyncOperationStatus.Succeeded)
             {
@@ -165,7 +166,6 @@ namespace Devarc
                 getBundleData(key)?.Add(obj.name);
                 callback?.Invoke(obj);
             }
-            createBundleData(key, task);
         }
 
 

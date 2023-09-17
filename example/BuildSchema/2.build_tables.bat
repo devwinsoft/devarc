@@ -26,4 +26,9 @@ move /Y   *.json    ..\UnityClient\Assets\Example\Bundles\Tables\
 move /Y   *.ddl    ..\Database\Tables\
 move /Y   *.sql    ..\Database\Tables\
 
+
+..\..\bin\TableBuilder.exe -lstr .\Tables\StringTable.xlsx
+move /Y   .\Tables\eng\*   ..\UnityClient\Assets\Example\Bundles\Strings\eng
+move /Y   .\Tables\kor\*   ..\UnityClient\Assets\Example\Bundles\Strings\kor
+
 pause

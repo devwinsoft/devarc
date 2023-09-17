@@ -59,39 +59,45 @@ namespace Devarc
 #endif
 
 
+        public LanguageType editorLanguage;
+
+
         [Serializable]
         public class RootPathData
         {
             public CString bundlePath;
             public CString builtinPath;
+            public CString tableSubDirectory;
+            public CString stringSubDirectory;
         }
         public RootPathData defaultDirectory = new RootPathData();
-
-        
-        [Serializable]
-        public class TablePathData
-        {
-            public CString tableSubDirectory;
-        }
-        public static TablePathData TableData => Instance.tableData;
-        public TablePathData tableData = new TablePathData();
-
 
         public static string GetDefault_BundlePath()
         {
             return Instance.defaultDirectory.bundlePath;
         }
 
+
         public static string GetTable_BundlePath()
         {
-            return $"{Instance.defaultDirectory.bundlePath}/{Instance.tableData.tableSubDirectory}";
+            return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.tableSubDirectory}";
         }
         public static string GetTable_BuiltinPath()
         {
-            return $"{Instance.defaultDirectory.builtinPath}/{Instance.tableData.tableSubDirectory}";
+            return $"{Instance.defaultDirectory.builtinPath}/{Instance.defaultDirectory.tableSubDirectory}";
         }
 
 
+        public static string GetStringTablePath_Bundle()
+        {
+            string subDir = LStringExt.ToISO639_2(Instance.editorLanguage);
+            return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.stringSubDirectory}/{subDir}";
+        }
+        public static string GetStringTablePath_Builtin()
+        {
+            string subDir = LStringExt.ToISO639_2(Instance.editorLanguage);
+            return $"{Instance.defaultDirectory.builtinPath}/{Instance.defaultDirectory.stringSubDirectory}/{subDir}";
+        }
 
         private void OnDestroy()
         {

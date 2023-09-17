@@ -30,7 +30,7 @@ namespace Devarc
 
             using (var sw = File.CreateText(filePath))
             {
-                sw.Write("{\"list\":[");
+                sw.WriteLine("{\"list\":[");
                 bool isFirstLine = true;
                 for (int r = (int)RowType.Data; r <= sheet.LastRowNum; r++)
                 {

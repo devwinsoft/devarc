@@ -17,16 +17,10 @@ MonoBehaviour:
       data: vbKyEUOyC4ieDR3hJBEL4INabSQRsg==
     builtinPath:
       data: vbKyEUOyC4ieDR3hJBELWxGy4oOdwxGy
-  tableData:
-    addressable:
-      data: Qw1AJBE=
     tableSubDirectory:
       data: lw1AJBGy
-  effectData:
-    addressable: effect
-    bundleSubDirectory: Effects
-  soundData:
-    addressable: sound
-    bundleTableSubPath: Tables/SOUND
-    builtinTableSubPath: Tables/SOUND@builtin
-    builtinResourceSubDirectory: Sounds
+    stringSubDirectory:
+      data: R0Odhlrusg==
+  tableData:
+    tableSubDirectory:
+      data: 

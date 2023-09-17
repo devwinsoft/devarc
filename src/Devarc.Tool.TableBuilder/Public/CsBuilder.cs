@@ -113,7 +113,7 @@ namespace Devarc
             sw.WriteLine("");
             sw.WriteLine("\t[System.Serializable]");
             sw.WriteLine("\t[MessagePackObject]");
-            sw.WriteLine($"\tpublic class {sheet.SheetName} : ITableData<_{sheet.SheetName}, {mCurrentHeader.KeyTypeName}>");
+            sw.WriteLine($"\tpublic partial class {sheet.SheetName} : ITableData<_{sheet.SheetName}, {mCurrentHeader.KeyTypeName}>");
             sw.WriteLine("\t{");
             sw.WriteLine($"\t\tpublic {mCurrentHeader.KeyTypeName} GetKey() {{ return {mCurrentHeader.KeyFieldName}; }}");
             int index = 0;

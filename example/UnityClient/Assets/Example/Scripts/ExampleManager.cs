@@ -17,6 +17,7 @@ public class ExampleManager : MonoBehaviour
     public SKILL_ID skillID;
     public SOUND_ID soundID;
     public EFFECT_ID effectID;
+    public STRING_ID stringID;
 
     public AuthNetwork authNetwork;
     public GameNetwork gameNetwork;
@@ -124,6 +125,11 @@ public class ExampleManager : MonoBehaviour
         yield return AssetManager.Instance.LoadAssets_Bundle<TextAsset>("table");
         Table.CHARACTER.LoadFromFile("CHARACTER");
         Table.SKILL.LoadFromFile("SKILL");
+
+        // Load String Table.
+        LanguageType lang = LanguageType.Korean;
+        yield return AssetManager.Instance.LoadAssets_Bundle<TextAsset>(lang.ToISO639_2());
+        Table.LString.LoadFromFile("LString");
 
         // Load Sound Table & AudioClips...
         yield return SoundManager.Instance.LoadBundleSounds("SOUND", "sound");
