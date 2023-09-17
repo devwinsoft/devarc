@@ -81,6 +81,7 @@ example/UnityClient/*.sln
 example/UnityClient/Library/
 example/UnityClient/Logs/
 example/UnityClient/obj/
+example/UnityClient/ServerData/
 example/UnityClient/Temp/
 example/UnityClient/UserSettings/
 
