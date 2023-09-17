@@ -5,10 +5,15 @@ Devarc supports:
 - Windows development evironment.
 - PC, Mobile, WebGL clients.
 - NodeJS, CSharp servers.
-- MySQL database.
+- MySQL: SQL generator.
+- Unity: Addressable management.
+- Unity: Localization management.
+- Unity: Effect management.
+- Unity: Playing animation without mechanim.
+- Unity: Sound management.
 
 Test Release:
-- [WebGL version](http://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com/a/index.html)
+- [WebGL version](http://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com/b/index.html)
 
 
 ## Install Client ##
@@ -63,6 +68,20 @@ IDL.exe -cs-def  {SchemaFolder}\Common.def
 IDL.exe -js  {SchemaFolder}\AuthProtocol.idl  {SchemaFolder}\Common.def
 TableBuilder.exe -cs {SchemaFolder}\SoundTable.xlsx
 move /Y   *.cs    {UnityProjectFolder}\Assets\Scripts\Generated\
+```
+
+## Unity Asset Management ##
+
+#### Localizing: Addressable configuration. ####
+![img](screenshot/example_addressable.png)
+
+#### Localizing: Script for loading. ####
+```
+    IEnumerator loadAssets()
+    {
+        yield return AssetManager.Instance.LoadAssets_Bundle<TextAsset>("lstring", SystemLanguage.English);
+        Table.LString.LoadFromFile("LString");
+    }
 ```
 
 ## License ##
