@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using Devarc;
 
 public enum CHANNEL
@@ -26,6 +27,7 @@ public class SoundManager : MonoSingleton<SoundManager>
 
     Dictionary<string, List<SoundData>> mSoundDatas = new Dictionary<string, List<SoundData>>();
     Dictionary<string, AudioClip> mClips = new Dictionary<string, AudioClip>();
+    bool mResourceLoading = false;
 
     protected override void onAwake()
     {
@@ -39,45 +41,52 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
 
 
-    public IEnumerator LoadSounds_Bundle(string tableFileName, string addressKey, SystemLanguage lang = SystemLanguage.Unknown)
+    public AsyncOperationHandle<IList<AudioClip>> LoadSounds(string addressKey)
     {
-        var textAsset = AssetManager.Instance.GetAsset<TextAsset>(tableFileName);
-        if (textAsset != null)
-        {
-            Table.SOUND.LoadJson(textAsset.text, (data) =>
-            {
-                register(data, addressKey);
-            });
-        }
+        return AssetManager.Instance.LoadAssets_Bundle<AudioClip>(addressKey);
+    }
 
-        // Load AudioClips...
-        if (lang == SystemLanguage.Unknown)
-            yield return AssetManager.Instance.LoadAssets_Bundle<AudioClip>(addressKey);
-        else
-            yield return AssetManager.Instance.LoadAssets_Bundle<AudioClip>(addressKey, lang);
+    public AsyncOperationHandle<IList<AudioClip>> LoadVoices(string addressKey, SystemLanguage lang)
+    {
+        return AssetManager.Instance.LoadAssets_Bundle<AudioClip>(addressKey, lang);
     }
 
 
-    public void UnloadSounds_Bundle(string addressKey)
+    public void Unload_Bundle(string addressKey)
     {
         AssetManager.Instance.UnloadAssets_Bundle(addressKey);
         unRegister(addressKey);
     }
 
 
-    public void LoadSounds_Resource(string tableFileName)
+    public void LoadTable(string fileName, bool isResource)
     {
-        var tableAsset = AssetManager.Instance.GetAsset<TextAsset>(tableFileName);
-        if (tableAsset != null)
-        {
-            Table.SOUND.LoadJson(tableAsset.text, (data) =>
-            {
-                register(data, null);
+        mResourceLoading = isResource;
 
-                // Load AudioClips...
-                AssetManager.Instance.LoadAsset_Resource<AudioClip>(data.path);
-            });
+        TextAsset tableAsset = null;
+        if (isResource)
+        {
+            tableAsset = AssetManager.Instance.GetAsset<TextAsset>(fileName);
         }
+        else
+        {
+            tableAsset = AssetManager.Instance.GetAsset<TextAsset>(fileName);
+        }
+        if (tableAsset == null)
+        {
+            Debug.LogError($"[SoundManager::LoadSoundTable] Cannot find table: fileName={fileName}");
+            return;
+        }
+
+        Table.SOUND.LoadJson(tableAsset.text, (data) =>
+        {
+            register(data, null);
+            if (mResourceLoading)
+            {
+                AssetManager.Instance.LoadAsset_Resource<AudioClip>(data.path);
+            }
+        });
+        mResourceLoading = false;
     }
 
 

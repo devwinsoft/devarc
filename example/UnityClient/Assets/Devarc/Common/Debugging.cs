@@ -5,15 +5,6 @@ using UnityEngine;
 
 namespace Devarc
 {
-    public enum LogTypeEx
-    {
-        Error,
-        Assert,
-        Warning,
-        Log,
-        Exception
-    }
-
     public class Debugging
     {
         static MainThreadDispatcher sDispatcher = new MainThreadDispatcher();

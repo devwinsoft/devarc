@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 public class ExampleManager : MonoBehaviour
 {
-    public CInt abc;
     public CHARACTER_ID charID;
     public SKILL_ID skillID;
     public SOUND_ID soundID;
@@ -118,23 +117,37 @@ public class ExampleManager : MonoBehaviour
 
     IEnumerator loadAssets()
     {
-        SystemLanguage lang = SystemLanguage.Korean;
-
-        // Load Resources...
+        // Load resources...
         AssetManager.Instance.LoadAssets_Resource<TextAsset>("Tables");
-        SoundManager.Instance.LoadSounds_Resource("SOUND@builtin");
+        SoundManager.Instance.LoadTable("SOUND@RES", true);
 
-        // Load Local Bundle Tables...
-        yield return AssetManager.Instance.LoadAssets_Bundle<TextAsset>("table");
-        Table.CHARACTER.LoadFromFile("CHARACTER");
-        Table.SKILL.LoadFromFile("SKILL");
+        // Load bundle common-tables...
+        {
+            var handle = AssetManager.Instance.LoadAssets_Bundle<TextAsset>("table");
+            yield return handle;
+            if (handle.IsValid())
+            {
+                Table.CHARACTER.LoadFromFile("CHARACTER");
+                Table.SKILL.LoadFromFile("SKILL");
+            }
+        }
 
-        // Load String Table.
-        yield return AssetManager.Instance.LoadAssets_Bundle<TextAsset>("lstring", lang);
-        Table.LString.LoadFromFile("LString");
+        // Load bundle string-table.
+        {
+            var handle = AssetManager.Instance.LoadAssets_Bundle<TextAsset>("lstring", SystemLanguage.Korean);
+            yield return handle;
+            if (handle.IsValid())
+            {
+                Table.LString.LoadFromFile("LString");
+            }
+        }
 
-        // Load Sound Table & AudioClips...
-        yield return SoundManager.Instance.LoadSounds_Bundle("SOUND", "sound");
+        // Load bundle sounds.
+        {
+            SoundManager.Instance.LoadTable("SOUND", false);
+            var handle = SoundManager.Instance.LoadSounds("sound");
+            yield return handle;
+        }
     }
 
 

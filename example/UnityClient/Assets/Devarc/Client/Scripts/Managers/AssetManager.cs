@@ -142,7 +142,7 @@ namespace Devarc
             createBundleData(key, task);
         }
 
-        public IEnumerator LoadAssets_Bundle<T>(string key, System.Action<T> callback = null) where T : UnityEngine.Object
+        public AsyncOperationHandle<IList<T>> LoadAssets_Bundle<T>(string key, System.Action<T> callback = null) where T : UnityEngine.Object
         {
             var task = Addressables.LoadAssetsAsync<T>(key, (obj) =>
             {
@@ -151,11 +151,11 @@ namespace Devarc
                 callback?.Invoke(obj);
             });
             createBundleData(key, task);
-            yield return task;
+            return task;
         }
 
 
-        public IEnumerator LoadAssets_Bundle<T>(string key, SystemLanguage lang, System.Action<T> callback = null) where T : UnityEngine.Object
+        public AsyncOperationHandle<IList<T>> LoadAssets_Bundle<T>(string key, SystemLanguage lang, System.Action<T> callback = null) where T : UnityEngine.Object
         {
             List<string> keys = new List<string> { key, lang.ToString() };
             var task = Addressables.LoadAssetsAsync<T>(keys, (obj) =>
@@ -165,7 +165,7 @@ namespace Devarc
                 callback?.Invoke(obj);
             }, Addressables.MergeMode.Intersection);
             createBundleData(key, task);
-            yield return task;
+            return task;
         }
 
 
@@ -184,7 +184,7 @@ namespace Devarc
         }
 
 
-        public IEnumerator LoadPrefabs_Bundle(string key, System.Action<GameObject> callback = null)
+        public AsyncOperationHandle<IList<GameObject>> LoadPrefabs_Bundle(string key, System.Action<GameObject> callback = null)
         {
             var task = Addressables.LoadAssetsAsync<GameObject>(key, (obj) =>
             {
@@ -192,11 +192,11 @@ namespace Devarc
                 getBundleData(key)?.Add(obj.name);
                 callback?.Invoke(obj);
             });
-            yield return task;
             createBundleData(key, task);
+            return task;
         }
 
-        public IEnumerator LoadPrefabs_Bundle(string key, SystemLanguage lang, System.Action<GameObject> callback = null)
+        public AsyncOperationHandle<IList<GameObject>> LoadPrefabs_Bundle(string key, SystemLanguage lang, System.Action<GameObject> callback = null)
         {
             List<string> keys = new List<string> { key, lang.ToString() };
             var task = Addressables.LoadAssetsAsync<GameObject>(keys, (obj) =>
@@ -205,8 +205,9 @@ namespace Devarc
                 getBundleData(key)?.Add(obj.name);
                 callback?.Invoke(obj);
             }, Addressables.MergeMode.Intersection);
-            yield return task;
+
             createBundleData(key, task);
+            return task;
         }
 
 
