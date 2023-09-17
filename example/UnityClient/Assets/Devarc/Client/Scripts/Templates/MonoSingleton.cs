@@ -36,8 +36,23 @@ namespace Devarc
                 return mInstance;
             }
         }
+
+        public static bool IsCreated() => mInstance != null;
+
         static T mInstance;
 
+        public static T Create(string resourcePath)
+        {
+            var prefab = Resources.Load<GameObject>(resourcePath);
+            if (prefab == null)
+            {
+                Debug.LogError($"[{typeof(T).Name}::Create] Cannot find prefab: resourcePath={resourcePath}");
+                return null;
+            }
+            var obj = Instantiate(prefab);
+            var compo = obj.GetComponent<T>();
+            return compo;
+        }
 
         protected virtual void onAwake() { }
         protected virtual void onStart() { }

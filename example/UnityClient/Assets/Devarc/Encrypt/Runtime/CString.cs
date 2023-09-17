@@ -10,6 +10,12 @@ namespace Devarc
             return obj.ToString();
         }
 
+        public static implicit operator CString(string value)
+        {
+            CString obj = new CString(value);
+            return obj;
+        }
+
         public string data;
 
         public string Value

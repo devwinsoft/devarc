@@ -6,12 +6,10 @@ using System;
 using System.Collections.Generic;
 using Devarc;
 using System.Text;
-using MessagePack.Resolvers;
 using System.Collections;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using System.Threading.Tasks;
 
-public class ExampleManager : MonoBehaviour
+public class ExampleScene : BaseScene
 {
     public CHARACTER_ID charID;
     public SKILL_ID skillID;
@@ -19,39 +17,18 @@ public class ExampleManager : MonoBehaviour
     public EFFECT_ID effectID;
     public STRING_ID stringID;
 
-    public AuthNetwork authNetwork;
-    public GameNetwork gameNetwork;
-
     public TMP_Dropdown domains;
     public TMP_InputField inputID;
     public TMP_InputField inputPW;
     public ScrollRect scrollRect;
     public TextMeshProUGUI logText;
 
-    string sessionID = string.Empty;
-    int secret = 0;
-
     StringBuilder mStrBuilder = new StringBuilder();
     List<string> mLogMessages = new List<string>();
 
-    string gameAddress => $"ws://{domains.captionText.text}:4000/Game";
-
-
-    IEnumerator Start()
+    protected override void onStart()
     {
-        initDebugging();
-        initNetwork();
-        yield return loadAssets();
-    }
-
-
-    void initDebugging()
-    {
-        Debugging.OnAssert += (condition, message) => { Debug.Assert(condition, message); };
-        Debugging.OnLog += (message) => { Debug.Log(message); };
-        Debugging.OnLogWarning += (message) => { Debug.LogWarning(message); };
-        Debugging.OnLogError += (message) => { Debug.LogError(message); };
-        Debugging.OnLogException += (ex) => { Debug.LogException(ex); };
+        AppManager.authNetwork.InitConnection(domains.captionText.text, 3000);
 
         Application.logMessageReceived += (log, stack, type) =>
         {
@@ -87,31 +64,8 @@ public class ExampleManager : MonoBehaviour
         {
             scrollRect.normalizedPosition = new Vector2(0, 0);
         };
-    }
 
-
-
-    void initNetwork()
-    {
-        StaticCompositeResolver.Instance.Register(
-            MessagePack.Resolvers.GeneratedResolver.Instance,
-            MessagePack.Resolvers.StandardResolver.Instance,
-            MessagePack.Unity.UnityResolver.Instance
-        );
-
-        authNetwork.Init(domains.captionText.text, 3000, "msgpack", "packet", StaticCompositeResolver.Instance);
-
-        gameNetwork.Init(StaticCompositeResolver.Instance);
-        gameNetwork.OnOpen += onConnected;
-        gameNetwork.OnClose += (sender, evt) =>
-        {
-            Debug.Log($"Diconnected: code={evt.Code}, reason={evt.Reason}");
-        };
-        gameNetwork.OnError += (sender, evt) =>
-        {
-            Debug.LogError(evt.Message);
-            gameNetwork.DisConnect();
-        };
+        StartCoroutine(loadAssets());
     }
 
 
@@ -167,14 +121,14 @@ public class ExampleManager : MonoBehaviour
         request.accountID = inputID.text;
         request.password = EncryptUtil.Encrypt_Base64(inputPW.text);
 
-        authNetwork.Domain = domains.captionText.text;
-        authNetwork.RequestLogin(request, (response, errorType, errorMsg) =>
+        AppManager.authNetwork.InitConnection(domains.captionText.text, 3000);
+        AppManager.authNetwork.RequestLogin(request, (response, errorType, errorMsg) =>
         {
             switch (errorType)
             {
                 case UnityWebRequest.Result.Success:
-                    sessionID = response.sessionID;
-                    secret = response.secret;
+                    AppManager.Instance.sessionID = response.sessionID;
+                    AppManager.Instance.secret = response.secret;
                     Debug.Log(JsonUtility.ToJson(response));
                     break;
                 default:
@@ -187,31 +141,20 @@ public class ExampleManager : MonoBehaviour
 
     public void OnClick_ConnectLogin()
     {
-        if (gameNetwork.IsConnected)
+        if (AppManager.gameNetwork.IsConnected)
         {
             Debug.LogWarning("Already connected.");
         }
         else
         {
-            gameNetwork.Connect(gameAddress);
+            AppManager.gameNetwork.Connect(domains.captionText.text, 4000);
         }
-    }
-
-
-    void onConnected(object sender, EventArgs e)
-    {
-        Debug.Log("Connected...");
-        C2Game.RequestLogin request = new C2Game.RequestLogin();
-        request.sessionID = sessionID;
-        request.secret = secret;
-        gameNetwork.SendData(request);
-        Debug.Log(JsonUtility.ToJson(request));
     }
 
 
     public void OnClick_Test1()
     {
-        gameNetwork.DisConnect();
+        AppManager.gameNetwork.DisConnect();
     }
 
 

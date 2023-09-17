@@ -10,6 +10,12 @@ namespace Devarc
 {
     public class SocketClient : MonoBehaviour
     {
+        public string ConnString => $"ws://{mDomain}:{mPort}/{mDirectory}";
+      
+        string mDomain;
+        int mPort;
+        string mDirectory;
+
         public enum SessionStateType
         {
             None,
@@ -25,7 +31,6 @@ namespace Devarc
         Dictionary<string, PacketHandler> mHandlers = new Dictionary<string, PacketHandler>();
         MainThreadDispatcher mDispatcher = new MainThreadDispatcher();
         WebSocket mSocket;
-        string mConnString = string.Empty;
         PacketEncoder mPacketEncoder = new PacketEncoder();
 
         public event EventHandler OnOpen;
@@ -37,8 +42,9 @@ namespace Devarc
             mDispatcher.MainThreadTick();
         }
 
-        public void Init(IFormatterResolver formatterResolver)
+        public void InitProtocol(string directory, IFormatterResolver formatterResolver)
         {
+            mDirectory = directory;
             mPacketEncoder.Init(formatterResolver);
         }
 
@@ -99,7 +105,7 @@ namespace Devarc
         }
 
 
-        public void Connect(string connStr)
+        public void Connect(string domain, int port)
         {
             switch (mCurrentState)
             {
@@ -110,8 +116,9 @@ namespace Devarc
                     break;
             }
 
-            mConnString = connStr;
-            mSocket = new WebSocket(mConnString);
+            mDomain = domain;
+            mPort = port;
+            mSocket = new WebSocket(this.ConnString);
             mSocket.OnOpen += onOpen;
             mSocket.OnClose += onClose;
             mSocket.OnError += onError;
@@ -120,7 +127,7 @@ namespace Devarc
             mSocket.ConnectAsync();
             ChangeState(SessionStateType.Connecting);
 
-            Debug.Log($"Connecting:{mConnString}");
+            Debug.Log($"Connecting:{this.ConnString}");
         }
 
 

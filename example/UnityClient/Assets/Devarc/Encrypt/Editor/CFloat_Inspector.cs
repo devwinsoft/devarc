@@ -25,10 +25,7 @@ namespace Devarc
             SerializedProperty propData1 = property.FindPropertyRelative("data1");
             SerializedProperty propData2 = property.FindPropertyRelative("data2");
 
-            if (script.IsValid == false)
-            {
-                script.Init(propData1.intValue, propData2.intValue);
-            }
+            script.Init(propData1.intValue, propData2.intValue);
 
             float prevValue = script.Value;
             float nextValue = EditorGUI.FloatField(position, label, prevValue);

@@ -68,16 +68,10 @@ namespace Devarc
                 temp2[i] = xor[i];
             }
 
-            crc = 0;
-            for (int i = 0; i < temp1.Length; i++)
-            {
-                crc += (i + 1) * temp1[i];
-                crc += (i + 2) * temp2[i];
-            }
-
-            isValid = true;
             data1 = BitConverter.ToInt32(temp1, 0);
             data2 = BitConverter.ToInt32(temp2, 0);
+
+            setupCRC(temp1, temp2);
         }
     }
 }

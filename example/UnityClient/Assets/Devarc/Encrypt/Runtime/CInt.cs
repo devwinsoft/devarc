@@ -13,16 +13,9 @@ namespace Devarc
             return obj.get();
         }
 
-        public static implicit operator float(CInt obj)
+        public static implicit operator CInt(int value)
         {
-            if (obj == null)
-                return 0;
-            return obj.get();
-        }
-
-        public static implicit operator CInt(int _value)
-        {
-            return new CInt(_value);
+            return new CInt(value);
         }
 
         public CInt()
@@ -74,52 +67,47 @@ namespace Devarc
                 temp2[i] = xor[i];
             }
 
-            crc = 0;
-            for (int i = 0; i < temp1.Length; i++)
-            {
-                crc += (i + 1) * temp1[i];
-                crc += (i + 2) * temp2[i];
-            }
-
-            isValid = true;
             data1 = BitConverter.ToInt32(temp1, 0);
             data2 = BitConverter.ToInt32(temp2, 0);
+
+            setupCRC(temp1, temp2);
         }
 
-//#if UNITY_EDITOR
-//        public int ReadFrom(UnityEditor.SerializedProperty property)
-//        {
-//            UnityEditor.SerializedProperty propData1 = property.FindPropertyRelative("data1");
-//            UnityEditor.SerializedProperty propData2 = property.FindPropertyRelative("data2");
-            
-//            var temp1 = BitConverter.GetBytes(propData1.intValue);
-//            var temp2 = BitConverter.GetBytes(propData2.intValue);
 
-//            for (int i = 0; i < propData1.arraySize; i++)
-//            {
-//                data1[i] = propData1.GetArrayElementAtIndex(i).intValue;
-//            }
-//            for (int i = 0; i < propData2.arraySize; i++)
-//            {
-//                data2[i] = propData2.GetArrayElementAtIndex(i).intValue;
-//            }
-//            return Value;
-//        }
+        //#if UNITY_EDITOR
+        //        public int ReadFrom(UnityEditor.SerializedProperty property)
+        //        {
+        //            UnityEditor.SerializedProperty propData1 = property.FindPropertyRelative("data1");
+        //            UnityEditor.SerializedProperty propData2 = property.FindPropertyRelative("data2");
 
-//        public void WriteTo(UnityEditor.SerializedProperty property)
-//        {
-//            UnityEditor.SerializedProperty propData1 = property.FindPropertyRelative("data1");
-//            UnityEditor.SerializedProperty propData2 = property.FindPropertyRelative("data2");
-//            for (int i = 0; i < propData1.arraySize; i++)
-//            {
-//                propData1.GetArrayElementAtIndex(i).intValue = data1[i];
-//            }
-//            for (int i = 0; i < propData2.arraySize; i++)
-//            {
-//                propData2.GetArrayElementAtIndex(i).intValue = data2[i];
-//            }
-//        }
-//#endif
+        //            var temp1 = BitConverter.GetBytes(propData1.intValue);
+        //            var temp2 = BitConverter.GetBytes(propData2.intValue);
+
+        //            for (int i = 0; i < propData1.arraySize; i++)
+        //            {
+        //                data1[i] = propData1.GetArrayElementAtIndex(i).intValue;
+        //            }
+        //            for (int i = 0; i < propData2.arraySize; i++)
+        //            {
+        //                data2[i] = propData2.GetArrayElementAtIndex(i).intValue;
+        //            }
+        //            return Value;
+        //        }
+
+        //        public void WriteTo(UnityEditor.SerializedProperty property)
+        //        {
+        //            UnityEditor.SerializedProperty propData1 = property.FindPropertyRelative("data1");
+        //            UnityEditor.SerializedProperty propData2 = property.FindPropertyRelative("data2");
+        //            for (int i = 0; i < propData1.arraySize; i++)
+        //            {
+        //                propData1.GetArrayElementAtIndex(i).intValue = data1[i];
+        //            }
+        //            for (int i = 0; i < propData2.arraySize; i++)
+        //            {
+        //                propData2.GetArrayElementAtIndex(i).intValue = data2[i];
+        //            }
+        //        }
+        //#endif
     }
 }
 

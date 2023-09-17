@@ -26,31 +26,27 @@ public abstract class WebClient : MonoBehaviour
 
     public string BaseURL => $"https://{mDomain}:{mPort}";
 
-    public string Domain
-    {
-        get { return mDomain; }
-        set { mDomain = value; }
-    }
+    public string Domain => mDomain;
     string mDomain;
 
-    public int Port
-    {
-        get { return mPort; }
-        set { mPort = value; }
-    }
+    public int Port => mPort;
     int mPort;
 
-    string mLocation;
+    string mDirectory;
     string mArgName;
     PacketEncoder mPacketEncoder = new PacketEncoder();
     Dictionary<Type, PacketHandler> mHandlers = new Dictionary<Type, PacketHandler>();
 
 
-    public void Init(string url, int port, string location , string argName, IFormatterResolver formatterResolver)
+    public void InitConnection(string doamin, int port)
     {
-        mDomain = url;
+        mDomain = doamin;
         mPort = port;
-        mLocation = location;
+    }
+
+    public void InitProtocol(string directory , string argName, IFormatterResolver formatterResolver)
+    {
+        mDirectory = directory;
         mArgName = argName;
         mPacketEncoder.Init(formatterResolver);
     }
@@ -97,7 +93,7 @@ public abstract class WebClient : MonoBehaviour
         {
             case RequestType.Get:
                 {
-                    var url = $"{BaseURL}/{mLocation}?{mArgName}={sendData}";
+                    var url = $"{BaseURL}/{mDirectory}?{mArgName}={sendData}";
                     www = UnityWebRequest.Get(url);
                     Debug.Log($"Request Get: {url}");
                 }
@@ -107,8 +103,8 @@ public abstract class WebClient : MonoBehaviour
                     WWWForm form = new WWWForm();
                     form.AddField(mArgName, sendData);
 
-                    www = UnityWebRequest.Post($"{BaseURL}/{mLocation}", form);
-                    var url = $"{BaseURL}/{mLocation}?{mArgName}={sendData}";
+                    www = UnityWebRequest.Post($"{BaseURL}/{mDirectory}", form);
+                    var url = $"{BaseURL}/{mDirectory}?{mArgName}={sendData}";
                     Debug.Log($"Request Post: {url}");
                 }
                 break;
