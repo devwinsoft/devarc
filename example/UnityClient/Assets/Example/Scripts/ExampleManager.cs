@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 public class ExampleManager : MonoBehaviour
 {
+    public CInt abc;
     public CHARACTER_ID charID;
     public SKILL_ID skillID;
     public SOUND_ID soundID;

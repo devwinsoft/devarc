@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Devarc
 {
@@ -26,88 +27,99 @@ namespace Devarc
 
         public CInt()
         {
-            isValid = false;
+            set(0);
         }
 
         public CInt(int _value)
         {
-            seed();
             set(_value);
         }
 
         protected override int get()
         {
-            byte[] temp = new byte[4];
+            var temp = new byte[4];
+            var temp1 = BitConverter.GetBytes(data1);
+            var temp2 = BitConverter.GetBytes(data2);
+
             for (int i = 0; i < temp.Length; i++)
             {
-                temp[i] = (byte)(0xff & (data1[i] ^ data2[i]));
+                temp[i] = (byte)(0xff & (temp1[i] ^ temp2[i]));
             }
 
             int tempCRC = 0;
-            for (int i = 0; i < data1.Length; i++)
+            for (int i = 0; i < temp1.Length; i++)
             {
-                tempCRC += (i + 1) * data1[i];
-                tempCRC += (i + 2) * data2[i];
+                tempCRC += (i + 1) * temp1[i];
+                tempCRC += (i + 2) * temp2[i];
             }
-
             if (isValid && tempCRC != crc)
             {
-                //UnityEngine.Debug.LogError(LogHeader.Function + "CIntEx CRC Error");
-                //CEncryptErrors.Instance.Add(LT_ABUSE_TYPE.MEMORY, "CIntEx CRC Error");
+                UnityEngine.Debug.LogError("[CInt::get] CRC Error");
             }
-            return BitConverter.ToInt32(temp, 0);
+
+            int value = BitConverter.ToInt32(temp, 0);
+            return value;
         }
 
         protected override void set(int value)
         {
             byte[] src = BitConverter.GetBytes(value);
-            byte[] xor = BitConverter.GetBytes(UnityEngine.Random.Range(-10000, 10000));
-            for (int i = 0; i < data1.Length; i++)
+            byte[] xor = BitConverter.GetBytes(getRandom());
+            byte[] temp1 = new byte[4];
+            byte[] temp2 = new byte[4];
+
+            for (int i = 0; i < temp1.Length; i++)
             {
-                data1[i] = (0xff & (src[i] ^ xor[i])) | getSeedValue();
-                data2[i] = xor[i] | getSeedValue();
+                temp1[i] = (byte)(0xff & (src[i] ^ xor[i]));
+                temp2[i] = xor[i];
             }
 
             crc = 0;
-            for (int i = 0; i < data1.Length; i++)
+            for (int i = 0; i < temp1.Length; i++)
             {
-                crc += (i + 1) * data1[i];
-                crc += (i + 2) * data2[i];
+                crc += (i + 1) * temp1[i];
+                crc += (i + 2) * temp2[i];
             }
 
             isValid = true;
+            data1 = BitConverter.ToInt32(temp1, 0);
+            data2 = BitConverter.ToInt32(temp2, 0);
         }
 
-#if UNITY_EDITOR
-        public int ReadFrom(UnityEditor.SerializedProperty property)
-        {
-            UnityEditor.SerializedProperty propData1 = property.FindPropertyRelative("data1");
-            UnityEditor.SerializedProperty propData2 = property.FindPropertyRelative("data2");
-            for (int i = 0; i < propData1.arraySize; i++)
-            {
-                data1[i] = propData1.GetArrayElementAtIndex(i).intValue;
-            }
-            for (int i = 0; i < propData2.arraySize; i++)
-            {
-                data2[i] = propData2.GetArrayElementAtIndex(i).intValue;
-            }
-            return Value;
-        }
+//#if UNITY_EDITOR
+//        public int ReadFrom(UnityEditor.SerializedProperty property)
+//        {
+//            UnityEditor.SerializedProperty propData1 = property.FindPropertyRelative("data1");
+//            UnityEditor.SerializedProperty propData2 = property.FindPropertyRelative("data2");
+            
+//            var temp1 = BitConverter.GetBytes(propData1.intValue);
+//            var temp2 = BitConverter.GetBytes(propData2.intValue);
 
-        public void WriteTo(UnityEditor.SerializedProperty property)
-        {
-            UnityEditor.SerializedProperty propData1 = property.FindPropertyRelative("data1");
-            UnityEditor.SerializedProperty propData2 = property.FindPropertyRelative("data2");
-            for (int i = 0; i < propData1.arraySize; i++)
-            {
-                propData1.GetArrayElementAtIndex(i).intValue = data1[i];
-            }
-            for (int i = 0; i < propData2.arraySize; i++)
-            {
-                propData2.GetArrayElementAtIndex(i).intValue = data2[i];
-            }
-        }
-#endif
+//            for (int i = 0; i < propData1.arraySize; i++)
+//            {
+//                data1[i] = propData1.GetArrayElementAtIndex(i).intValue;
+//            }
+//            for (int i = 0; i < propData2.arraySize; i++)
+//            {
+//                data2[i] = propData2.GetArrayElementAtIndex(i).intValue;
+//            }
+//            return Value;
+//        }
+
+//        public void WriteTo(UnityEditor.SerializedProperty property)
+//        {
+//            UnityEditor.SerializedProperty propData1 = property.FindPropertyRelative("data1");
+//            UnityEditor.SerializedProperty propData2 = property.FindPropertyRelative("data2");
+//            for (int i = 0; i < propData1.arraySize; i++)
+//            {
+//                propData1.GetArrayElementAtIndex(i).intValue = data1[i];
+//            }
+//            for (int i = 0; i < propData2.arraySize; i++)
+//            {
+//                propData2.GetArrayElementAtIndex(i).intValue = data2[i];
+//            }
+//        }
+//#endif
     }
 }
 

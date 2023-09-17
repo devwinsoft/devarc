@@ -6,15 +6,13 @@
         protected abstract void set(T value);
 
         [UnityEngine.SerializeField]
-        public int[] data1 = new int[4];
+        public int data1;
 
         [UnityEngine.SerializeField]
-        public int[] data2 = new int[4];
+        public int data2;
 
         protected bool isValid = false;
         protected int crc = 0;
-        protected byte[] seedAry = null;
-        protected static int index = 0;
 
         public bool IsValid
         {
@@ -27,50 +25,19 @@
             set { set(value); }
         }
 
-        public void Init(int[] _data1, int[] _data2)
+        public void Init(int _data1, int _data2)
         {
-            if (_data1.Length == data1.Length && _data2.Length == data2.Length)
-            {
-                _data1.CopyTo(data1, 0);
-                _data2.CopyTo(data2, 0);
-            }
-            else
-            {
-                isValid = false;
-            }
+            data1 = _data1;
+            data2 = _data2;
         }
 
-        protected void seed()
+        protected int getRandom()
         {
-            if (seedAry != null)
-            {
-                return;
-            }
-            seedAry = new byte[7] { 0, 1, 2, 3, 4, 5, 6 };
-            try
-            {
-                for (int i = 0; i < seedAry.Length; i++)
-                {
-                    seedAry[i] = (byte)UnityEngine.Random.Range(0, 255);
-                }
-            }
-            catch (System.Exception ex)
-            {
-                UnityEngine.Debug.LogError(ex.Message);
-            }
-        }
-
-        protected int getSeedValue()
-        {
-            seed();
-
             int value = 0;
-            value |= seedAry[index] << 8;
-            index = (index + 1) % seedAry.Length;
-            value |= seedAry[index] << 16;
-            index = (index + 1) % seedAry.Length;
-            value |= seedAry[index] << 24;
-            index = (index + 1) % seedAry.Length;
+#if UNITY_EDITOR
+#else
+            value = UnityEngine.Random.Range(-10000, 10000);
+#endif
             return value;
         }
     }

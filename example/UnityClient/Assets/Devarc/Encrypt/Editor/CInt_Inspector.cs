@@ -27,15 +27,7 @@ namespace Devarc
 
             if (script.IsValid == false)
             {
-                for (int i = 0; i < propData1.arraySize; i++)
-                {
-                    data1[i] = (byte)propData1.GetArrayElementAtIndex(i).intValue;
-                }
-                for (int i = 0; i < propData2.arraySize; i++)
-                {
-                    data2[i] = (byte)propData2.GetArrayElementAtIndex(i).intValue;
-                }
-                script.Init(data1, data2);
+                script.Init(propData1.intValue, propData2.intValue);
             }
 
             int prevValue = script.Value;
@@ -43,14 +35,8 @@ namespace Devarc
             if (prevValue != nextValue)
             {
                 script = nextValue;
-                for (int i = 0; i < propData1.arraySize; i++)
-                {
-                    propData1.GetArrayElementAtIndex(i).intValue = script.data1[i];
-                }
-                for (int i = 0; i < propData2.arraySize; i++)
-                {
-                    propData2.GetArrayElementAtIndex(i).intValue = script.data2[i];
-                }
+                propData1.intValue = script.data1;
+                propData2.intValue = script.data2;
             }
         }
     }

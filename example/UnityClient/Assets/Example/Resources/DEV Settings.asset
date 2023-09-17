@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d975764f5bd1884986cdb7e59f0a53c, type: 3}
   m_Name: DEV Settings
   m_EditorClassIdentifier: 
+  editorLanguage: 22
   defaultDirectory:
     bundlePath:
       data: vbKyEUOyC4ieDR3hJBEL4INabSQRsg==
@@ -20,7 +21,4 @@ MonoBehaviour:
     tableSubDirectory:
       data: lw1AJBGy
     stringSubDirectory:
-      data: R0Odhlrusg==
-  tableData:
-    tableSubDirectory:
-      data: 
+      data: xkdDnYZa7rI=
