@@ -10,10 +10,10 @@ Devarc is cross-platform development templates.
 #### Devarc includes ####
 - Protocol builder.
 - Table builder.
-- Unity: Asset management.
-- Unity: Simple effect management.
-- Unity: Simple animation management.
-- Unity: Simple sound management.
+- Unity: Asset manager.
+- Unity: Simple effect manager.
+- Unity: Simple animation manager.
+- Unity: Simple sound manager.
 - Unity: Simple data encryption.
 
 #### Test Release ####
@@ -92,7 +92,7 @@ move /Y   *.ddl    ..\Database\Tables\
 move /Y   *.sql    ..\Database\Tables\
 ```
 
-## Unity Asset Management ##
+## Unity: Asset Management ##
 
 #### Step 1: Create localizing table. ####
 ![img](screenshot/example_lstring.png)
@@ -113,13 +113,13 @@ move /Y   *.sql    ..\Database\Tables\
     }
 ```
 
-## Unity Effect Management. ##
+## Unity: Simple Effect Manager. ##
 
-## Unity Animation Management. ##
+## Unity: Simple Animation Manager. ##
 
-## Unity Sound Management. ##
+## Unity: Simple Sound Manager. ##
   
-## Unity Data Encryption ##
+## Unity: Data Encryption ##
 
 ## License ##
 
