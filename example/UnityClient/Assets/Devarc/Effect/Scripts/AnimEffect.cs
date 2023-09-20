@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Devarc
 {
-    [RequireComponent(typeof(SimpleAnimator))]
     public class AnimEffect : BaseEffect
     {
         public SimpleAnimList animDatas;
@@ -14,7 +13,7 @@ namespace Devarc
             get
             {
                 if (mController == null)
-                    mController = GetComponent<SimpleAnimator>();
+                    mController = GetComponentInChildren<SimpleAnimator>();
                 return mController;
             }
         }
@@ -56,14 +55,14 @@ namespace Devarc
             Controller.PlaySpeed = mPlaySpeed;
             Controller.PlayAnimation(animDatas.list, () =>
             {
-                EffectManager.Instance.Push(this);
+                EffectManager.Instance.Remove(this);
             });
         }
 
 
         protected override void onStop()
         {
-            EffectManager.Instance.Push(this);
+            EffectManager.Instance.Remove(this);
         }
 
 

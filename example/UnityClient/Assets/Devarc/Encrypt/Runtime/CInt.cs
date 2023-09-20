@@ -72,42 +72,6 @@ namespace Devarc
 
             setupCRC(temp1, temp2);
         }
-
-
-        //#if UNITY_EDITOR
-        //        public int ReadFrom(UnityEditor.SerializedProperty property)
-        //        {
-        //            UnityEditor.SerializedProperty propData1 = property.FindPropertyRelative("data1");
-        //            UnityEditor.SerializedProperty propData2 = property.FindPropertyRelative("data2");
-
-        //            var temp1 = BitConverter.GetBytes(propData1.intValue);
-        //            var temp2 = BitConverter.GetBytes(propData2.intValue);
-
-        //            for (int i = 0; i < propData1.arraySize; i++)
-        //            {
-        //                data1[i] = propData1.GetArrayElementAtIndex(i).intValue;
-        //            }
-        //            for (int i = 0; i < propData2.arraySize; i++)
-        //            {
-        //                data2[i] = propData2.GetArrayElementAtIndex(i).intValue;
-        //            }
-        //            return Value;
-        //        }
-
-        //        public void WriteTo(UnityEditor.SerializedProperty property)
-        //        {
-        //            UnityEditor.SerializedProperty propData1 = property.FindPropertyRelative("data1");
-        //            UnityEditor.SerializedProperty propData2 = property.FindPropertyRelative("data2");
-        //            for (int i = 0; i < propData1.arraySize; i++)
-        //            {
-        //                propData1.GetArrayElementAtIndex(i).intValue = data1[i];
-        //            }
-        //            for (int i = 0; i < propData2.arraySize; i++)
-        //            {
-        //                propData2.GetArrayElementAtIndex(i).intValue = data2[i];
-        //            }
-        //        }
-        //#endif
     }
 }
 

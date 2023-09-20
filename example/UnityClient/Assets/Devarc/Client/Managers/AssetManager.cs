@@ -52,7 +52,7 @@ namespace Devarc
 
 
 #if UNITY_EDITOR
-        public static GameObject[] LoadDatabasePrefabs(string searchDir)
+        public static GameObject[] FindPrefabs(string searchDir)
         {
             List<GameObject> result = new List<GameObject>();
             var list = AssetDatabase.FindAssets("t:GameObject", new string[] { searchDir });
@@ -66,7 +66,7 @@ namespace Devarc
         }
 
 
-        public static T[] LoadDatabasePrefabs<T>(string fileName, string searchDir) where T : MonoBehaviour
+        public static T[] FindPrefabs<T>(string fileName, string searchDir) where T : MonoBehaviour
         {
             List<T> result = new List<T>();
             var list = AssetDatabase.FindAssets($"t:GameObject {fileName}", new string[] { searchDir });
@@ -82,7 +82,7 @@ namespace Devarc
         }
 
 
-        public static T[] LoadDatabaseAssets<T>(string fileName, string searchDir) where T : UnityEngine.Object
+        public static T[] FindAssets<T>(string fileName, string searchDir) where T : UnityEngine.Object
         {
             List<T> result = new List<T>();
             var list = AssetDatabase.FindAssets($"t:{typeof(T).Name} {fileName}", new string[] { searchDir });
@@ -119,7 +119,7 @@ namespace Devarc
         }
 
 
-        public void UnloadResourceAssets<T>(string searchDir, System.Action<string> callback = null)
+        public void UnloadResourceAssets<T>(string searchDir)
         {
             Type type = typeof(T);
             string resDir = searchDir.ToLower();
@@ -145,7 +145,7 @@ namespace Devarc
         }
 
 
-        public void UnloadBundleAssets(string key, System.Action<string> callback = null)
+        public void UnloadBundleAssets(string key)
         {
             BundleData bundleData;
             if (mBundles.TryGetValue(key, out bundleData))
@@ -155,7 +155,6 @@ namespace Devarc
                     foreach (var list in mBundleAssets.Values)
                     {
                         list.Remove(name);
-                        callback?.Invoke(name);
                     }
                 }
                 bundleData.list.Clear();
@@ -165,7 +164,7 @@ namespace Devarc
         }
 
 
-        public IEnumerator LoadBundleAsset<T>(string key, System.Action<T> callback = null) where T : UnityEngine.Object
+        public IEnumerator LoadBundleAsset<T>(string key) where T : UnityEngine.Object
         {
             var task = Addressables.LoadAssetAsync<T>(key);
             yield return task;
@@ -174,32 +173,29 @@ namespace Devarc
                 var obj = task.Result;
                 registerAsset_Bundle(obj);
                 getBundleData(key)?.Add(obj.name);
-                callback?.Invoke(obj);
             }
             createBundleData(key, task);
         }
 
-        public AsyncOperationHandle<IList<T>> LoadBundleAssets<T>(string key, System.Action<T> callback = null) where T : UnityEngine.Object
+        public AsyncOperationHandle<IList<T>> LoadBundleAssets<T>(string key) where T : UnityEngine.Object
         {
             var task = Addressables.LoadAssetsAsync<T>(key, (obj) =>
             {
                 registerAsset_Bundle(obj);
                 getBundleData(key)?.Add(obj.name);
-                callback?.Invoke(obj);
             });
             createBundleData(key, task);
             return task;
         }
 
 
-        public AsyncOperationHandle<IList<T>> LoadBundleAssets<T>(string key, SystemLanguage lang, System.Action<T> callback = null) where T : UnityEngine.Object
+        public AsyncOperationHandle<IList<T>> LoadBundleAssets<T>(string key, SystemLanguage lang) where T : UnityEngine.Object
         {
             List<string> keys = new List<string> { key, lang.ToString() };
             var task = Addressables.LoadAssetsAsync<T>(keys, (obj) =>
             {
                 registerAsset_Bundle(obj);
                 getBundleData(key)?.Add(obj.name);
-                callback?.Invoke(obj);
             }, Addressables.MergeMode.Intersection);
             createBundleData(key, task);
             return task;

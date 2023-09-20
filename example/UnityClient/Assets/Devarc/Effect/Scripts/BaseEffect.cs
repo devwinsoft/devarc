@@ -79,7 +79,7 @@ namespace Devarc
 
         public void Complete()
         {
-            EffectManager.Instance.Push(this);
+            EffectManager.Instance.Remove(this);
         }
 
         private void Awake()

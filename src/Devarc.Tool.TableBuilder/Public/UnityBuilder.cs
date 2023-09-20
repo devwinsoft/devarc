@@ -113,11 +113,11 @@ namespace Devarc
                     sw.WriteLine("\t\tpublic override void Reload()");
                     sw.WriteLine("\t\t{");
                     sw.WriteLine($"\t\t\tTable.{info.SheetName}.Clear();");
-                    sw.WriteLine($"\t\t\tforeach (var textAsset in AssetManager.LoadDatabaseAssets<TextAsset>(\"{info.SheetName}\", DEV_Settings.GetTable_BundlePath()))");
+                    sw.WriteLine($"\t\t\tforeach (var textAsset in AssetManager.FindAssets<TextAsset>(\"{info.SheetName}\", DEV_Settings.GetTable_BundlePath()))");
                     sw.WriteLine("\t\t\t{");
                     sw.WriteLine($"\t\t\t\tTable.{info.SheetName}.LoadJson(textAsset.text);");
                     sw.WriteLine("\t\t\t}");
-                    sw.WriteLine($"\t\t\tforeach (var textAsset in AssetManager.LoadDatabaseAssets<TextAsset>(\"{info.SheetName}\", DEV_Settings.GetTable_BuiltinPath()))");
+                    sw.WriteLine($"\t\t\tforeach (var textAsset in AssetManager.FindAssets<TextAsset>(\"{info.SheetName}\", DEV_Settings.GetTable_ResourcePath()))");
                     sw.WriteLine("\t\t\t{");
                     sw.WriteLine($"\t\t\t\tTable.{info.SheetName}.LoadJson(textAsset.text);");
                     sw.WriteLine("\t\t\t}");

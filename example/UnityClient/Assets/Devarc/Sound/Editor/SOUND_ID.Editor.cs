@@ -27,7 +27,7 @@ namespace Devarc
 		public override void Reload()
 		{
             Table.SOUND_BUNDLE.Clear();
-            foreach (var textAsset in AssetManager.LoadDatabaseAssets<TextAsset>("SOUND", DEV_Settings.GetTable_BundlePath()))
+            foreach (var textAsset in AssetManager.FindAssets<TextAsset>("SOUND", DEV_Settings.GetTable_BundlePath()))
             {
                 Table.SOUND_BUNDLE.LoadJson(textAsset.text);
             }
@@ -37,7 +37,7 @@ namespace Devarc
             }
 
             Table.SOUND_RESOURCE.Clear();
-			foreach (var textAsset in AssetManager.LoadDatabaseAssets<TextAsset>("SOUND", DEV_Settings.GetTable_BuiltinPath()))
+			foreach (var textAsset in AssetManager.FindAssets<TextAsset>("SOUND", DEV_Settings.GetTable_ResourcePath()))
 			{
 				Table.SOUND_RESOURCE.LoadJson(textAsset.text);
 			}

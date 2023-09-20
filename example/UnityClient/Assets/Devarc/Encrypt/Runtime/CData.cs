@@ -3,10 +3,9 @@ using UnityEngine;
 
 namespace Devarc
 {
-    public abstract class CData<T>
+    public abstract class CData
     {
-        protected abstract T get();
-        protected abstract void set(T value);
+        protected static System.Random random = new System.Random();
 
         [UnityEngine.SerializeField]
         public int data1;
@@ -22,12 +21,6 @@ namespace Devarc
             get { return isValid; }
         }
 
-        public T Value
-        {
-            get { return get(); }
-            set { set(value); }
-        }
-
         public void Init(int _data1, int _data2)
         {
             data1 = _data1;
@@ -37,11 +30,7 @@ namespace Devarc
 
         protected int getRandom()
         {
-            int value = 0;
-#if UNITY_EDITOR
-#else
-            value = UnityEngine.Random.Range(-10000, 10000);
-#endif
+            int value = random.Next();
             return value;
         }
 
@@ -54,6 +43,18 @@ namespace Devarc
                 crc += (i + 1) * temp1[i];
                 crc += (i + 2) * temp2[i];
             }
+        }
+    }
+
+    public abstract class CData<T> : CData
+    {
+        protected abstract T get();
+        protected abstract void set(T value);
+
+        public T Value
+        {
+            get { return get(); }
+            set { set(value); }
         }
     }
 }

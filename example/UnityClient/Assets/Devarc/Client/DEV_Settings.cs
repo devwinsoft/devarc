@@ -82,7 +82,7 @@ namespace Devarc
         {
             return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.tableSubDirectory}";
         }
-        public static string GetTable_BuiltinPath()
+        public static string GetTable_ResourcePath()
         {
             return $"{Instance.defaultDirectory.builtinPath}/{Instance.defaultDirectory.tableSubDirectory}";
         }

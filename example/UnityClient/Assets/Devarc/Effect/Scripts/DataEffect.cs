@@ -20,22 +20,13 @@ namespace Devarc
         public string Value;
     }
 
-    public abstract class BaseEffectData
+
+    [System.Serializable]
+    public class EffectPlayData
     {
         public EFFECT_ID EffectID;
         public Vector2 Offset;
         public float WaitTime;
-    }
-
-
-    [System.Serializable]
-    public class AnimEffectData : BaseEffectData
-    {
-    }
-
-    [System.Serializable]
-    public class ParticleEffectData : BaseEffectData
-    {
     }
 }
 

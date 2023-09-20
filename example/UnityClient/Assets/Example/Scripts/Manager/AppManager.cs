@@ -4,6 +4,7 @@ using MessagePack.Resolvers;
 using Devarc;
 
 
+[RequireComponent(typeof(DownloadManager))]
 public class AppManager : MonoSingleton<AppManager>
 {
     public static AuthNetwork authNetwork => Instance.mAuthNetwork;
@@ -89,6 +90,7 @@ public class AppManager : MonoSingleton<AppManager>
         }
 
         yield return SoundManager.Instance.LoadBundleSounds("sound");
+        //yield return SoundManager.Instance.LoadBundleSounds("voice", lang);
     }
 
 
@@ -105,5 +107,6 @@ public class AppManager : MonoSingleton<AppManager>
 
         AssetManager.Instance.UnloadBundleAssets("effect");
         SoundManager.Instance.UnloadBundleSounds("sound");
+        //SoundManager.Instance.UnloadBundleSounds("voice");
     }
 }

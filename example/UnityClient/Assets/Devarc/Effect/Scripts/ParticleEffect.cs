@@ -82,7 +82,7 @@ namespace Devarc
             {
                 if (particle.IsAlive(true) == false)
                 {
-                    EffectManager.Instance.Push(this);
+                    EffectManager.Instance.Remove(this);
                 }
             }
         }

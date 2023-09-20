@@ -20,7 +20,7 @@ namespace Devarc
             mPool.Clear();
         }
 
-        public BaseEffect CreateEffect(BaseEffectData data, Vector3 worldPos, bool flipX = false)
+        public BaseEffect CreateEffect(EffectPlayData data, Vector3 worldPos, bool flipX = false)
         {
             if (data.EffectID == null || data.EffectID.IsValid == false)
             {
@@ -30,6 +30,7 @@ namespace Devarc
             GameObject prefab = AssetManager.Instance.GetAsset<GameObject>(data.EffectID);
             if (prefab == null)
             {
+                Debug.LogError($"[EffectManager] Cannot play effect: effect_id={data.EffectID}");
                 return null;
             }
 
@@ -45,7 +46,7 @@ namespace Devarc
         }
 
 
-        public BaseEffect CreateEffect(BaseEffectData data, Transform attachTr, bool flipX = false)
+        public BaseEffect CreateEffect(EffectPlayData data, Transform attachTr, bool flipX = false)
         {
             if (data.EffectID == null || data.EffectID.IsValid == false)
             {
@@ -75,7 +76,7 @@ namespace Devarc
             return obj;
         }
 
-        public void Push(BaseEffect _effect)
+        public void Remove(BaseEffect _effect)
         {
             if (_effect == null)
             {
