@@ -17,7 +17,7 @@ Devarc is cross-platform development templates.
 - Unity: Simple data encryption.
 
 #### Test Release ####
-- [WebGL version](http://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com/b/index.html)
+- [WebGL version](http://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com/a/index.html)
 
 
 ## Install Client ##
