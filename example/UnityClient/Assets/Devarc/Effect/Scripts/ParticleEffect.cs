@@ -67,12 +67,12 @@ namespace Devarc
                 transform.SetParent(EffectManager.Instance.transform, true);
                 if (fadeOutTime > 0f)
                 {
-                    Invoke("Complete", fadeOutTime);
+                    Invoke("Remove", fadeOutTime);
                 }
             }
             else
             {
-                Complete();
+                Remove();
             }
         }
 
@@ -82,7 +82,7 @@ namespace Devarc
             {
                 if (particle.IsAlive(true) == false)
                 {
-                    EffectManager.Instance.Remove(this);
+                    Remove();
                 }
             }
         }

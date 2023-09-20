@@ -97,6 +97,8 @@ public class AppManager : MonoSingleton<AppManager>
 
         //yield return SoundManager.Instance.LoadBundleSounds("sound");
         //yield return SoundManager.Instance.LoadBundleSounds("voice", lang);
+
+        EffectManager.Instance.Clear();
     }
 
 

@@ -13,7 +13,7 @@ namespace Devarc
             get
             {
                 if (mController == null)
-                    mController = GetComponentInChildren<SimpleAnimator>();
+                    mController = GetComponentInChildren<SimpleAnimator>(true);
                 if (mController == null)
                     Debug.LogError("[AnimEffect] SimpleAnimator is not attached.");
                 return mController;
@@ -57,14 +57,14 @@ namespace Devarc
             Controller.PlaySpeed = mPlaySpeed;
             Controller.PlayAnimation(animDatas.list, () =>
             {
-                EffectManager.Instance.Remove(this);
+                Remove();
             });
         }
 
 
         protected override void onStop()
         {
-            EffectManager.Instance.Remove(this);
+            Remove();
         }
 
 

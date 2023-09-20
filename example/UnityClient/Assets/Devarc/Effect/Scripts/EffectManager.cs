@@ -17,6 +17,11 @@ namespace Devarc
 
         protected override void onDestroy()
         {
+            Clear();
+        }
+
+        public void Clear()
+        {
             mPool.Clear();
         }
 
@@ -27,20 +32,13 @@ namespace Devarc
                 return null;
             }
 
-            GameObject prefab = AssetManager.Instance.GetAsset<GameObject>(data.EffectID);
-            if (prefab == null)
-            {
-                Debug.LogError($"[EffectManager] Cannot play effect: effect_id={data.EffectID.Value}");
-                return null;
-            }
-
             Vector3 offset = data.Offset;
             if (flipX)
             {
                 offset.x = -offset.x;
             }
 
-            BaseEffect obj = mPool.Pop(prefab, mPool.Root, worldPos + offset);
+            BaseEffect obj = mPool.Pop(data.EffectID, mPool.Root, worldPos + offset);
             obj.Play(data.WaitTime);
             return obj;
         }
@@ -53,19 +51,13 @@ namespace Devarc
                 return null;
             }
 
-            GameObject prefab = AssetManager.Instance.GetAsset<GameObject>(data.EffectID);
-            if (prefab == null)
-            {
-                return null;
-            }
-
             Vector3 offset = data.Offset;
             if (flipX)
             {
                 offset.x = -offset.x;
             }
 
-            BaseEffect obj = mPool.Pop(prefab, attachTr, offset);
+            BaseEffect obj = mPool.Pop(data.EffectID, attachTr, offset);
             if (obj == null)
             {
                 Debug.LogErrorFormat("Cannot find effect_id: {0}", data.EffectID.Value);

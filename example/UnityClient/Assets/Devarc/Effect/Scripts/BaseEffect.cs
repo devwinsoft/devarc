@@ -77,7 +77,7 @@ namespace Devarc
             onStop();
         }
 
-        public void Complete()
+        public void Remove()
         {
             EffectManager.Instance.Remove(this);
         }

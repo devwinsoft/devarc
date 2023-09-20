@@ -72,7 +72,7 @@ public class SimpleAnimator : MonoBehaviour
             mPlaySpeed = value;
             if (mPlayDatas != null && mPlayDatas.Length > 0)
             {
-                mAnimator.speed = mPlaySpeed * mPlayDatas[mPlayIndex].Speed;
+                animator.speed = mPlaySpeed * mPlayDatas[mPlayIndex].Speed;
             }
         }
     }
@@ -125,7 +125,6 @@ public class SimpleAnimator : MonoBehaviour
 
     System.Action mCallback = null;
     AnimData[] mPlayDatas;
-    AnimData mCurrentPlayData;
     string mCurrentAnimationName = string.Empty;
     int mPlayIndex;
     int mRepeatIndex;
@@ -141,7 +140,6 @@ public class SimpleAnimator : MonoBehaviour
     private void Awake()
     {
         mCompleted = true;
-        mAnimator = GetComponent<Animator>();
         if (animator.runtimeAnimatorController != null)
         {
             foreach (AnimationClip ac in animator.runtimeAnimatorController.animationClips)
@@ -268,7 +266,7 @@ public class SimpleAnimator : MonoBehaviour
         AnimData _playData = mPlayDatas[_playIndex];
         if (_playData.Clip == null)
         {
-            Debug.LogErrorFormat("[AnimController] Animation clip is null: index={0}", _playIndex);
+            Debug.LogErrorFormat("[SimpleAnimator] Animation clip is null: index={0}", _playIndex);
             return false;
         }
         if (string.Equals(mCurrentAnimationName, _playData.Clip))
@@ -285,17 +283,17 @@ public class SimpleAnimator : MonoBehaviour
         if (_playData.FadeTime <= 0f)
         {
             animator.Play(_playData.Clip.name, 0, 0f);
-            for (int i = 1; i < mAnimator.layerCount; i++)
+            for (int i = 1; i < animator.layerCount; i++)
             {
-                animator.Play(string.Format("{0} ({1})", _playData.Clip.name, mAnimator.GetLayerName(i)), i, 0f);
+                animator.Play(string.Format("{0} ({1})", _playData.Clip.name, animator.GetLayerName(i)), i, 0f);
             }
         }
         else
         {
             animator.CrossFade(_playData.Clip.name, _playData.FadeTime, 0, 0f);
-            for (int i = 1; i < mAnimator.layerCount; i++)
+            for (int i = 1; i < animator.layerCount; i++)
             {
-                animator.CrossFade(string.Format("{0} ({1})", _playData.Clip.name, mAnimator.GetLayerName(i)), _playData.FadeTime, i, 0f);
+                animator.CrossFade(string.Format("{0} ({1})", _playData.Clip.name, animator.GetLayerName(i)), _playData.FadeTime, i, 0f);
             }
         }
         return true;
@@ -329,7 +327,7 @@ public class SimpleAnimator : MonoBehaviour
         }
         else
         {
-            mAnimator.speed = 0f;
+            animator.speed = 0f;
             if (mCallback != null)
             {
                 mCallback.Invoke();
