@@ -77,11 +77,10 @@ namespace Devarc
                 for (int r = (int)RowType.Data; r <= sheet.LastRowNum; r++)
                 {
                     var row = sheet.GetRow(r);
-                    var cells = row.Cells;
                     var started = false;
 
                     sw.Write($"insert into `{sheet.SheetName}` (");
-                    for (int c = 0; c < cells.Count; c++)
+                    for (int c = 0; c < row.LastCellNum; c++)
                     {
                         var header = mCurrentHeader.Get(c);
                         if (header == null)
@@ -93,11 +92,16 @@ namespace Devarc
                     }
                     sw.Write(") values (");
                     started = false;
-                    for (int c = 0; c < cells.Count; c++)
+                    for (int c = 0; c < row.LastCellNum; c++)
                     {
                         var header = mCurrentHeader.Get(c);
                         if (header == null)
                             continue;
+
+                        var cell = row.GetCell(c);
+                        if (cell == null)
+                            continue;
+
                         if (started)
                             sw.Write(", ");
 
@@ -106,26 +110,26 @@ namespace Devarc
                             case VAR_TYPE.BOOL:
                                 {
                                     bool value;
-                                    bool.TryParse(cells[c].ToString(), out value);
+                                    bool.TryParse(cell.ToString(), out value);
                                     sw.Write(value);
                                 }
                                 break;
                             case VAR_TYPE.FLOAT:
                                 {
                                     float value;
-                                    float.TryParse(cells[c].ToString(), out value);
+                                    float.TryParse(cell.ToString(), out value);
                                     sw.Write(value);
                                 }
                                 break;
                             case VAR_TYPE.INT:
                                 {
                                     int value;
-                                    int.TryParse(cells[c].ToString(), out value);
+                                    int.TryParse(cell.ToString(), out value);
                                     sw.Write(value);
                                 }
                                 break;
                             default:
-                                sw.Write($"'{cells[c]}'");
+                                sw.Write($"'{cell}'");
                                 break;
                         }
                         started = true;

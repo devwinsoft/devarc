@@ -18,7 +18,6 @@ namespace Devarc
             public string language;
             public Dictionary<string, string> list;
         }
-        Dictionary<int, Data> mDatas = new Dictionary<int, Data>();
         string mOutputDir;
 
         public void Build(string inputPath)
@@ -36,29 +35,35 @@ namespace Devarc
 
         void generate(ISheet sheet)
         {
+            Dictionary<int, Data> sheetDatas = new Dictionary<int, Data>();
+
             // read header
             {
-                var cells = sheet.GetRow(0).Cells;
-                for (int c = 1; c < cells.Count; c++)
+                var row = sheet.GetRow(0);
+                for (int c = 1; c < row.LastCellNum; c++)
                 {
+                    var cell = row.GetCell(c);
+                    if (cell == null)
+                        continue;
                     Data data = new Data();
                     data.index = c;
-                    data.language = cells[c].ToString();
+                    data.language = cell.ToString();
                     data.list = new Dictionary<string, string>();
-                    mDatas.Add(c, data);
+                    sheetDatas.Add(c, data);
                 }
             }
 
             int maxColumnNum = -1;
             for (int r = 1; r <= sheet.LastRowNum; r++)
             {
-                var cells = sheet.GetRow(r).Cells;
-                var key = cells[0].ToString();
-                for (int c = 1; c < cells.Count; c++)
+                var row = sheet.GetRow(r);
+                var key = row.GetCell(0).ToString();
+                for (int c = 1; c < row.LastCellNum; c++)
                 {
-                    var value = cells[c].ToString();
+                    var cell = row.GetCell(c);
+                    var value = cell.ToString();
                     Data data;
-                    if (mDatas.TryGetValue(c, out data) == false)
+                    if (sheetDatas.TryGetValue(c, out data) == false)
                         continue;
 
                     data.list.Add(key, value);
@@ -69,7 +74,7 @@ namespace Devarc
             for (int c = 1; c <= maxColumnNum; c++)
             {
                 Data data;
-                if (mDatas.TryGetValue(c, out data) == false)
+                if (sheetDatas.TryGetValue(c, out data) == false)
                     continue;
 
                 var code = data.language;
@@ -105,17 +110,6 @@ namespace Devarc
             }
         }
 
-
-        string ToISO639_2(string language)
-        {
-            switch (language.ToLower())
-            {
-                case "korean": return "kor";
-                case "japanese": return "jpn";
-                case "chinease": return "zho";
-                default: return "eng";
-            }
-        }
     }
 
 }

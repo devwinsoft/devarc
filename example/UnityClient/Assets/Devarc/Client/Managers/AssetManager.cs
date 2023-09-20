@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using System.Diagnostics.Eventing.Reader;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -13,7 +14,7 @@ namespace Devarc
 {
     public class AssetManager : MonoSingleton<AssetManager>
     {
-        internal class BundleData
+        class BundleData
         {
             public string addressable;
             public AsyncOperationHandle handle;
@@ -33,15 +34,25 @@ namespace Devarc
         }
         Dictionary<string, BundleData> mBundles = new Dictionary<string, BundleData>();
 
-        Dictionary<Type, Dictionary<string, UnityEngine.Object>> mBundleAssets = new Dictionary<Type, Dictionary<string, UnityEngine.Object>>();
-        Dictionary<string, GameObject> mBundlePrefabs = new Dictionary<string, GameObject>();
 
-        Dictionary<Type, Dictionary<string, UnityEngine.Object>> mResourceAssets = new Dictionary<Type, Dictionary<string, UnityEngine.Object>>();
-        Dictionary<string, GameObject> mResourcePrefabs = new Dictionary<string, GameObject>();
+        abstract class ResData
+        {
+            public string dir;
+            public abstract UnityEngine.Object get();
+        }
+
+        class ResData<T> : ResData where T : UnityEngine.Object
+        {
+            public T obj;
+            public override UnityEngine.Object get() => obj;
+        }
+
+        Dictionary<Type, Dictionary<string, UnityEngine.Object>> mBundleAssets = new Dictionary<Type, Dictionary<string, UnityEngine.Object>>();
+        Dictionary<Type, Dictionary<string, ResData>> mResourceAssets = new Dictionary<Type, Dictionary<string, ResData>>();
 
 
 #if UNITY_EDITOR
-        public static GameObject[] LoadPrefabs_Database(string searchDir)
+        public static GameObject[] LoadDatabasePrefabs(string searchDir)
         {
             List<GameObject> result = new List<GameObject>();
             var list = AssetDatabase.FindAssets("t:GameObject", new string[] { searchDir });
@@ -55,7 +66,7 @@ namespace Devarc
         }
 
 
-        public static T[] LoadPrefabs_Database<T>(string fileName, string searchDir) where T : MonoBehaviour
+        public static T[] LoadDatabasePrefabs<T>(string fileName, string searchDir) where T : MonoBehaviour
         {
             List<T> result = new List<T>();
             var list = AssetDatabase.FindAssets($"t:GameObject {fileName}", new string[] { searchDir });
@@ -71,7 +82,7 @@ namespace Devarc
         }
 
 
-        public static T[] LoadAssets_Database<T>(string fileName, string searchDir) where T : UnityEngine.Object
+        public static T[] LoadDatabaseAssets<T>(string fileName, string searchDir) where T : UnityEngine.Object
         {
             List<T> result = new List<T>();
             var list = AssetDatabase.FindAssets($"t:{typeof(T).Name} {fileName}", new string[] { searchDir });
@@ -87,28 +98,54 @@ namespace Devarc
 #endif
 
 
-        public void UnloadAsset_Resource<T>(string fileName) where T : UnityEngine.Object
+        public void UnloadResourceAsset<T>(string fileName) where T : UnityEngine.Object
         {
             string name = fileName.ToLower();
             Type type = typeof(T);
+            Dictionary<string, ResData> list = null;
 
-            Dictionary<string, UnityEngine.Object> list = null;
             if (mResourceAssets.TryGetValue(type, out list) == false)
             {
-                list = new Dictionary<string, UnityEngine.Object>();
+                list = new Dictionary<string, ResData>();
                 mResourceAssets.Add(type, list);
             }
 
-            UnityEngine.Object obj = null;
-            if (list.TryGetValue(name, out obj))
+            ResData data = null;
+            if (list.TryGetValue(name, out data))
             {
+                Resources.UnloadAsset(data.get());
                 list.Remove(name);
-                Resources.UnloadAsset(obj);
             }
         }
 
 
-        public void UnloadAssets_Bundle(string key, System.Action<string> callback = null)
+        public void UnloadResourceAssets<T>(string searchDir, System.Action<string> callback = null)
+        {
+            Type type = typeof(T);
+            string resDir = searchDir.ToLower();
+            Dictionary<string, ResData> list = null;
+
+            if (mResourceAssets.TryGetValue(type, out list) == false)
+            {
+                return;
+            }
+
+            List<string> deleteNames = new List<string>();
+            foreach (var data in list.Values)
+            {
+                if (data.dir.Contains(resDir))
+                {
+                    deleteNames.Add(data.get().name.ToLower());
+                }
+            }
+            foreach (var name in deleteNames)
+            {
+                list.Remove(name);
+            }
+        }
+
+
+        public void UnloadBundleAssets(string key, System.Action<string> callback = null)
         {
             BundleData bundleData;
             if (mBundles.TryGetValue(key, out bundleData))
@@ -128,7 +165,7 @@ namespace Devarc
         }
 
 
-        public IEnumerator LoadAsset_Bundle<T>(string key, System.Action<T> callback = null) where T : UnityEngine.Object
+        public IEnumerator LoadBundleAsset<T>(string key, System.Action<T> callback = null) where T : UnityEngine.Object
         {
             var task = Addressables.LoadAssetAsync<T>(key);
             yield return task;
@@ -142,7 +179,7 @@ namespace Devarc
             createBundleData(key, task);
         }
 
-        public AsyncOperationHandle<IList<T>> LoadAssets_Bundle<T>(string key, System.Action<T> callback = null) where T : UnityEngine.Object
+        public AsyncOperationHandle<IList<T>> LoadBundleAssets<T>(string key, System.Action<T> callback = null) where T : UnityEngine.Object
         {
             var task = Addressables.LoadAssetsAsync<T>(key, (obj) =>
             {
@@ -155,7 +192,7 @@ namespace Devarc
         }
 
 
-        public AsyncOperationHandle<IList<T>> LoadAssets_Bundle<T>(string key, SystemLanguage lang, System.Action<T> callback = null) where T : UnityEngine.Object
+        public AsyncOperationHandle<IList<T>> LoadBundleAssets<T>(string key, SystemLanguage lang, System.Action<T> callback = null) where T : UnityEngine.Object
         {
             List<string> keys = new List<string> { key, lang.ToString() };
             var task = Addressables.LoadAssetsAsync<T>(keys, (obj) =>
@@ -169,178 +206,75 @@ namespace Devarc
         }
 
 
-        public IEnumerator LoadPrefab_Bundle(string key, System.Action<GameObject> callback = null)
+        public T LoadResourceAsset<T>(string filePath, SystemLanguage lang = SystemLanguage.Unknown) where T : UnityEngine.Object
         {
-            var task = Addressables.LoadAssetAsync<GameObject>(key);
-            createBundleData(key, task);
-            yield return task;
-            if (task.Status == AsyncOperationStatus.Succeeded)
-            {
-                GameObject obj = task.Result;
-                registerPrefab_Bundle(obj);
-                getBundleData(key)?.Add(obj.name);
-                callback?.Invoke(obj);
-            }
-        }
-
-
-        public AsyncOperationHandle<IList<GameObject>> LoadPrefabs_Bundle(string key, System.Action<GameObject> callback = null)
-        {
-            var task = Addressables.LoadAssetsAsync<GameObject>(key, (obj) =>
-            {
-                registerPrefab_Bundle(obj);
-                getBundleData(key)?.Add(obj.name);
-                callback?.Invoke(obj);
-            });
-            createBundleData(key, task);
-            return task;
-        }
-
-        public AsyncOperationHandle<IList<GameObject>> LoadPrefabs_Bundle(string key, SystemLanguage lang, System.Action<GameObject> callback = null)
-        {
-            List<string> keys = new List<string> { key, lang.ToString() };
-            var task = Addressables.LoadAssetsAsync<GameObject>(keys, (obj) =>
-            {
-                registerPrefab_Bundle(obj);
-                getBundleData(key)?.Add(obj.name);
-                callback?.Invoke(obj);
-            }, Addressables.MergeMode.Intersection);
-
-            createBundleData(key, task);
-            return task;
-        }
-
-
-        public IEnumerator LoadPrefabs_Bundle<T>(string key, System.Action<T> callback = null) where T : MonoBehaviour
-        {
-            var task = Addressables.LoadAssetsAsync<GameObject>(key, (obj) =>
-            {
-                registerPrefab_Bundle(obj);
-                getBundleData(key)?.Add(obj.name);
-
-                T compo = obj.GetComponent<T>();
-                if (compo != null)
-                {
-                    callback?.Invoke(compo);
-                }
-            });
-            yield return task;
-            createBundleData(key, task);
-        }
-
-
-        public T LoadAsset_Resource<T>(string filePath) where T : UnityEngine.Object
-        {
-            Type type = typeof(T);
             var resPath = GetResourcePath(filePath);
+            string resDir = Path.GetDirectoryName(filePath);
+            if (lang == SystemLanguage.Unknown)
+            {
+                resDir = resDir.ToLower();
+            }
+            else
+            {
+                resDir = Path.Combine(resDir, lang.ToString()).ToLower();
+            }
+
+            Type type = typeof(T);
             var obj = Resources.Load<T>(resPath);
             if (obj != null)
             {
-                registerAsset_Resource<T>(obj);
+                registerAsset_Resource<T>(obj, resDir);
             }
             return obj;
         }
 
 
-        public T[] LoadAssets_Resource<T>(string searchDir) where T : UnityEngine.Object
+        public T[] LoadResourceAssets<T>(string searchDir, SystemLanguage lang = SystemLanguage.Unknown) where T : UnityEngine.Object
         {
-            var resPath = GetResourcePath(searchDir);
-            T[] result = Resources.LoadAll<T>(resPath);
+            string resDir = null;
+            if (lang == SystemLanguage.Unknown)
+            {
+                resDir = searchDir.ToLower();
+            }
+            else
+            {
+                resDir = Path.Combine(searchDir, lang.ToString()).ToLower();
+            }
+
+            T[] result = Resources.LoadAll<T>(resDir);
             foreach (var obj in result)
             {
-                registerAsset_Resource<T>(obj);
+                registerAsset_Resource<T>(obj, resDir);
             }
             return result;
         }
 
 
-        public GameObject LoadPrefab_Resource(string filePath)
-        {
-            Addressables.CleanBundleCache();
-
-            var resPath = GetResourcePath(filePath);
-            var obj = Resources.Load<GameObject>(resPath);
-            if (obj == null)
-                return null;
-            registerPrefab_Bundle(obj);
-            return obj;
-        }
-
-
-        public T LoadPrefab_Resource<T>(string searchDir) where T : UnityEngine.MonoBehaviour
-        {
-            var resPath = GetResourcePath(searchDir);
-            var obj = Resources.Load<GameObject>(resPath);
-            if (obj == null)
-                return null;
-            registerPrefab_Bundle(obj);
-            return obj.GetComponent<T>();
-        }
-
-
-        public GameObject[] LoadPrefabs_Resource(string searchDir)
-        {
-            GameObject[] list = Resources.LoadAll<GameObject>(searchDir);
-            foreach (GameObject obj in list)
-            {
-                registerPrefab_Bundle(obj);
-            }
-            return list;
-        }
-
-
-        public T[] LoadPrefabs_Resource<T>(string searchDir) where T : MonoBehaviour
-        {
-            List<T> result = new List<T>();
-            GameObject[] list = Resources.LoadAll<GameObject>(searchDir);
-            foreach (GameObject obj in list)
-            {
-                registerPrefab_Bundle(obj);
-
-                T compo = obj.GetComponent<T>();
-                if (compo != null)
-                {
-                    result.Add(compo);
-                }
-            }
-            return result.ToArray();
-        }
-
-
-        public T GetAsset<T>(string path) where T : UnityEngine.Object
+        public T GetAsset<T>(string fileName) where T : UnityEngine.Object
         {
             Type type = typeof(T);
-            Dictionary<string, UnityEngine.Object> list = null;
-            string name = Path.GetFileNameWithoutExtension(path).ToLower();
-            UnityEngine.Object obj = null;
+            string name = Path.GetFileNameWithoutExtension(fileName).ToLower();
 
-            if (mResourceAssets.TryGetValue(type, out list))
+            // serach bundle
             {
-                if (list.TryGetValue(name, out obj))
-                    return obj as T;
+                Dictionary<string, UnityEngine.Object> list = null;
+                UnityEngine.Object obj = null;
+                if (mBundleAssets.TryGetValue(type, out list))
+                {
+                    if (list.TryGetValue(name, out obj))
+                        return obj as T;
+                }
             }
 
-            if (mBundleAssets.TryGetValue(type, out list))
+            // search resource
             {
-                if (list.TryGetValue(name, out obj))
-                    return obj as T;
-            }
-
-            return null;
-        }
-
-
-        public GameObject GetPrefab(string path)
-        {
-            string name = Path.GetFileNameWithoutExtension(path).ToLower();
-            GameObject obj = null;
-            if (mBundlePrefabs.TryGetValue(name, out obj))
-            {
-                return obj;
-            }
-            if (mResourcePrefabs.TryGetValue (name, out obj))
-            {
-                return obj;
+                Dictionary<string, ResData> list = null;
+                ResData data = null;
+                if (mResourceAssets.TryGetValue(type, out list))
+                {
+                    if (list.TryGetValue(name, out data))
+                        return data.get() as T;
+                }
             }
             return null;
         }
@@ -454,16 +388,16 @@ namespace Devarc
         }
 
 
-        void registerAsset_Resource<T>(T obj) where T : UnityEngine.Object
+        void registerAsset_Resource<T>(T obj, string dir) where T : UnityEngine.Object
         {
             if (obj == null)
                 return;
 
             Type type = typeof(T);
-            Dictionary<string, UnityEngine.Object> list = null;
+            Dictionary<string, ResData> list = null;
             if (mResourceAssets.TryGetValue(type, out list) == false)
             {
-                list = new Dictionary<string, UnityEngine.Object>();
+                list = new Dictionary<string, ResData>();
                 mResourceAssets.Add(type, list);
             }
 
@@ -473,37 +407,11 @@ namespace Devarc
                 Debug.LogError($"[AssetManager::registerAsset_Resource] Already exist asset: type={type.Name}, name={name}");
                 return;
             }
-            list.Add(name, obj);
-        }
 
-
-        void registerPrefab_Bundle(GameObject obj)
-        {
-            if (obj == null)
-                return;
-
-            string name = obj.name.ToLower();
-            if (mBundlePrefabs.ContainsKey(name))
-            {
-                Debug.LogError($"[AssetManager::registerPrefab_Bundle] Already exist prefab: name={name}");
-                return;
-            }
-            mBundlePrefabs.Add(obj.name, obj);
-        }
-
-
-        void registerPrefab_Resource(GameObject obj)
-        {
-            if (obj == null)
-                return;
-
-            string name = obj.name.ToLower();
-            if (mResourcePrefabs.ContainsKey(name))
-            {
-                Debug.LogError($"[AssetManager::registerPrefab_Resource] Already exist prefab: name={name}");
-                return;
-            }
-            mResourcePrefabs.Add(name, obj);
+            ResData<T> data = new ResData<T>();
+            data.obj = obj;
+            data.dir = dir;
+            list.Add(name, data);
         }
     }
 }

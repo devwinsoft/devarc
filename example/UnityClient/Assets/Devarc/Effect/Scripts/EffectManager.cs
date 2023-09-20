@@ -8,7 +8,6 @@ namespace Devarc
 {
     public class EffectManager : MonoSingleton<EffectManager>
     {
-        Dictionary<string, BaseEffect> mPrefabs = new Dictionary<string, BaseEffect>();
         SimplePool<BaseEffect> mPool = new SimplePool<BaseEffect>();
 
         protected override void onAwake()
@@ -21,14 +20,6 @@ namespace Devarc
             mPool.Clear();
         }
 
-        public IEnumerator Preload(string addressable)
-        {
-            yield return AssetManager.Instance.LoadPrefabs_Bundle<BaseEffect>(addressable, (obj) =>
-            {
-                mPrefabs.Add(obj.name, obj);
-            });
-        }
-
         public BaseEffect CreateEffect(BaseEffectData data, Vector3 worldPos, bool flipX = false)
         {
             if (data.EffectID == null || data.EffectID.IsValid == false)
@@ -36,8 +27,8 @@ namespace Devarc
                 return null;
             }
 
-            BaseEffect prefab = null;
-            if (mPrefabs.TryGetValue(data.EffectID, out prefab) == false)
+            GameObject prefab = AssetManager.Instance.GetAsset<GameObject>(data.EffectID);
+            if (prefab == null)
             {
                 return null;
             }
@@ -48,7 +39,7 @@ namespace Devarc
                 offset.x = -offset.x;
             }
 
-            BaseEffect obj = mPool.Pop(prefab.gameObject, mPool.Root, worldPos + offset);
+            BaseEffect obj = mPool.Pop(prefab, mPool.Root, worldPos + offset);
             obj.Play(data.WaitTime);
             return obj;
         }
@@ -61,8 +52,8 @@ namespace Devarc
                 return null;
             }
 
-            BaseEffect prefab = null;
-            if (mPrefabs.TryGetValue(data.EffectID, out prefab) == false)
+            GameObject prefab = AssetManager.Instance.GetAsset<GameObject>(data.EffectID);
+            if (prefab == null)
             {
                 return null;
             }
@@ -73,7 +64,7 @@ namespace Devarc
                 offset.x = -offset.x;
             }
 
-            BaseEffect obj = mPool.Pop(prefab.gameObject, attachTr, offset);
+            BaseEffect obj = mPool.Pop(prefab, attachTr, offset);
             if (obj == null)
             {
                 Debug.LogErrorFormat("Cannot find effect_id: {0}", data.EffectID.Value);

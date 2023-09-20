@@ -26,82 +26,71 @@ public class ExampleScene : BaseScene
     StringBuilder mStrBuilder = new StringBuilder();
     List<string> mLogMessages = new List<string>();
 
-    protected override void onStart()
+
+    protected override void onAwake()
     {
-        AppManager.authNetwork.InitConnection(domains.captionText.text, 3000);
-
-        Application.logMessageReceived += (log, stack, type) =>
+        if (!AppManager.IsCreated())
         {
-            switch (type)
-            {
-                case LogType.Error:
-                    mLogMessages.Add($"<color=red>[{DateTime.Now.ToString("HH:mm:ss")}] {log}</color>");
-                    break;
-                case LogType.Warning:
-                    mLogMessages.Add($"<color=yellow>[{DateTime.Now.ToString("HH:mm:ss")}] {log}</color>");
-                    break;
-                default:
-                    mLogMessages.Add($"[{DateTime.Now.ToString("HH:mm:ss")}] {log}");
-                    break;
-            }
+            AppManager.Create("AppManager");
+        }
+        Debug.Log("ExampleScene::onAwake");
+    }
 
-            if (mLogMessages.Count > 50)
-            {
-                mLogMessages.RemoveAt(0);
-            }
 
-            mStrBuilder.Clear();
-            foreach (string msg in mLogMessages)
-            {
-                mStrBuilder.AppendLine(msg);
-            }
-            logText.text = mStrBuilder.ToString();
-            LayoutRebuilder.ForceRebuildLayoutImmediate(logText.GetComponent<RectTransform>());
-        };
+    public override IEnumerator OnEnterScene()
+    {
+        Debug.Log("ExampleScene::OnEnterScene");
 
+        Application.logMessageReceived += LogCallback;
         logText.text = string.Empty;
         logText.OnPreRenderText += (info) =>
         {
             scrollRect.normalizedPosition = new Vector2(0, 0);
         };
 
-        StartCoroutine(loadAssets());
+        AppManager.authNetwork.InitConnection(domains.captionText.text, 3000);
+
+        AppManager.Instance.LoadResources(SystemLanguage.Korean);
+        yield return AppManager.Instance.LoadBundles(SystemLanguage.Korean);
     }
 
 
-    IEnumerator loadAssets()
+    public override void OnLeaveScene()
     {
-        // Load resources...
-        AssetManager.Instance.LoadAssets_Resource<TextAsset>("Tables");
-        SoundManager.Instance.LoadTable("SOUND@RES", true);
+        AppManager.Instance.UnloadResources();
+        AppManager.Instance.UnloadBundles();
 
-        // Load bundle common-tables...
+        Application.logMessageReceived -= LogCallback;
+    }
+
+
+    void LogCallback(string log, string stackTrace, LogType type)
+    {
+        switch (type)
         {
-            var handle = AssetManager.Instance.LoadAssets_Bundle<TextAsset>("table");
-            yield return handle;
-            if (handle.IsValid())
-            {
-                Table.CHARACTER.LoadFromFile("CHARACTER");
-                Table.SKILL.LoadFromFile("SKILL");
-            }
+            case LogType.Error:
+                mLogMessages.Add($"<color=red>[{DateTime.Now.ToString("HH:mm:ss")}] {log}</color>");
+                break;
+            case LogType.Warning:
+                mLogMessages.Add($"<color=yellow>[{DateTime.Now.ToString("HH:mm:ss")}] {log}</color>");
+                break;
+            default:
+                mLogMessages.Add($"[{DateTime.Now.ToString("HH:mm:ss")}] {log}");
+                break;
         }
 
-        // Load bundle string-table.
+        if (mLogMessages.Count > 50)
         {
-            var handle = AssetManager.Instance.LoadAssets_Bundle<TextAsset>("lstring", SystemLanguage.Korean);
-            yield return handle;
-            if (handle.IsValid())
-            {
-                Table.LString.LoadFromFile("LString");
-            }
+            mLogMessages.RemoveAt(0);
         }
 
-        // Load bundle sounds.
+        mStrBuilder.Clear();
+        foreach (string msg in mLogMessages)
         {
-            SoundManager.Instance.LoadTable("SOUND", false);
-            var handle = SoundManager.Instance.LoadSounds("sound");
-            yield return handle;
+            mStrBuilder.AppendLine(msg);
         }
+        logText.text = mStrBuilder.ToString();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(logText.GetComponent<RectTransform>());
     }
 
 
@@ -161,6 +150,7 @@ public class ExampleScene : BaseScene
     public void OnClick_Test2()
     {
         SoundManager.Instance.PlaySound(CHANNEL.EFFECT, soundID);
+        StartCoroutine(download());
     }
 
 
@@ -184,7 +174,8 @@ public class ExampleScene : BaseScene
         Debug.Log($"Download completed: success={success}");
         if (success)
         {
-            yield return AssetManager.Instance.LoadPrefabs_Bundle("effect");
+            yield return AssetManager.Instance.LoadBundleAssets<GameObject>("effect");
+            SceneTransManager.Instance.LoadScene("TestScene");
         }
     }
 }

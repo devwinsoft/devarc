@@ -60,9 +60,9 @@ namespace Devarc
         }
 
 
-        public T Pop(string path, Transform attachTr)
+        public T Pop(string fileName, Transform attachTr)
         {
-            GameObject prefab = getPrefab(path);
+            GameObject prefab = getPrefab(fileName);
             if (prefab == null)
             {
                 return null;
@@ -70,9 +70,9 @@ namespace Devarc
             return Pop(prefab, attachTr, prefab.transform.localPosition);
         }
 
-        public T Pop(string path, Transform attachTr, Vector3 localPos)
+        public T Pop(string fileName, Transform attachTr, Vector3 localPos)
         {
-            GameObject prefab = getPrefab(path);
+            GameObject prefab = getPrefab(fileName);
             if (prefab == null)
             {
                 return null;
@@ -142,16 +142,16 @@ namespace Devarc
         }
 
 
-        GameObject getPrefab(string path)
+        GameObject getPrefab(string fileName)
         {
-            string name = Path.GetFileNameWithoutExtension(path);
+            string name = Path.GetFileNameWithoutExtension(fileName);
             GameObject prefab;
             if (mPrefabs.TryGetValue(name, out prefab) == false)
             {
-                prefab = AssetManager.Instance.GetPrefab(path);
+                prefab = AssetManager.Instance.GetAsset<GameObject>(fileName);
                 if (prefab == null)
                 {
-                    Debug.LogErrorFormat("[SimplePool::Pop] Cannot find prefab: path={0}", path);
+                    Debug.LogErrorFormat("[SimplePool::Pop] Cannot find prefab: path={0}", fileName);
                     return null;
                 }
                 mPrefabs.Add(name, prefab);

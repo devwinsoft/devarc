@@ -3683,8 +3683,6 @@ MonoBehaviour:
     Value: 
   stringID:
     Value: 
-  authNetwork: {fileID: 0}
-  gameNetwork: {fileID: 0}
   domains: {fileID: 938221163}
   inputID: {fileID: 682187088}
   inputPW: {fileID: 1255208662}

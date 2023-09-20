@@ -33,7 +33,7 @@ namespace Devarc
 
         public override void Reload()
         {
-            foreach (var obj in AssetManager.LoadPrefabs_Database<BaseEffect>("*", DEV_Settings.GetDefault_BundlePath()))
+            foreach (var obj in AssetManager.LoadDatabasePrefabs<BaseEffect>("*", DEV_Settings.GetDefault_BundlePath()))
             {
                 add(obj.name);
             }

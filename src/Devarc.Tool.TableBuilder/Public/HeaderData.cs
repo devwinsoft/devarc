@@ -48,14 +48,12 @@ namespace Devarc
 
         public void Set(IRow row, RowType rowType)
         {
-            var cells = row.Cells;
-
-            mMaxColumn = Math.Max(mMaxColumn, cells.Count);
+            mMaxColumn = Math.Max(mMaxColumn, row.LastCellNum);
 
             int cnt = 0;
-            for (int col = 0; cnt < cells.Count; col++) 
+            for (int c = 0; c < row.LastCellNum; c++) 
             {
-                var cell = row.GetCell(col);
+                var cell = row.GetCell(c);
                 if (cell == null)
                     continue;
                 cnt++;
@@ -64,11 +62,11 @@ namespace Devarc
                 if (rowType == RowType.Description)
                 {
                     field = new FieldData();
-                    fields[col] = field;
+                    fields[c] = field;
                 }
                 else
                 {
-                    field = fields[col];
+                    field = fields[c];
                 }
 
                 switch (rowType)

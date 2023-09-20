@@ -47,18 +47,20 @@ namespace Devarc
 
         void onReadRow(IRow row, StreamWriter sw, bool isFirstLine)
         {
-            var cells = row.Cells;
             if (isFirstLine)
                 sw.Write("{");
             else
                 sw.Write(",{ ");
             bool started = false;
-            for (int c = 0; c < cells.Count; c++)
+            for (int c = 0; c < row.LastCellNum; c++)
             {
                 var header = mCurrentHeader.Get(c);
                 if (header == null)
                     continue;
-                var value = cells[c].ToString();
+                var cell = row.GetCell(c);
+                if (cell == null)
+                    continue;
+                var value = cell.ToString();
                 if (started == false)
                     started = true;
                 else

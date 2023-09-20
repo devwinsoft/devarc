@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Devarc;
+using UnityEditor.AddressableAssets.Build.BuildPipelineTasks;
 
 public enum CHANNEL
 {
@@ -27,7 +28,6 @@ public class SoundManager : MonoSingleton<SoundManager>
 
     Dictionary<string, List<SoundData>> mSoundDatas = new Dictionary<string, List<SoundData>>();
     Dictionary<string, AudioClip> mClips = new Dictionary<string, AudioClip>();
-    bool mResourceLoading = false;
 
     protected override void onAwake()
     {
@@ -41,56 +41,71 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
 
 
-    public AsyncOperationHandle<IList<AudioClip>> LoadSounds(string addressKey)
+    public void LoadResourceSounds(string key = null)
     {
-        return AssetManager.Instance.LoadAssets_Bundle<AudioClip>(addressKey);
-    }
-
-    public AsyncOperationHandle<IList<AudioClip>> LoadVoices(string addressKey, SystemLanguage lang)
-    {
-        return AssetManager.Instance.LoadAssets_Bundle<AudioClip>(addressKey, lang);
-    }
-
-
-    public void Unload_Bundle(string addressKey)
-    {
-        AssetManager.Instance.UnloadAssets_Bundle(addressKey);
-        unRegister(addressKey);
-    }
-
-
-    public void LoadTable(string fileName, bool isResource)
-    {
-        mResourceLoading = isResource;
-
-        TextAsset tableAsset = null;
-        if (isResource)
+        foreach (var data in Table.SOUND_RESOURCE.List)
         {
-            tableAsset = AssetManager.Instance.GetAsset<TextAsset>(fileName);
+            if (string.IsNullOrEmpty(key) && string.IsNullOrEmpty(data.key))
+            {
+                // Load global sounds.
+                register(data);
+                AssetManager.Instance.LoadResourceAsset<AudioClip>(data.path);
+            }
+            else if (key == data.key)
+            {
+                // Load specific sounds.
+                register(data);
+                AssetManager.Instance.LoadResourceAsset<AudioClip>(data.path);
+            }
+        }
+    }
+
+
+    public void UnloadResourceSounds(string key = null)
+    {
+        foreach (var data in Table.SOUND_RESOURCE.List)
+        {
+            if (string.IsNullOrEmpty(key) && string.IsNullOrEmpty(data.key))
+            {
+                AssetManager.Instance.UnloadResourceAsset<AudioClip>(data.path);
+            }
+            else if (key == data.key)
+            {
+                AssetManager.Instance.UnloadResourceAsset<AudioClip>(data.path);
+            }
+        }
+        unRegister(key);
+    }
+
+
+    public IEnumerator LoadBundleSounds(string addressKey, SystemLanguage lang = SystemLanguage.Unknown)
+    {
+        foreach (var data in Table.SOUND_BUNDLE.List)
+        {
+            register(data, addressKey);
+        }
+
+        if (lang == SystemLanguage.Unknown)
+        {
+            var handle = AssetManager.Instance.LoadBundleAssets<AudioClip>(addressKey);
+            yield return handle;
         }
         else
         {
-            tableAsset = AssetManager.Instance.GetAsset<TextAsset>(fileName);
+            var handle = AssetManager.Instance.LoadBundleAssets<AudioClip>(addressKey, lang);
+            yield return handle;
         }
-        if (tableAsset == null)
-        {
-            Debug.LogError($"[SoundManager::LoadSoundTable] Cannot find table: fileName={fileName}");
-            return;
-        }
-
-        Table.SOUND.LoadJson(tableAsset.text, (data) =>
-        {
-            register(data, null);
-            if (mResourceLoading)
-            {
-                AssetManager.Instance.LoadAsset_Resource<AudioClip>(data.path);
-            }
-        });
-        mResourceLoading = false;
     }
 
 
-    void register(SOUND data, string addressKey)
+    public void UnloadBundleSounds(string key)
+    {
+        AssetManager.Instance.UnloadBundleAssets(key);
+        unRegister(key);
+    }
+
+
+    void register(SOUND_BUNDLE data, string addressKey)
     {
         List<SoundData> list;
         if (mSoundDatas.TryGetValue(data.sound_id, out list) == false)
@@ -100,6 +115,22 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
         SoundData obj = new SoundData();
         obj.addressKey = addressKey;
+        obj.path = data.path;
+        obj.volume = data.volume;
+        obj.loop = data.loop;
+        list.Add(obj);
+    }
+
+    void register(SOUND_RESOURCE data)
+    {
+        List<SoundData> list;
+        if (mSoundDatas.TryGetValue(data.sound_id, out list) == false)
+        {
+            list = new List<SoundData>();
+            mSoundDatas.Add(data.sound_id, list);
+        }
+        SoundData obj = new SoundData();
+        obj.addressKey = data.key;
         obj.path = data.path;
         obj.volume = data.volume;
         obj.loop = data.loop;

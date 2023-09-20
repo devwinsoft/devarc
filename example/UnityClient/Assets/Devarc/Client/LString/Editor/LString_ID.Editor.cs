@@ -27,11 +27,11 @@ namespace Devarc
 		public override void Reload()
 		{
 			Table.LString.Clear();
-			foreach (var textAsset in AssetManager.LoadAssets_Database<TextAsset>("*", DEV_Settings.GetStringTablePath_Bundle()))
+			foreach (var textAsset in AssetManager.LoadDatabaseAssets<TextAsset>("*", DEV_Settings.GetStringTablePath_Bundle()))
 			{
 				Table.LString.LoadJson(textAsset.text);
 			}
-			foreach (var textAsset in AssetManager.LoadAssets_Database<TextAsset>("*", DEV_Settings.GetStringTablePath_Builtin()))
+			foreach (var textAsset in AssetManager.LoadDatabaseAssets<TextAsset>("*", DEV_Settings.GetStringTablePath_Builtin()))
 			{
 				Table.LString.LoadJson(textAsset.text);
 			}

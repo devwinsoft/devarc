@@ -1,4 +1,4 @@
 {"list":[
-{"index":1,"sound_id":"BGM_INTRO","path":"Sounds/snd_explosion","loop":"TRUE","volume":1}
+{"index":1,"key":"bgm","sound_id":"BGM_INTRO","path":"Sounds/snd_explosion","loop":"TRUE","volume":1}
 ,{ "index":2,"sound_id":"UI_CLICK","path":"Sounds/snd_explosion","loop":"FALSE","volume":1}
 ]}
