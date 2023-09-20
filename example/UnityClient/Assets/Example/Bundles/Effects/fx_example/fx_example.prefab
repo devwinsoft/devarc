@@ -167,6 +167,6 @@ MonoBehaviour:
   animDatas:
     list:
     - Clip: {fileID: 7400000, guid: 1d5b345be3ce2e846810d3d7ef3f0eea, type: 2}
-      Speed: 1
-      Repeat: 1
+      Speed: 0.75
+      Repeat: 2
       FadeTime: 0

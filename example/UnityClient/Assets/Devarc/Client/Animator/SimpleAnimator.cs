@@ -247,7 +247,6 @@ public class SimpleAnimator : MonoBehaviour
             func.Invoke();
         }
 
-        mCompleted = false;
         mPlayDatas = _playDatas;
         mCallback = _callback;
         mPlaySpeed = _playSpeed;
@@ -263,6 +262,7 @@ public class SimpleAnimator : MonoBehaviour
             return false;
         }
 
+        mCompleted = false;
         mPlayIndex = _playIndex;
         mRepeatIndex = _repeatIndex;
         AnimData _playData = mPlayDatas[_playIndex];

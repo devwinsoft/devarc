@@ -33,17 +33,18 @@ public class AppManager : MonoSingleton<AppManager>
             MessagePack.Unity.UnityResolver.Instance
         );
 
-        mAuthNetwork = Create<AuthNetwork>();
+        mAuthNetwork = Create<AuthNetwork>(transform);
         mAuthNetwork.InitProtocol("msgpack", "packet", StaticCompositeResolver.Instance);
 
-        mGameNetwork = Create<GameNetwork>();
+        mGameNetwork = Create<GameNetwork>(transform);
         mGameNetwork.InitProtocol("Game", StaticCompositeResolver.Instance);
     }
 
 
-    T Create<T>() where T : MonoBehaviour
+    T Create<T>(Transform root) where T : MonoBehaviour
     {
         GameObject obj = new GameObject(typeof(T).Name);
+        obj.transform.parent = root;
         T compo = obj.AddComponent<T>();
         return compo;
     }

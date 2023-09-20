@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,15 +10,10 @@ using Devarc;
 
 public class TestNetworkScene : BaseScene
 {
+    public UIDebugLog debugLog;
     public TMP_Dropdown domains;
     public TMP_InputField inputID;
     public TMP_InputField inputPW;
-    public ScrollRect scrollRect;
-    public TextMeshProUGUI logText;
-
-    StringBuilder mStrBuilder = new StringBuilder();
-    List<string> mLogMessages = new List<string>();
-
 
     protected override void onAwake()
     {
@@ -37,12 +31,7 @@ public class TestNetworkScene : BaseScene
 
         AppManager.authNetwork.InitConnection(domains.captionText.text, 3000);
 
-        Application.logMessageReceived += LogCallback;
-        logText.text = string.Empty;
-        logText.OnPreRenderText += (info) =>
-        {
-            scrollRect.normalizedPosition = new Vector2(0, 0);
-        };
+
 
         yield return null;
     }
@@ -50,47 +39,6 @@ public class TestNetworkScene : BaseScene
 
     public override void OnLeaveScene()
     {
-        Application.logMessageReceived -= LogCallback;
-    }
-
-
-    void LogCallback(string log, string stackTrace, LogType type)
-    {
-        switch (type)
-        {
-            case LogType.Error:
-                mLogMessages.Add($"<color=red>[{DateTime.Now.ToString("HH:mm:ss")}] {log}</color>");
-                break;
-            case LogType.Warning:
-                mLogMessages.Add($"<color=yellow>[{DateTime.Now.ToString("HH:mm:ss")}] {log}</color>");
-                break;
-            default:
-                mLogMessages.Add($"[{DateTime.Now.ToString("HH:mm:ss")}] {log}");
-                break;
-        }
-
-        if (mLogMessages.Count > 50)
-        {
-            mLogMessages.RemoveAt(0);
-        }
-
-        mStrBuilder.Clear();
-        foreach (string msg in mLogMessages)
-        {
-            mStrBuilder.AppendLine(msg);
-        }
-        logText.text = mStrBuilder.ToString();
-        LayoutRebuilder.ForceRebuildLayoutImmediate(logText.GetComponent<RectTransform>());
-    }
-
-
-
-    public void OnClick_Clear()
-    {
-        mStrBuilder.Clear();
-        mLogMessages.Clear();
-        logText.text = string.Empty;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(logText.GetComponent<RectTransform>());
     }
 
 
@@ -137,9 +85,8 @@ public class TestNetworkScene : BaseScene
     }
 
 
-    public void OnClick_Test2()
+    public void OnClick_GotoAssetTest()
     {
         SceneTransManager.Instance.LoadScene("TestAssetScene");
     }
-
 }

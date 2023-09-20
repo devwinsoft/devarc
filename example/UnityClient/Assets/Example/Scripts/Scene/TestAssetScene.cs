@@ -7,6 +7,7 @@ using Devarc;
 
 public class TestAssetScene : BaseScene
 {
+    public UIDebugLog debugLog;
     public CHARACTER_ID charID;
     public SKILL_ID skillID;
     public SOUND_ID soundID;
@@ -80,7 +81,7 @@ public class TestAssetScene : BaseScene
     }
 
 
-    public void OnClick_GoBack()
+    public void OnClick_GotoNetworkTest()
     {
         SceneTransManager.Instance.LoadScene("TestNetworkScene");
     }
