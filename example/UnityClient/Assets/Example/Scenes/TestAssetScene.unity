@@ -1635,7 +1635,7 @@ MonoBehaviour:
     Value: SKILL_HEAL
   effectData:
     EffectID:
-      Value: fx_example
+      Value: fx_walk
     Offset: {x: 0, y: 0}
     WaitTime: 0
   stringID:

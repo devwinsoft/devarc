@@ -96,9 +96,9 @@ public class SimpleAnimator : MonoBehaviour
         get
         {
             if (mAnimator == null)
-            {
                 mAnimator = GetComponent<Animator>();
-            }
+            if (mAnimator == null)
+                Debug.LogError($"Animator is not attached: gameObject={gameObject.name}");
             return mAnimator;
         }
     }
@@ -352,7 +352,6 @@ public class SimpleAnimator : MonoBehaviour
             var temp = _playDatas[i];
             if (temp.Clip == null)
             {
-                Debug.LogError("");
                 return 0f;
             }
             if (temp.Repeat == ANIM_PLAY_COUNT.Loop)

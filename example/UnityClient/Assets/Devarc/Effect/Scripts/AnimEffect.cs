@@ -14,6 +14,8 @@ namespace Devarc
             {
                 if (mController == null)
                     mController = GetComponentInChildren<SimpleAnimator>();
+                if (mController == null)
+                    Debug.LogError("[AnimEffect] SimpleAnimator is not attached.");
                 return mController;
             }
         }

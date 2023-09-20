@@ -64,7 +64,7 @@ public class TestAssetScene : BaseScene
         Debug.Log($"Download completed: success={success}");
         if (success)
         {
-            yield return AssetManager.Instance.LoadBundleAssets<GameObject>("effect");
+            yield return SoundManager.Instance.LoadBundleSounds("sound");
         }
     }
 

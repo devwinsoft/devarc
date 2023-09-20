@@ -30,7 +30,7 @@ namespace Devarc
             GameObject prefab = AssetManager.Instance.GetAsset<GameObject>(data.EffectID);
             if (prefab == null)
             {
-                Debug.LogError($"[EffectManager] Cannot play effect: effect_id={data.EffectID}");
+                Debug.LogError($"[EffectManager] Cannot play effect: effect_id={data.EffectID.Value}");
                 return null;
             }
 
@@ -48,7 +48,7 @@ namespace Devarc
 
         public BaseEffect CreateEffect(EffectPlayData data, Transform attachTr, bool flipX = false)
         {
-            if (data.EffectID == null || data.EffectID.IsValid == false)
+            if (data == null || data.EffectID == null || data.EffectID.IsValid == false)
             {
                 return null;
             }
