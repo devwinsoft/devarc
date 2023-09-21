@@ -12,12 +12,39 @@ public enum CHANNEL
     MAX,
 }
 
-public class SoundData
+public abstract class SoundData
+{
+    public abstract string sound_id { get; }
+    public abstract string key { get; }
+    public abstract string path { get; }
+    public abstract float volume { get; }
+    public abstract bool loop { get; }
+    public abstract bool isBundle { get; }
+}
+
+public class BundleSoundData : SoundData
 {
     public string addressKey;
-    public string path;
-    public float volume;
-    public bool loop;
+    public SOUND_BUNDLE data;
+
+    public override string sound_id => data.sound_id;
+    public override string key => addressKey;
+    public override string path => data.path;
+    public override float volume => data.volume;
+    public override bool loop => data.loop;
+    public override bool isBundle => false;
+}
+
+public class ResourceSoundData : SoundData
+{
+    public SOUND_RESOURCE data;
+
+    public override string sound_id => data.sound_id;
+    public override string key => data.key;
+    public override string path => data.path;
+    public override float volume => data.volume;
+    public override bool loop => data.loop;
+    public override bool isBundle => false;
 }
 
 public class SoundManager : MonoSingleton<SoundManager>
@@ -72,7 +99,7 @@ public class SoundManager : MonoSingleton<SoundManager>
                 AssetManager.Instance.UnloadResourceAsset<AudioClip>(data.path);
             }
         }
-        unRegister(key);
+        unRegister(key, false);
     }
 
 
@@ -99,7 +126,7 @@ public class SoundManager : MonoSingleton<SoundManager>
     public void UnloadBundle(string key)
     {
         AssetManager.Instance.UnloadBundleAssets(key);
-        unRegister(key);
+        unRegister(key, true);
     }
 
 
@@ -111,11 +138,9 @@ public class SoundManager : MonoSingleton<SoundManager>
             list = new List<SoundData>();
             mSoundDatas.Add(data.sound_id, list);
         }
-        SoundData obj = new SoundData();
+        var obj = new BundleSoundData();
         obj.addressKey = addressKey;
-        obj.path = data.path;
-        obj.volume = data.volume;
-        obj.loop = data.loop;
+        obj.data = data;
         list.Add(obj);
     }
 
@@ -127,23 +152,25 @@ public class SoundManager : MonoSingleton<SoundManager>
             list = new List<SoundData>();
             mSoundDatas.Add(data.sound_id, list);
         }
-        SoundData obj = new SoundData();
-        obj.addressKey = data.key;
-        obj.path = data.path;
-        obj.volume = data.volume;
-        obj.loop = data.loop;
+        var obj = new ResourceSoundData();
+        obj.data = data;
         list.Add(obj);
     }
 
 
-    void unRegister(string addressKey)
+    void unRegister(string addressKey, bool isBundle)
     {
         foreach (var list in mSoundDatas.Values)
         {
             for (int i = list.Count - 1; i >= 0; i--)
             {
-                if (list[i].addressKey == addressKey)
-                    list.RemoveAt(i);
+                var obj = list[i];
+                if (obj.isBundle != isBundle)
+                    continue;
+                if (obj.key != addressKey)
+                    continue;
+
+                list.RemoveAt(i);
             }
         }
     }
