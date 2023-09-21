@@ -28,11 +28,15 @@ Devarc is cross-platform development templates.
   * https://github.com/psygames/UnityWebSocket
     
 
-## Install Server ##
+## Install C# Server ##
 #### Step 1: Create csharp project. ####
-#### Step 2: Download websocket-sharp project, and import into csharp project. ####
+#### Step 2: Download projects, and import into C# project. ####
+  * https://github.com/devwinsoft/devarc/tree/main/src/Devarc.Net.Common
+  * https://github.com/devwinsoft/devarc/tree/main/src/Devarc.Net.Server
   * https://github.com/sta/websocket-sharp
-    
+
+## Install Node.JS Server ##
+  * Now, working...
 ## Protocol Builder ##
 #### Step 1: Create shared definitions with C#. ####
 ```csharp
@@ -67,7 +71,7 @@ namespace Auth2C
     }
 }
 ```
-#### Step 3: Create batch files to build. ####
+#### Step 3: Create batch files. ####
 ```
 IDL.exe -cs-def  {SchemaFolder}\Common.def
 IDL.exe -js  {SchemaFolder}\AuthProtocol.idl  {SchemaFolder}\Common.def
@@ -79,7 +83,7 @@ move /Y   *.cs    {UnityProjectFolder}\Assets\Scripts\Generated\
 
 #### Step 1: Create Excel Tables. ####
 
-#### Step 2: Create batch files to build. ####
+#### Step 2: Create batch files. ####
 ```
 ..\..\bin\TableBuilder.exe -cs .\Tables\GameTable.xlsx
 move /Y   *.cs    ..\UnityClient\Assets\Example\Scripts\Generated\Tables\
