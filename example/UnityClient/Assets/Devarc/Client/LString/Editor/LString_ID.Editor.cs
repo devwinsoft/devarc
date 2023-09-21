@@ -31,7 +31,7 @@ namespace Devarc
 			{
 				Table.LString.LoadJson(textAsset.text);
 			}
-			foreach (var textAsset in AssetManager.FindAssets<TextAsset>("*", DEV_Settings.GetStringTablePath_Builtin()))
+			foreach (var textAsset in AssetManager.FindAssets<TextAsset>("*", DEV_Settings.GetStringTablePath_Resource()))
 			{
 				Table.LString.LoadJson(textAsset.text);
 			}

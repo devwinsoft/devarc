@@ -66,7 +66,7 @@ namespace Devarc
         public class RootPathData
         {
             public CString bundlePath;
-            public CString builtinPath;
+            public CString resourcePath;
             public CString tableSubDirectory;
             public CString stringSubDirectory;
         }
@@ -84,7 +84,7 @@ namespace Devarc
         }
         public static string GetTable_ResourcePath()
         {
-            return $"{Instance.defaultDirectory.builtinPath}/{Instance.defaultDirectory.tableSubDirectory}";
+            return $"{Instance.defaultDirectory.resourcePath}/{Instance.defaultDirectory.tableSubDirectory}";
         }
 
 
@@ -93,10 +93,10 @@ namespace Devarc
             string subDir = Instance.editorLanguage.ToString();
             return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.stringSubDirectory}/{subDir}";
         }
-        public static string GetStringTablePath_Builtin()
+        public static string GetStringTablePath_Resource()
         {
             string subDir = Instance.editorLanguage.ToString();
-            return $"{Instance.defaultDirectory.builtinPath}/{Instance.defaultDirectory.stringSubDirectory}/{subDir}";
+            return $"{Instance.defaultDirectory.resourcePath}/{Instance.defaultDirectory.stringSubDirectory}/{subDir}";
         }
 
         private void OnDestroy()
