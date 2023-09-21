@@ -145,8 +145,9 @@ namespace Devarc
         }
 
 
-        public void UnloadBundleAssets(string key)
+        public IEnumerable<string> UnloadBundleAssets(string key)
         {
+            List<string> result = new List<string>();
             BundleData bundleData;
             if (mBundles.TryGetValue(key, out bundleData))
             {
@@ -154,6 +155,7 @@ namespace Devarc
                 {
                     foreach (var list in mBundleAssets.Values)
                     {
+                        result.Add(name);
                         list.Remove(name);
                     }
                 }
@@ -161,6 +163,7 @@ namespace Devarc
                 Addressables.Release(bundleData.handle);
             }
             mBundles.Remove(key);
+            return result;
         }
 
 

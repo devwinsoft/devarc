@@ -55,7 +55,7 @@ public class AppManager : MonoSingleton<AppManager>
         AssetManager.Instance.LoadResourceAssets<TextAsset>("Tables");
         AssetManager.Instance.LoadResourceAssets<TextAsset>("LStrings", lang);
 
-        SoundManager.Instance.LoadResourceSounds();
+        SoundManager.Instance.LoadResource();
     }
 
 
@@ -64,11 +64,11 @@ public class AppManager : MonoSingleton<AppManager>
         AssetManager.Instance.UnloadResourceAssets<TextAsset>("Tables");
         AssetManager.Instance.UnloadResourceAssets<TextAsset>("LStrings");
 
-        SoundManager.Instance.UnloadResourceSounds();
+        SoundManager.Instance.UnloadResource();
     }
 
 
-    public IEnumerator LoadBundles(SystemLanguage lang)
+    public IEnumerator LoadLocalBundles(SystemLanguage lang)
     {
         {
             var handle = AssetManager.Instance.LoadBundleAssets<TextAsset>("table");
@@ -89,16 +89,6 @@ public class AppManager : MonoSingleton<AppManager>
                 Table.LString.LoadFromFile("LString");
             }
         }
-
-        //{
-        //    var handle = AssetManager.Instance.LoadBundleAssets<GameObject>("effect");
-        //    yield return handle;
-        //}
-
-        //yield return SoundManager.Instance.LoadBundleSounds("sound");
-        //yield return SoundManager.Instance.LoadBundleSounds("voice", lang);
-
-        EffectManager.Instance.Clear();
     }
 
 
@@ -113,8 +103,8 @@ public class AppManager : MonoSingleton<AppManager>
         AssetManager.Instance.UnloadBundleAssets("lstring");
         Table.LString.Clear();
 
-        AssetManager.Instance.UnloadBundleAssets("effect");
-        SoundManager.Instance.UnloadBundleSounds("sound");
+        EffectManager.Instance.UnloadBundle("effect");
+        SoundManager.Instance.UnloadBundle("sound");
         //SoundManager.Instance.UnloadBundleSounds("voice");
     }
 }

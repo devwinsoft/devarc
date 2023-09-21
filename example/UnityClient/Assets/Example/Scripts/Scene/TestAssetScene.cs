@@ -28,7 +28,7 @@ public class TestAssetScene : BaseScene
     public override IEnumerator OnEnterScene()
     {
         AppManager.Instance.LoadResources(SystemLanguage.Korean);
-        yield return AppManager.Instance.LoadBundles(SystemLanguage.Korean);
+        yield return AppManager.Instance.LoadLocalBundles(SystemLanguage.Korean);
     }
 
 
@@ -64,8 +64,10 @@ public class TestAssetScene : BaseScene
         Debug.Log($"Download completed: success={success}");
         if (success)
         {
-            yield return AssetManager.Instance.LoadBundleAssets<GameObject>("effect");
-            yield return SoundManager.Instance.LoadBundleSounds("sound");
+            EffectManager.Instance.Clear();
+            yield return EffectManager.Instance.LoadBundle("effect");
+            yield return SoundManager.Instance.LoadBundle("sound");
+            //yield return SoundManager.Instance.LoadBundleSounds("voice", lang);
         }
     }
 

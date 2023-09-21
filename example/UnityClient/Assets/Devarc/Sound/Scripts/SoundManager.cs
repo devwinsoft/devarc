@@ -26,7 +26,6 @@ public class SoundManager : MonoSingleton<SoundManager>
     SoundChannel[] mChannels = new SoundChannel[(int)CHANNEL.MAX];
 
     Dictionary<string, List<SoundData>> mSoundDatas = new Dictionary<string, List<SoundData>>();
-    Dictionary<string, AudioClip> mClips = new Dictionary<string, AudioClip>();
 
     protected override void onAwake()
     {
@@ -40,7 +39,7 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
 
 
-    public void LoadResourceSounds(string key = null)
+    public void LoadResource(string key = null)
     {
         foreach (var data in Table.SOUND_RESOURCE.List)
         {
@@ -60,7 +59,7 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
 
 
-    public void UnloadResourceSounds(string key = null)
+    public void UnloadResource(string key = null)
     {
         foreach (var data in Table.SOUND_RESOURCE.List)
         {
@@ -77,7 +76,7 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
 
 
-    public IEnumerator LoadBundleSounds(string addressKey, SystemLanguage lang = SystemLanguage.Unknown)
+    public IEnumerator LoadBundle(string addressKey, SystemLanguage lang = SystemLanguage.Unknown)
     {
         foreach (var data in Table.SOUND_BUNDLE.List)
         {
@@ -97,7 +96,7 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
 
 
-    public void UnloadBundleSounds(string key)
+    public void UnloadBundle(string key)
     {
         AssetManager.Instance.UnloadBundleAssets(key);
         unRegister(key);
