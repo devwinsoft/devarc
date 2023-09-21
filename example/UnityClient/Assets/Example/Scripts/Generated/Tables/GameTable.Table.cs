@@ -1,9 +1,37 @@
 namespace Devarc
 {
+	public class _CHARACTER_TABLE : TableData<CHARACTER, _CHARACTER, int>
+	{
+		public _CHARACTER_TABLE()
+		{
+			TableManager.Instance.registerLoadTableCallback("CHARACTER", (textAsset) =>
+			{
+				LoadJson(textAsset.text);
+			});
+			TableManager.Instance.registerUnloadTableCallback("CHARACTER", () =>
+			{
+				Clear();
+			});
+		}
+	}
+	public class _SKILL_TABLE : TableData<SKILL, _SKILL, string>
+	{
+		public _SKILL_TABLE()
+		{
+			TableManager.Instance.registerLoadTableCallback("SKILL", (textAsset) =>
+			{
+				LoadJson(textAsset.text);
+			});
+			TableManager.Instance.registerUnloadTableCallback("SKILL", () =>
+			{
+				Clear();
+			});
+		}
+	}
 	public partial class Table
 	{
-		public static TableData<CHARACTER, _CHARACTER, int> CHARACTER = new TableData<CHARACTER, _CHARACTER, int>();
-		public static TableData<SKILL, _SKILL, string> SKILL = new TableData<SKILL, _SKILL, string>();
+		public static _CHARACTER_TABLE CHARACTER = new _CHARACTER_TABLE();
+		public static _SKILL_TABLE SKILL = new _SKILL_TABLE();
 	}
 
 	[System.Serializable]

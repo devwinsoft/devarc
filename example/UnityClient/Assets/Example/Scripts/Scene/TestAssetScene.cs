@@ -27,15 +27,30 @@ public class TestAssetScene : BaseScene
 
     public override IEnumerator OnEnterScene()
     {
-        AppManager.Instance.LoadResources(SystemLanguage.Korean);
-        yield return AppManager.Instance.LoadLocalBundles(SystemLanguage.Korean);
+        // Load resouce assets...
+        Table.Initailize();
+        TableManager.Instance.LoadResourceTable();
+        TableManager.Instance.LoadResourceString(SystemLanguage.Korean);
+        SoundManager.Instance.LoadResource();
+
+        // Load bundle assets...
+        yield return TableManager.Instance.LoadBundleTable("table");
+        yield return TableManager.Instance.LoadBundleString("lstring", SystemLanguage.Korean);
     }
 
 
     public override void OnLeaveScene()
     {
-        AppManager.Instance.UnloadResources();
-        AppManager.Instance.UnloadBundles();
+        // Unload resource assets...
+        TableManager.Instance.UnloadResourceTable();
+        TableManager.Instance.UnloadResourceString();
+        SoundManager.Instance.UnloadResource();
+
+        // Unload bundle assets...
+        TableManager.Instance.UnloadBundleString("lstring");
+        TableManager.Instance.UnloadBundleTable("table");
+        EffectManager.Instance.UnloadBundle("effect");
+        SoundManager.Instance.UnloadBundle("sound");
     }
 
 

@@ -1,9 +1,37 @@
 namespace Devarc
 {
+	public class _SOUND_BUNDLE_TABLE : TableData<SOUND_BUNDLE, _SOUND_BUNDLE, int>
+	{
+		public _SOUND_BUNDLE_TABLE()
+		{
+			TableManager.Instance.registerLoadTableCallback("SOUND_BUNDLE", (textAsset) =>
+			{
+				LoadJson(textAsset.text);
+			});
+			TableManager.Instance.registerUnloadTableCallback("SOUND_BUNDLE", () =>
+			{
+				Clear();
+			});
+		}
+	}
+	public class _SOUND_RESOURCE_TABLE : TableData<SOUND_RESOURCE, _SOUND_RESOURCE, int>
+	{
+		public _SOUND_RESOURCE_TABLE()
+		{
+			TableManager.Instance.registerLoadTableCallback("SOUND_RESOURCE", (textAsset) =>
+			{
+				LoadJson(textAsset.text);
+			});
+			TableManager.Instance.registerUnloadTableCallback("SOUND_RESOURCE", () =>
+			{
+				Clear();
+			});
+		}
+	}
 	public partial class Table
 	{
-		public static TableData<SOUND_BUNDLE, _SOUND_BUNDLE, int> SOUND_BUNDLE = new TableData<SOUND_BUNDLE, _SOUND_BUNDLE, int>();
-		public static TableData<SOUND_RESOURCE, _SOUND_RESOURCE, int> SOUND_RESOURCE = new TableData<SOUND_RESOURCE, _SOUND_RESOURCE, int>();
+		public static _SOUND_BUNDLE_TABLE SOUND_BUNDLE = new _SOUND_BUNDLE_TABLE();
+		public static _SOUND_RESOURCE_TABLE SOUND_RESOURCE = new _SOUND_RESOURCE_TABLE();
 	}
 
 	[System.Serializable]

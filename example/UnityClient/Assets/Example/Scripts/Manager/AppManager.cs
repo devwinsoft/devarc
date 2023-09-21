@@ -32,10 +32,10 @@ public class AppManager : MonoSingleton<AppManager>
             MessagePack.Unity.UnityResolver.Instance
         );
 
-        mAuthNetwork = Create<AuthNetwork>(transform);
+        mAuthNetwork = create<AuthNetwork>(transform);
         mAuthNetwork.InitProtocol("msgpack", "packet", StaticCompositeResolver.Instance);
 
-        mGameNetwork = Create<GameNetwork>(transform);
+        mGameNetwork = create<GameNetwork>(transform);
         mGameNetwork.InitProtocol("Game", StaticCompositeResolver.Instance);
 
 
@@ -56,7 +56,7 @@ public class AppManager : MonoSingleton<AppManager>
         DownloadManager.Instance.OnResult += () =>
         {
             Debug.Log($"Download completed.");
-            StartCoroutine(LoadRemoteBundles());
+            StartCoroutine(loadRemoteBundles());
         };
 
         DownloadManager.Instance.OnError += () =>
@@ -66,58 +66,7 @@ public class AppManager : MonoSingleton<AppManager>
     }
 
 
-    T Create<T>(Transform root) where T : MonoBehaviour
-    {
-        GameObject obj = new GameObject(typeof(T).Name);
-        obj.transform.parent = root;
-        T compo = obj.AddComponent<T>();
-        return compo;
-    }
-
-
-    public void LoadResources(SystemLanguage lang)
-    {
-        AssetManager.Instance.LoadResourceAssets<TextAsset>("Tables");
-        AssetManager.Instance.LoadResourceAssets<TextAsset>("LStrings", lang);
-
-        SoundManager.Instance.LoadResource();
-    }
-
-
-    public void UnloadResources()
-    {
-        AssetManager.Instance.UnloadResourceAssets<TextAsset>("Tables");
-        AssetManager.Instance.UnloadResourceAssets<TextAsset>("LStrings");
-
-        SoundManager.Instance.UnloadResource();
-    }
-
-
-    public IEnumerator LoadLocalBundles(SystemLanguage lang)
-    {
-        {
-            var handle = AssetManager.Instance.LoadBundleAssets<TextAsset>("table");
-            yield return handle;
-            if (handle.IsValid())
-            {
-                Table.CHARACTER.LoadFromFile("CHARACTER");
-                Table.SKILL.LoadFromFile("SKILL");
-                Table.SOUND_BUNDLE.LoadFromFile("SOUND_BUNDLE");
-            }
-        }
-
-        {
-            var handle = AssetManager.Instance.LoadBundleAssets<TextAsset>("lstring", lang);
-            yield return handle;
-            if (handle.IsValid())
-            {
-                Table.LString.LoadFromFile("LString");
-            }
-        }
-    }
-
-
-    public IEnumerator LoadRemoteBundles()
+    IEnumerator loadRemoteBundles()
     {
         EffectManager.Instance.Clear();
         yield return EffectManager.Instance.LoadBundle("effect");
@@ -126,19 +75,11 @@ public class AppManager : MonoSingleton<AppManager>
     }
 
 
-    public void UnloadBundles()
+    T create<T>(Transform root) where T : MonoBehaviour
     {
-        AssetManager.Instance.UnloadBundleAssets("table");
-        Table.CHARACTER.Clear();
-        Table.SKILL.Clear();
-        Table.SOUND_BUNDLE.Clear();
-        Table.SOUND_RESOURCE.Clear();
-
-        AssetManager.Instance.UnloadBundleAssets("lstring");
-        Table.LString.Clear();
-
-        EffectManager.Instance.UnloadBundle("effect");
-        SoundManager.Instance.UnloadBundle("sound");
-        //SoundManager.Instance.UnloadBundleSounds("voice");
+        GameObject obj = new GameObject(typeof(T).Name);
+        obj.transform.parent = root;
+        T compo = obj.AddComponent<T>();
+        return compo;
     }
 }

@@ -119,18 +119,18 @@ namespace Devarc
         }
 
 
-        public void UnloadResourceAssets<T>(string searchDir)
+        public IEnumerable<string> UnloadResourceAssets<T>(string searchDir)
         {
             Type type = typeof(T);
             string resDir = searchDir.ToLower();
             Dictionary<string, ResData> list = null;
+            List<string> deleteNames = new List<string>();
 
             if (mResourceAssets.TryGetValue(type, out list) == false)
             {
-                return;
+                return deleteNames;
             }
 
-            List<string> deleteNames = new List<string>();
             foreach (var data in list.Values)
             {
                 if (data.dir.Contains(resDir))
@@ -142,6 +142,7 @@ namespace Devarc
             {
                 list.Remove(name);
             }
+            return deleteNames;
         }
 
 

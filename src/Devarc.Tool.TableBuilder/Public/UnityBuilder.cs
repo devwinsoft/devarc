@@ -22,13 +22,32 @@ namespace Devarc
             {
                 sw.WriteLine("namespace Devarc");
                 sw.WriteLine("{");
+                foreach (var info in mHeaderList)
+                {
+                    if (info.IsDataSheet)
+                        continue;
+                    sw.WriteLine($"\tpublic class _{info.SheetName}_TABLE : TableData<{info.SheetName}, _{info.SheetName}, {info.KeyTypeName}>");
+                    sw.WriteLine("\t{");
+                    sw.WriteLine($"\t\tpublic _{info.SheetName}_TABLE()");
+                    sw.WriteLine("\t\t{");
+                    sw.WriteLine($"\t\t\tTableManager.Instance.registerLoadTableCallback(\"{info.SheetName}\", (textAsset) =>");
+                    sw.WriteLine("\t\t\t{");
+                    sw.WriteLine("\t\t\t\tLoadJson(textAsset.text);");
+                    sw.WriteLine("\t\t\t});");
+                    sw.WriteLine($"\t\t\tTableManager.Instance.registerUnloadTableCallback(\"{info.SheetName}\", () =>");
+                    sw.WriteLine("\t\t\t{");
+                    sw.WriteLine("\t\t\t\tClear();");
+                    sw.WriteLine("\t\t\t});");
+                    sw.WriteLine("\t\t}");
+                    sw.WriteLine("\t}");
+                }
                 sw.WriteLine($"\tpublic partial class Table");
                 sw.WriteLine("\t{");
                 foreach (var info in mHeaderList)
                 {
                     if (info.IsDataSheet)
                         continue;
-                    sw.WriteLine($"\t\tpublic static TableData<{info.SheetName}, _{info.SheetName}, {info.KeyTypeName}> {info.SheetName} = new TableData<{info.SheetName}, _{info.SheetName}, {info.KeyTypeName}>();");
+                    sw.WriteLine($"\t\tpublic static _{info.SheetName}_TABLE {info.SheetName} = new _{info.SheetName}_TABLE();");
                 }
                 sw.WriteLine("\t}");
                 sw.WriteLine("");

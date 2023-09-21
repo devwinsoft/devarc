@@ -11,6 +11,8 @@ namespace Devarc
         public float playTime;
         public float fadeOutTime;
 
+        float mReaminTime = 0f;
+
         public ParticleSystem particle
         {
             get
@@ -52,6 +54,7 @@ namespace Devarc
 
         protected override void onPlay()
         {
+            mReaminTime = playTime;
             particle.Play(true);
             if (playTime > 0f)
             {
@@ -69,6 +72,10 @@ namespace Devarc
                 {
                     Invoke("Remove", fadeOutTime);
                 }
+                else
+                {
+                    Remove();
+                }
             }
             else
             {
@@ -78,13 +85,16 @@ namespace Devarc
 
         public override void onLateUpdate()
         {
-            if (playTime == 0 && particle != null)
+            if (playTime > 0f)
             {
-                if (particle.IsAlive(true) == false)
-                {
+                mReaminTime -= Time.deltaTime;
+                if (mReaminTime <= 0f)
                     Remove();
-                }
             }
+            //if (particle.IsAlive(true) == false)
+            //{
+            //    Remove();
+            //}
         }
     }
 }

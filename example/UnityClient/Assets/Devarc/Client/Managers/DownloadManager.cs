@@ -27,6 +27,7 @@ namespace Devarc
         public Dictionary<string, long> patchSizes = new Dictionary<string, long>();
     }
 
+
     public class DownloadManager : MonoSingleton<DownloadManager>
     {
         public event DownloadPatchCallback OnPatch;
