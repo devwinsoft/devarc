@@ -90,10 +90,10 @@ public class AppManager : MonoSingleton<AppManager>
             }
         }
 
-        {
-            var handle = AssetManager.Instance.LoadBundleAssets<GameObject>("effect");
-            yield return handle;
-        }
+        //{
+        //    var handle = AssetManager.Instance.LoadBundleAssets<GameObject>("effect");
+        //    yield return handle;
+        //}
 
         //yield return SoundManager.Instance.LoadBundleSounds("sound");
         //yield return SoundManager.Instance.LoadBundleSounds("voice", lang);
