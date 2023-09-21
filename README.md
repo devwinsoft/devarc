@@ -104,17 +104,37 @@ move /Y   *.sql    ..\Database\Tables\
 #### Step 2: Edit addressable configuration. ####
 ![img](screenshot/example_addressable.png)
 
-#### Step 3: Make loading scripts. ####
+#### Step 3: Initialize DownloadManager. ####
+```csharp
+DownloadManager.Instance.AddToPatchList("effect");
+DownloadManager.Instance.AddToPatchList("sound");
+
+DownloadManager.Instance.OnPatch += (info) =>
+{
+    DownloadManager.Instance.BeginDownload();
+};
+
+DownloadManager.Instance.OnResult += () =>
+{
+    // Load bundles...
+    StartCoroutine(loadAssets());
+};
 ```
-    IEnumerator loadAssets()
+
+#### Step 4: Make loading scripts. ####
+```csharp
+IEnumerator loadAssets()
+{
+    var handle = AssetManager.Instance.LoadAssets_Bundle<TextAsset>("lstring", SystemLanguage.English);
+    yield return handle;
+    if (handle.IsValid())
     {
-        var handle = AssetManager.Instance.LoadAssets_Bundle<TextAsset>("lstring", SystemLanguage.English);
-        yield return handle;
-        if (handle.IsValid())
-        {
-            Table.LString.LoadFromFile("LString");
-        }
+        Table.LString.LoadFromFile("LString");
     }
+
+    yield return EffectManager.Instance.LoadBundle("effect");
+    yield return SoundManager.Instance.LoadBundle("sound");
+}
 ```
 
 ## Unity: Simple Effect Manager. ##
