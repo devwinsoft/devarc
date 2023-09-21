@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7735272448572892014}
   - component: {fileID: 8683448957997830714}
-  - component: {fileID: -4601400091338516945}
   m_Layer: 0
   m_Name: AppManager
   m_TagString: Untagged
@@ -31,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8683448957997830714
 MonoBehaviour:
@@ -48,19 +47,5 @@ MonoBehaviour:
   sessionID:
     data: 
   secret:
-    data1: 1618552617
-    data2: 1618552617
---- !u!114 &-4601400091338516945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3073732214351062771}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a70233178aa4cc4cba6563dc9e3fade, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  addressList:
-  - data: suKDWm0=
+    data1: 1352214509
+    data2: 1352214509

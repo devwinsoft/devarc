@@ -41,36 +41,8 @@ public class TestAssetScene : BaseScene
 
     public void OnClick_Download()
     {
-        StartCoroutine(download());
+        DownloadManager.Instance.BeginPatch();
     }
-
-    IEnumerator download()
-    {
-        long totalSize = 0;
-        Dictionary<string, long> patchList = null;
-        yield return DownloadManager.Instance.GetPatchList((_size, _list) =>
-        {
-            totalSize = _size;
-            patchList = _list;
-        });
-
-        Debug.LogFormat("Start to download contents: {0:N0} kb", (float)totalSize / 1000f);
-        bool success = false;
-        yield return DownloadManager.Instance.Download(patchList, (result, process) =>
-        {
-            success = (result == AsyncOperationStatus.Succeeded);
-        });
-
-        Debug.Log($"Download completed: success={success}");
-        if (success)
-        {
-            EffectManager.Instance.Clear();
-            yield return EffectManager.Instance.LoadBundle("effect");
-            yield return SoundManager.Instance.LoadBundle("sound");
-            //yield return SoundManager.Instance.LoadBundleSounds("voice", lang);
-        }
-    }
-
 
     public void OnClick_PlayEffect()
     {

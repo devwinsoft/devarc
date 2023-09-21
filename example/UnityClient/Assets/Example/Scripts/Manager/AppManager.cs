@@ -4,7 +4,6 @@ using MessagePack.Resolvers;
 using Devarc;
 
 
-[RequireComponent(typeof(DownloadManager))]
 public class AppManager : MonoSingleton<AppManager>
 {
     public static AuthNetwork authNetwork => Instance.mAuthNetwork;
@@ -38,6 +37,32 @@ public class AppManager : MonoSingleton<AppManager>
 
         mGameNetwork = Create<GameNetwork>(transform);
         mGameNetwork.InitProtocol("Game", StaticCompositeResolver.Instance);
+
+
+        // Init download manager.
+        DownloadManager.Instance.AddToPatchList("effect");
+        DownloadManager.Instance.AddToPatchList("sound");
+
+        DownloadManager.Instance.OnPatch += (info) =>
+        {
+            Debug.LogFormat("Start to download contents: {0:N0} kb", (float)(info.totalSize / 1000f));
+            DownloadManager.Instance.BeginDownload();
+        };
+
+        DownloadManager.Instance.OnProgress += (progress) =>
+        {
+        };
+
+        DownloadManager.Instance.OnResult += () =>
+        {
+            Debug.Log($"Download completed.");
+            StartCoroutine(LoadRemoteBundles());
+        };
+
+        DownloadManager.Instance.OnError += () =>
+        {
+            Debug.Log($"Download failed.");
+        };
     }
 
 
@@ -89,6 +114,15 @@ public class AppManager : MonoSingleton<AppManager>
                 Table.LString.LoadFromFile("LString");
             }
         }
+    }
+
+
+    public IEnumerator LoadRemoteBundles()
+    {
+        EffectManager.Instance.Clear();
+        yield return EffectManager.Instance.LoadBundle("effect");
+        yield return SoundManager.Instance.LoadBundle("sound");
+        //yield return SoundManager.Instance.LoadBundleSounds("voice", lang);
     }
 
 

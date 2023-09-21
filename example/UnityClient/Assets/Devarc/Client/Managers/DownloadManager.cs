@@ -10,19 +10,57 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Devarc
 {
+    public delegate void DownloadPatchCallback(PatchInfo info);
+    public delegate void DownloadProgressCallback(float progress);
+    public delegate void DownloadResultCallback();
+    public delegate void DownloadErrorCallback();
+
+    public class PatchInfo
+    {
+        public void Clear()
+        {
+            totalSize = 0;
+            patchSizes.Clear();
+        }
+
+        public long totalSize;
+        public Dictionary<string, long> patchSizes = new Dictionary<string, long>();
+    }
+
     public class DownloadManager : MonoSingleton<DownloadManager>
     {
-        // Remote addressable list.
-        public CString[] addressList;
+        public event DownloadPatchCallback OnPatch;
+        public event DownloadProgressCallback OnProgress;
+        public event DownloadResultCallback OnResult;
+        public event DownloadErrorCallback OnError;
+
+        PatchInfo mPathInfo = new PatchInfo();
+        List<string> mPatchList = new List<string>();
 
 
-        // Return value = Dictionary(addressable, size)
-        public IEnumerator GetPatchList(System.Action<long, Dictionary<string, long>> resultCallback)
+        public void AddToPatchList(string addressableKey)
         {
-            long patchSize = 0;
-            Dictionary<string, long> patchList = new Dictionary<string, long>();
+            if (!mPatchList.Contains(addressableKey))
+                mPatchList.Add(addressableKey);
+        }
 
-            foreach (var key in addressList)
+
+        public void BeginPatch()
+        {
+            StartCoroutine(beginPatch());
+        }
+
+        IEnumerator beginPatch()
+        {
+            if (mPatchList.Count == 0)
+            {
+                Debug.LogWarning($"[DownloadManager::BeginPatch] Patch list is empty.");
+                OnPatch?.Invoke(mPathInfo);
+                yield break;
+            }
+
+            mPathInfo.Clear();
+            foreach (var key in mPatchList)
             {
                 // WARNING: This will cause all asset bundles to be re-downloaded at startup every time and should not be used in a production game
                 Addressables.ClearDependencyCacheAsync(key);
@@ -33,48 +71,56 @@ namespace Devarc
                 switch (getDownloadSize.Status)
                 {
                     case AsyncOperationStatus.Succeeded:
-                        patchSize += getDownloadSize.Result;
-                        patchList.Add(key, getDownloadSize.Result);
+                        mPathInfo.totalSize += getDownloadSize.Result;
+                        mPathInfo.patchSizes.Add(key, getDownloadSize.Result);
                         break;
                     default:
-                        resultCallback?.Invoke(0, null);
+                        Addressables.Release(getDownloadSize);
+                        OnError?.Invoke();
                         yield break;
                 }
                 Addressables.Release(getDownloadSize);
             }
-            resultCallback?.Invoke(patchSize, patchList);
+            OnPatch?.Invoke(mPathInfo);
         }
 
 
-
-        public IEnumerator Download(Dictionary<string, long> patchList, System.Action<AsyncOperationStatus, float> progressCallback)
+        public void BeginDownload()
         {
-            long totalSize = 0;
-            foreach (var temp in patchList)
+            StartCoroutine(beginDownload());
+        }
+
+        IEnumerator beginDownload()
+        {
+            if (mPathInfo.totalSize == 0)
             {
-                totalSize += temp.Value;
+                Debug.Log($"[DownloadManager::BeginDownload] There is no data to patch.");
+                OnResult?.Invoke();
+                yield break;
             }
 
             long downloadSize = 0;
-            foreach (var temp in patchList)
+            foreach (var temp in mPathInfo.patchSizes)
             {
                 AsyncOperationHandle downloadHandle = Addressables.DownloadDependenciesAsync(temp.Key, false);
                 yield return downloadHandle;
+
                 if (downloadHandle.Status == AsyncOperationStatus.Succeeded)
                 {
                     downloadSize += temp.Value;
-                    progressCallback?.Invoke(AsyncOperationStatus.None, (float)downloadSize / (float)totalSize);
-                    Addressables.Release(downloadHandle);
                 }
                 else
                 {
-                    progressCallback?.Invoke(AsyncOperationStatus.Failed, (float)downloadSize / (float)totalSize);
-                    Addressables.Release(downloadHandle);
                     yield break;
                 }
+                Addressables.Release(downloadHandle);
+
+                float progress = (float)downloadSize / (float)mPathInfo.totalSize;
+                OnProgress?.Invoke(progress);
             }
-            progressCallback?.Invoke(AsyncOperationStatus.Succeeded, 1f);
+            OnResult?.Invoke();
         }
+
     }
 }
 
