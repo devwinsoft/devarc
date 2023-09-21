@@ -10,10 +10,10 @@ Devarc is cross-platform development templates.
 #### Devarc includes ####
 - Protocol builder.
 - Table builder.
-- Unity: Asset manager.
+- Unity: Asset Management.
+- Unity: Simple sound manager.
 - Unity: Simple effect manager.
 - Unity: Simple animation manager.
-- Unity: Simple sound manager.
 - Unity: Simple data encryption.
 
 #### Test Release ####
@@ -121,28 +121,40 @@ DownloadManager.Instance.OnResult += () =>
 };
 ```
 
-#### Step 4: Make loading scripts. ####
+#### Step 4: Load assets. ####
 ```csharp
 IEnumerator loadAssets()
 {
-    var handle = AssetManager.Instance.LoadAssets_Bundle<TextAsset>("lstring", SystemLanguage.English);
-    yield return handle;
-    if (handle.IsValid())
-    {
-        Table.LString.LoadFromFile("LString");
-    }
+    yield return TableManager.Instance.LoadBundleTable("table");
+    yield return TableManager.Instance.LoadBundleString("lstring", SystemLanguage.Korean);
 
     yield return EffectManager.Instance.LoadBundle("effect");
     yield return SoundManager.Instance.LoadBundle("sound");
 }
 ```
+#### Step 5: Unload assets. ####
+```csharp
+void unloadAssets()
+{
+    // Unload resource assets...
+    TableManager.Instance.UnloadResourceTable();
+    TableManager.Instance.UnloadResourceString();
+    SoundManager.Instance.UnloadResource();
 
+    // Unload bundle assets...
+    TableManager.Instance.UnloadBundleString("lstring");
+    TableManager.Instance.UnloadBundleTable("table");
+    EffectManager.Instance.UnloadBundle("effect");
+    SoundManager.Instance.UnloadBundle("sound");
+}
+```
+
+## Unity: Simple Sound Manager. ##
+  
 ## Unity: Simple Effect Manager. ##
 
 ## Unity: Simple Animation Manager. ##
 
-## Unity: Simple Sound Manager. ##
-  
 ## Unity: Data Encryption ##
 
 ## License ##
