@@ -26,7 +26,6 @@ public class TestAssetScene : BaseScene
     public override IEnumerator OnEnterScene()
     {
         // Load resouce assets...
-        Table.Initailize();
         TableManager.Instance.LoadResourceTable();
         TableManager.Instance.LoadResourceString(SystemLanguage.Korean);
         SoundManager.Instance.LoadResource();

@@ -1,8 +1,22 @@
 namespace Devarc
 {
-	public partial class Table
+    public class _LString_TABLE : TableData<LString, _LString, string>
+    {
+        public _LString_TABLE()
+        {
+            TableManager.Instance.registerLoadStringCallback("LString", (textAsset) =>
+            {
+                LoadJson(textAsset.text);
+            });
+            TableManager.Instance.registerUnloadStringCallback("LString", () =>
+            {
+                Clear();
+            });
+        }
+    }
+    public partial class Table
 	{
-		public static TableData<LString, _LString, string> LString = new TableData<LString, _LString, string>();
+		public static _LString_TABLE LString = new _LString_TABLE();
 	}
 
 	[System.Serializable]

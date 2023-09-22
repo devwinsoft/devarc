@@ -18,6 +18,13 @@ public class AppManager : MonoSingleton<AppManager>
 
     protected override void onAwake()
     {
+        // Initialize TableManager
+        Table.Initailize();
+        TableManager.Instance.OnError += (errorType, args) =>
+        {
+            Debug.Log(errorType);
+        };
+
         // Init debugging.
         Debugging.OnAssert += (condition, message) => { Debug.Assert(condition, message); };
         Debugging.OnLog += (message) => { Debug.Log(message); };
