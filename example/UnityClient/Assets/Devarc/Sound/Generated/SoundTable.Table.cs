@@ -1,31 +1,98 @@
+using System;
+using System.IO;
+using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+using MessagePack;
 namespace Devarc
 {
 	public class _SOUND_BUNDLE_TABLE : TableData<SOUND_BUNDLE, _SOUND_BUNDLE, int>
 	{
 		public _SOUND_BUNDLE_TABLE()
 		{
-			TableManager.Instance.registerLoadTableCallback("SOUND_BUNDLE", (textAsset) =>
+			TableManager.RegisterLoadTableBin("SOUND_BUNDLE", (data, options) =>
+			{
+				LoadBin(data, options);
+			});
+			TableManager.RegisterLoadTableJson("SOUND_BUNDLE", (textAsset) =>
 			{
 				LoadJson(textAsset.text);
 			});
-			TableManager.Instance.registerUnloadTableCallback("SOUND_BUNDLE", () =>
+			TableManager.RegisterSaveTable("SOUND_BUNDLE", (textAsset, isBundle, lang) =>
+			{
+				SaveBin(textAsset, isBundle, lang);
+			});
+			TableManager.RegisterUnloadTable("SOUND_BUNDLE", () =>
 			{
 				Clear();
 			});
+		}
+		public void LoadBin(byte[] data, MessagePackSerializerOptions options)
+		{
+			InitLoad(data);
+			int count = ReadInt();
+			for (int i = 0; i < count; i++)
+			{
+				int size = ReadInt();
+				var temp = ReadBytes(size);
+				var obj = MessagePackSerializer.Deserialize<SOUND_BUNDLE>(temp, options);
+				Add(obj.GetKey(), obj);
+			}
+		}
+		public void SaveBin(TextAsset textAsset, bool isBundle, SystemLanguage lang)
+		{
+#if UNITY_EDITOR
+			Clear();
+			LoadJson(textAsset.text);
+			var saveAsset = new TextAsset(Convert.ToBase64String(GetBytes()));
+			var filePath = Path.Combine(DEV_Settings.GetTablePath(isBundle, TableFormatType.BIN), "SOUND_BUNDLE.asset");
+			AssetDatabase.CreateAsset(saveAsset, filePath);
+#endif
 		}
 	}
 	public class _SOUND_RESOURCE_TABLE : TableData<SOUND_RESOURCE, _SOUND_RESOURCE, int>
 	{
 		public _SOUND_RESOURCE_TABLE()
 		{
-			TableManager.Instance.registerLoadTableCallback("SOUND_RESOURCE", (textAsset) =>
+			TableManager.RegisterLoadTableBin("SOUND_RESOURCE", (data, options) =>
+			{
+				LoadBin(data, options);
+			});
+			TableManager.RegisterLoadTableJson("SOUND_RESOURCE", (textAsset) =>
 			{
 				LoadJson(textAsset.text);
 			});
-			TableManager.Instance.registerUnloadTableCallback("SOUND_RESOURCE", () =>
+			TableManager.RegisterSaveTable("SOUND_RESOURCE", (textAsset, isBundle, lang) =>
+			{
+				SaveBin(textAsset, isBundle, lang);
+			});
+			TableManager.RegisterUnloadTable("SOUND_RESOURCE", () =>
 			{
 				Clear();
 			});
+		}
+		public void LoadBin(byte[] data, MessagePackSerializerOptions options)
+		{
+			InitLoad(data);
+			int count = ReadInt();
+			for (int i = 0; i < count; i++)
+			{
+				int size = ReadInt();
+				var temp = ReadBytes(size);
+				var obj = MessagePackSerializer.Deserialize<SOUND_RESOURCE>(temp, options);
+				Add(obj.GetKey(), obj);
+			}
+		}
+		public void SaveBin(TextAsset textAsset, bool isBundle, SystemLanguage lang)
+		{
+#if UNITY_EDITOR
+			Clear();
+			LoadJson(textAsset.text);
+			var saveAsset = new TextAsset(Convert.ToBase64String(GetBytes()));
+			var filePath = Path.Combine(DEV_Settings.GetTablePath(isBundle, TableFormatType.BIN), "SOUND_RESOURCE.asset");
+			AssetDatabase.CreateAsset(saveAsset, filePath);
+#endif
 		}
 	}
 	public partial class Table

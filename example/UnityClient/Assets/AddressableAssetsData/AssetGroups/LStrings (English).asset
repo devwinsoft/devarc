@@ -17,11 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 27ac5aa438b3bc249934e4630b27832c
   m_SerializeEntries:
-  - m_GUID: d59c32eb4f1f5604fb95ae997e9019ba
-    m_Address: Assets/Example/Bundles/Strings/English
+  - m_GUID: 10c7ffb5e310ac945b05c8ffd5d53764
+    m_Address: Assets/Example/Bundles/LStrings/bin/English
     m_ReadOnly: 0
     m_SerializedLabels:
-    - lstring
+    - lstring-bin
     - English
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0

@@ -30,8 +30,7 @@ namespace Devarc
             {
                 if (mInstance == null)
                 {
-                    GameObject obj = new GameObject(typeof(T).Name);
-                    mInstance = obj.AddComponent<T>();
+                    return Create();
                 }
                 return mInstance;
             }
@@ -42,8 +41,24 @@ namespace Devarc
         static T mInstance;
         bool mInitialized = false;
 
+        public static T Create()
+        {
+            if (IsCreated())
+            {
+                return mInstance;
+            }
+            GameObject obj = new GameObject(typeof(T).Name);
+            mInstance = obj.AddComponent<T>();
+            return mInstance;
+        }
+
         public static T Create(string resourcePath)
         {
+            if (IsCreated())
+            {
+                return mInstance;
+            }
+
             var prefab = Resources.Load<GameObject>(resourcePath);
             if (prefab == null)
             {

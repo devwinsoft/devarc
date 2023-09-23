@@ -9,7 +9,8 @@ public class TestAssetScene : BaseScene
     public CHARACTER_ID charID;
     public SKILL_ID skillID;
     public SOUND_ID soundID;
-    public EffectPlayData effectData;
+    public EffectPlayData effectData1;
+    public EffectPlayData effectData2;
     public STRING_ID stringID;
 
 
@@ -31,8 +32,13 @@ public class TestAssetScene : BaseScene
         SoundManager.Instance.LoadResource();
 
         // Load bundle assets...
-        yield return TableManager.Instance.LoadBundleTable("table");
-        yield return TableManager.Instance.LoadBundleString("lstring", SystemLanguage.Korean);
+#if UNITY_EDITOR
+        yield return TableManager.Instance.LoadBundleTable("table-json", TableFormatType.JSON);
+        yield return TableManager.Instance.LoadBundleString("lstring-json", TableFormatType.JSON, SystemLanguage.Korean);
+#else
+        yield return TableManager.Instance.LoadBundleTable("table-bin", TableFormatType.BIN);
+        yield return TableManager.Instance.LoadBundleString("lstring-bin", TableFormatType.JSON, SystemLanguage.Korean);
+#endif
     }
 
 
@@ -44,8 +50,13 @@ public class TestAssetScene : BaseScene
         SoundManager.Instance.UnloadResource();
 
         // Unload bundle assets...
-        TableManager.Instance.UnloadBundleString("lstring");
-        TableManager.Instance.UnloadBundleTable("table");
+#if UNITY_EDITOR
+        TableManager.Instance.UnloadBundleTable("table-json");
+        TableManager.Instance.UnloadBundleString("lstring-json");
+#else
+        TableManager.Instance.UnloadBundleTable("table-bin");
+        TableManager.Instance.UnloadBundleString("lstring-bin");
+#endif
         EffectManager.Instance.UnloadBundle("effect");
         SoundManager.Instance.UnloadBundle("sound");
     }
@@ -56,11 +67,15 @@ public class TestAssetScene : BaseScene
         DownloadManager.Instance.BeginPatch();
     }
 
-    public void OnClick_PlayEffect()
+    public void OnClick_PlayEffect1()
     {
-        EffectManager.Instance.CreateEffect(effectData, Vector3.zero);
+        EffectManager.Instance.CreateEffect(effectData1, Vector3.zero);
     }
 
+    public void OnClick_PlayEffect2()
+    {
+        EffectManager.Instance.CreateEffect(effectData2, Vector3.zero);
+    }
 
     public void OnClick_PlaySound()
     {

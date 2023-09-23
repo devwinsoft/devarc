@@ -16,11 +16,17 @@ MonoBehaviour:
   defaultDirectory:
     bundlePath:
       data: vbKyEUOyC4ieDR3hJBEL4INabSQRsg==
-    builtinPath:
-      data: 
     resourcePath:
       data: vbKyEUOyC4ieDR3hJBELWxGy4oOdwxGy
     tableSubDirectory:
-      data: lw1AJBGy
+      data: 
     stringSubDirectory:
-      data: xkdDnYZa7rI=
+      data: 
+    tableBinDirectory:
+      data: lw1AJBGyC0CGWg==
+    stringBinDirectory:
+      data: xkdDnYZa7rILQIZa
+    tableJsonDirectory:
+      data: lw1AJBGyC/Cy4lo=
+    stringJsonDirectory:
+      data: xkdDnYZa7rIL8LLiWg==

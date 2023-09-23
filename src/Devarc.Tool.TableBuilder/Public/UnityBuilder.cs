@@ -20,6 +20,13 @@ namespace Devarc
 
             using (var sw = File.CreateText(tableCodePath))
             {
+                sw.WriteLine("using System;");
+                sw.WriteLine("using System.IO;");
+                sw.WriteLine("using UnityEngine;");
+                sw.WriteLine("#if UNITY_EDITOR");
+                sw.WriteLine("using UnityEditor;");
+                sw.WriteLine("#endif");
+                sw.WriteLine("using MessagePack;");
                 sw.WriteLine("namespace Devarc");
                 sw.WriteLine("{");
                 foreach (var info in mHeaderList)
@@ -30,14 +37,44 @@ namespace Devarc
                     sw.WriteLine("\t{");
                     sw.WriteLine($"\t\tpublic _{info.SheetName}_TABLE()");
                     sw.WriteLine("\t\t{");
-                    sw.WriteLine($"\t\t\tTableManager.Instance.registerLoadTableCallback(\"{info.SheetName}\", (textAsset) =>");
+                    sw.WriteLine($"\t\t\tTableManager.RegisterLoadTableBin(\"{info.SheetName}\", (data, options) =>");
+                    sw.WriteLine("\t\t\t{");
+                    sw.WriteLine("\t\t\t\tLoadBin(data, options);");
+                    sw.WriteLine("\t\t\t});");
+                    sw.WriteLine($"\t\t\tTableManager.RegisterLoadTableJson(\"{info.SheetName}\", (textAsset) =>");
                     sw.WriteLine("\t\t\t{");
                     sw.WriteLine("\t\t\t\tLoadJson(textAsset.text);");
                     sw.WriteLine("\t\t\t});");
-                    sw.WriteLine($"\t\t\tTableManager.Instance.registerUnloadTableCallback(\"{info.SheetName}\", () =>");
+                    sw.WriteLine($"\t\t\tTableManager.RegisterSaveTable(\"{info.SheetName}\", (textAsset, isBundle, lang) =>");
+                    sw.WriteLine("\t\t\t{");
+                    sw.WriteLine("\t\t\t\tSaveBin(textAsset, isBundle, lang);");
+                    sw.WriteLine("\t\t\t});");
+                    sw.WriteLine($"\t\t\tTableManager.RegisterUnloadTable(\"{info.SheetName}\", () =>");
                     sw.WriteLine("\t\t\t{");
                     sw.WriteLine("\t\t\t\tClear();");
                     sw.WriteLine("\t\t\t});");
+                    sw.WriteLine("\t\t}");
+                    sw.WriteLine("\t\tpublic void LoadBin(byte[] data, MessagePackSerializerOptions options)");
+                    sw.WriteLine("\t\t{");
+                    sw.WriteLine("\t\t\tInitLoad(data);");
+                    sw.WriteLine("\t\t\tint count = ReadInt();");
+                    sw.WriteLine("\t\t\tfor (int i = 0; i < count; i++)");
+                    sw.WriteLine("\t\t\t{");
+                    sw.WriteLine("\t\t\t\tint size = ReadInt();");
+                    sw.WriteLine("\t\t\t\tvar temp = ReadBytes(size);");
+                    sw.WriteLine($"\t\t\t\tvar obj = MessagePackSerializer.Deserialize<{info.SheetName}>(temp, options);");
+                    sw.WriteLine("\t\t\t\tAdd(obj.GetKey(), obj);");
+                    sw.WriteLine("\t\t\t}");
+                    sw.WriteLine("\t\t}");
+                    sw.WriteLine("\t\tpublic void SaveBin(TextAsset textAsset, bool isBundle, SystemLanguage lang)");
+                    sw.WriteLine("\t\t{");
+                    sw.WriteLine("#if UNITY_EDITOR");
+                    sw.WriteLine("\t\t\tClear();");
+                    sw.WriteLine("\t\t\tLoadJson(textAsset.text);");
+                    sw.WriteLine("\t\t\tvar saveAsset = new TextAsset(Convert.ToBase64String(GetBytes()));");
+                    sw.WriteLine($"\t\t\tvar filePath = Path.Combine(DEV_Settings.GetTablePath(isBundle, TableFormatType.BIN), \"{info.SheetName}.asset\");");
+                    sw.WriteLine("\t\t\tAssetDatabase.CreateAsset(saveAsset, filePath);");
+                    sw.WriteLine("#endif");
                     sw.WriteLine("\t\t}");
                     sw.WriteLine("\t}");
                 }
@@ -132,11 +169,11 @@ namespace Devarc
                     sw.WriteLine("\t\tpublic override void Reload()");
                     sw.WriteLine("\t\t{");
                     sw.WriteLine($"\t\t\tTable.{info.SheetName}.Clear();");
-                    sw.WriteLine($"\t\t\tforeach (var textAsset in AssetManager.FindAssets<TextAsset>(\"{info.SheetName}\", DEV_Settings.GetTable_BundlePath()))");
+                    sw.WriteLine($"\t\t\tforeach (var textAsset in AssetManager.FindAssets<TextAsset>(\"{info.SheetName}\", DEV_Settings.GetTablePath(true, TableFormatType.JSON)))");
                     sw.WriteLine("\t\t\t{");
                     sw.WriteLine($"\t\t\t\tTable.{info.SheetName}.LoadJson(textAsset.text);");
                     sw.WriteLine("\t\t\t}");
-                    sw.WriteLine($"\t\t\tforeach (var textAsset in AssetManager.FindAssets<TextAsset>(\"{info.SheetName}\", DEV_Settings.GetTable_ResourcePath()))");
+                    sw.WriteLine($"\t\t\tforeach (var textAsset in AssetManager.FindAssets<TextAsset>(\"{info.SheetName}\", DEV_Settings.GetTablePath(false, TableFormatType.JSON)))");
                     sw.WriteLine("\t\t\t{");
                     sw.WriteLine($"\t\t\t\tTable.{info.SheetName}.LoadJson(textAsset.text);");
                     sw.WriteLine("\t\t\t}");

@@ -1,17 +1,55 @@
+using System.IO;
+using UnityEngine;
+using System;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+using MessagePack;
+
 namespace Devarc
 {
     public class _LString_TABLE : TableData<LString, _LString, string>
     {
         public _LString_TABLE()
         {
-            TableManager.Instance.registerLoadStringCallback("LString", (textAsset) =>
+            TableManager.RegisterLoadTableBin("LString", (data, options) =>
+            {
+                LoadBin(data, options);
+            });
+            TableManager.RegisterLoadStringJson("LString", (textAsset) =>
             {
                 LoadJson(textAsset.text);
             });
-            TableManager.Instance.registerUnloadStringCallback("LString", () =>
+            TableManager.RegisterSaveString("LString", (textAsset, isBundle, lang) =>
+            {
+                SaveBin(textAsset, isBundle, lang);
+            });
+            TableManager.RegisterUnloadString("LString", () =>
             {
                 Clear();
             });
+        }
+        public void LoadBin(byte[] data, MessagePackSerializerOptions options)
+        {
+            InitLoad(data);
+            int count = ReadInt();
+            for (int i = 0; i < count; i++)
+            {
+                int size = ReadInt();
+                var temp = ReadBytes(size);
+                var obj = MessagePackSerializer.Deserialize<LString>(temp, options);
+                Add(obj.GetKey(), obj);
+            }
+        }
+        public void SaveBin(TextAsset textAsset, bool isBundle, SystemLanguage lang)
+        {
+#if UNITY_EDITOR
+            Clear();
+            LoadJson(textAsset.text);
+            var saveAsset = new TextAsset(Convert.ToBase64String(GetBytes()));
+            var filePath = Path.Combine(DEV_Settings.GetStringPath(lang, isBundle, TableFormatType.BIN), "LString.asset");
+            AssetDatabase.CreateAsset(saveAsset, filePath);
+#endif
         }
     }
     public partial class Table

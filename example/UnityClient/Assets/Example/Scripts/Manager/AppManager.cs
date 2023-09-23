@@ -19,7 +19,7 @@ public class AppManager : MonoSingleton<AppManager>
     protected override void onAwake()
     {
         // Initialize TableManager
-        Table.Initailize();
+        TableManager.Create();
         TableManager.Instance.OnError += (errorType, args) =>
         {
             Debug.Log(errorType);
@@ -33,12 +33,6 @@ public class AppManager : MonoSingleton<AppManager>
         Debugging.OnLogException += (ex) => { Debug.LogException(ex); };
 
         // Init network.
-        StaticCompositeResolver.Instance.Register(
-            MessagePack.Resolvers.GeneratedResolver.Instance,
-            MessagePack.Resolvers.StandardResolver.Instance,
-            MessagePack.Unity.UnityResolver.Instance
-        );
-
         mAuthNetwork = create<AuthNetwork>(transform);
         mAuthNetwork.InitProtocol("msgpack", "packet", StaticCompositeResolver.Instance);
 

@@ -17,11 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: a269bdcb1150f5741a41797d19d6faaf
   m_SerializeEntries:
-  - m_GUID: 0bcf231e336f65f4a81c0b321835ead4
-    m_Address: Assets/Example/Bundles/Strings/Chinese
+  - m_GUID: cb1b25abdfd14574db0320cbc63c158f
+    m_Address: Assets/Example/Bundles/LStrings/bin/Chinese
     m_ReadOnly: 0
     m_SerializedLabels:
-    - lstring
+    - lstring-bin
     - Chinese
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0

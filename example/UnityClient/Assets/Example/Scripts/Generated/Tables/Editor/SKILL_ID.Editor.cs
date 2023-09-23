@@ -27,11 +27,11 @@ namespace Devarc
 		public override void Reload()
 		{
 			Table.SKILL.Clear();
-			foreach (var textAsset in AssetManager.FindAssets<TextAsset>("SKILL", DEV_Settings.GetTable_BundlePath()))
+			foreach (var textAsset in AssetManager.FindAssets<TextAsset>("SKILL", DEV_Settings.GetTablePath(true, TableFormatType.JSON)))
 			{
 				Table.SKILL.LoadJson(textAsset.text);
 			}
-			foreach (var textAsset in AssetManager.FindAssets<TextAsset>("SKILL", DEV_Settings.GetTable_ResourcePath()))
+			foreach (var textAsset in AssetManager.FindAssets<TextAsset>("SKILL", DEV_Settings.GetTablePath(false, TableFormatType.JSON)))
 			{
 				Table.SKILL.LoadJson(textAsset.text);
 			}

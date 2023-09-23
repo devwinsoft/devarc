@@ -70,9 +70,9 @@ public class SimpleAnimator : MonoBehaviour
         set
         {
             mPlaySpeed = value;
-            if (mPlayDatas != null && mPlayDatas.Length > 0)
+            if (mAnimDatas != null && mAnimDatas.Length > 0)
             {
-                animator.speed = mPlaySpeed * mPlayDatas[mPlayIndex].Speed;
+                animator.speed = mPlaySpeed * mAnimDatas[mPlayIndex].Speed;
             }
         }
     }
@@ -82,9 +82,9 @@ public class SimpleAnimator : MonoBehaviour
     {
         get
         {
-            if (mPlayDatas == null)
+            if (mAnimDatas == null)
                 return false;
-            if (mPlayIndex < mPlayDatas.Length)
+            if (mPlayIndex < mAnimDatas.Length)
                 return true;
             return false;
         }
@@ -111,9 +111,9 @@ public class SimpleAnimator : MonoBehaviour
             if (mCompleted == false)
                 return false;
 
-            if (mPlayDatas != null && mPlayIndex < mPlayDatas.Length)
+            if (mAnimDatas != null && mPlayIndex < mAnimDatas.Length)
             {
-                AnimData playData = mPlayDatas[mPlayIndex];
+                AnimData playData = mAnimDatas[mPlayIndex];
                 if (playData.Repeat == ANIM_PLAY_COUNT.Loop)
                     return false;
             }
@@ -124,7 +124,7 @@ public class SimpleAnimator : MonoBehaviour
     bool mPaused = false;
 
     System.Action mCallback = null;
-    AnimData[] mPlayDatas;
+    AnimData[] mAnimDatas;
     string mCurrentAnimationName = string.Empty;
     int mPlayIndex;
     int mRepeatIndex;
@@ -178,9 +178,9 @@ public class SimpleAnimator : MonoBehaviour
         }
         else
         {
-            if (mPlayDatas != null && mPlayIndex < mPlayDatas.Length)
+            if (mAnimDatas != null && mPlayIndex < mAnimDatas.Length)
             {
-                animator.speed = mPlaySpeed * mPlayDatas[mPlayIndex].Speed;
+                animator.speed = mPlaySpeed * mAnimDatas[mPlayIndex].Speed;
             }
             else
             {
@@ -203,32 +203,27 @@ public class SimpleAnimator : MonoBehaviour
 
     public void PlayAnimation(SimpleAnimList _data)
     {
-        PlayAnimation(_data.list, mPlaySpeed, null);
+        PlayAnimation(_data, mPlaySpeed, null);
     }
 
-    public void PlayAnimation(AnimData[] _playDatas)
-    {
-        PlayAnimation(_playDatas, mPlaySpeed, null);
-    }
-
-    public void PlayAnimation(AnimData[] _playDatas, float _playSpeed)
+    public void PlayAnimation(SimpleAnimList _playDatas, float _playSpeed)
     {
         PlayAnimation(_playDatas, _playSpeed, 0, null);
     }
 
-    public void PlayAnimation(AnimData[] _playDatas, System.Action _callback)
+    public void PlayAnimation(SimpleAnimList _playDatas, System.Action _callback)
     {
         PlayAnimation(_playDatas, mPlaySpeed, 0, _callback);
     }
 
-    public void PlayAnimation(AnimData[] _playDatas, float _playSpeed, System.Action _callback)
+    public void PlayAnimation(SimpleAnimList _playDatas, float _playSpeed, System.Action _callback)
     {
         PlayAnimation(_playDatas, _playSpeed, 0, _callback);
     }
 
-    public void PlayAnimation(AnimData[] _playDatas, float _playSpeed, int _playIndex, System.Action _callback)
+    public void PlayAnimation(SimpleAnimList _playDatas, float _playSpeed, int _playIndex, System.Action _callback)
     {
-        if (_playDatas == null || _playDatas.Length == 0)
+        if (_playDatas.list == null || _playDatas.list.Length == 0)
         {
             //Debug.LogErrorFormat("[AnimController] Animation play data is empty.");
             if (mCallback != null)
@@ -245,7 +240,7 @@ public class SimpleAnimator : MonoBehaviour
             func.Invoke();
         }
 
-        mPlayDatas = _playDatas;
+        mAnimDatas = _playDatas.list;
         mCallback = _callback;
         mPlaySpeed = _playSpeed;
         playAnimation(_playIndex, 0);
@@ -253,7 +248,7 @@ public class SimpleAnimator : MonoBehaviour
 
     private bool playAnimation(int _playIndex, int _repeatIndex)
     {
-        if (mPlayDatas == null || _playIndex >= mPlayDatas.Length)
+        if (mAnimDatas == null || _playIndex >= mAnimDatas.Length)
         {
             mPlayIndex = 0;
             mRepeatIndex = 0;
@@ -263,7 +258,7 @@ public class SimpleAnimator : MonoBehaviour
         mCompleted = false;
         mPlayIndex = _playIndex;
         mRepeatIndex = _repeatIndex;
-        AnimData _playData = mPlayDatas[_playIndex];
+        AnimData _playData = mAnimDatas[_playIndex];
         if (_playData.Clip == null)
         {
             Debug.LogErrorFormat("[SimpleAnimator] Animation clip is null: index={0}", _playIndex);
@@ -303,12 +298,12 @@ public class SimpleAnimator : MonoBehaviour
     {
         float _deltaTime = Time.deltaTime;
 
-        if (mPlayDatas == null || mPlayIndex >= mPlayDatas.Length)
+        if (mAnimDatas == null || mPlayIndex >= mAnimDatas.Length)
         {
             return;
         }
 
-        AnimData playData = mPlayDatas[mPlayIndex];
+        AnimData playData = mAnimDatas[mPlayIndex];
         if (mCompleted == false)
         {
             // wait
@@ -321,7 +316,7 @@ public class SimpleAnimator : MonoBehaviour
         {
             playAnimation(mPlayIndex, mRepeatIndex + 1);
         }
-        else if (mPlayIndex < mPlayDatas.Length - 1)
+        else if (mPlayIndex < mAnimDatas.Length - 1)
         {
             playAnimation(mPlayIndex + 1, 0);
         }

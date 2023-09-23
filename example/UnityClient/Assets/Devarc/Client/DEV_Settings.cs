@@ -51,7 +51,7 @@ namespace Devarc
         }
 
 #if UNITY_EDITOR
-        [MenuItem("Tools/Devwin/Create setting file")]
+        [MenuItem("Tools/Devarc/Create setting file")]
         static void ShowEditor()
         {
             var instance = DEV_Settings.Instance;
@@ -67,8 +67,10 @@ namespace Devarc
         {
             public CString bundlePath;
             public CString resourcePath;
-            public CString tableSubDirectory;
-            public CString stringSubDirectory;
+            public CString tableBinDirectory;
+            public CString stringBinDirectory;
+            public CString tableJsonDirectory;
+            public CString stringJsonDirectory;
         }
         public RootPathData defaultDirectory = new RootPathData();
 
@@ -78,25 +80,53 @@ namespace Devarc
         }
 
 
-        public static string GetTable_BundlePath()
+        public static string GetTablePath(bool isBundle, TableFormatType formatType)
         {
-            return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.tableSubDirectory}";
-        }
-        public static string GetTable_ResourcePath()
-        {
-            return $"{Instance.defaultDirectory.resourcePath}/{Instance.defaultDirectory.tableSubDirectory}";
+            if (isBundle)
+            {
+                switch (formatType)
+                {
+                    case TableFormatType.BIN:
+                        return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.tableBinDirectory}";
+                    default:
+                        return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.tableJsonDirectory}";
+                }
+            }
+            else
+            {
+                switch (formatType)
+                {
+                    case TableFormatType.BIN:
+                        return $"{Instance.defaultDirectory.resourcePath}/{Instance.defaultDirectory.tableBinDirectory}";
+                    default:
+                        return $"{Instance.defaultDirectory.resourcePath}/{Instance.defaultDirectory.tableJsonDirectory}";
+                }
+            }
         }
 
 
-        public static string GetStringTablePath_Bundle()
+        public static string GetStringPath(SystemLanguage lang, bool isBundle, TableFormatType formatType)
         {
-            string subDir = Instance.editorLanguage.ToString();
-            return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.stringSubDirectory}/{subDir}";
-        }
-        public static string GetStringTablePath_Resource()
-        {
-            string subDir = Instance.editorLanguage.ToString();
-            return $"{Instance.defaultDirectory.resourcePath}/{Instance.defaultDirectory.stringSubDirectory}/{subDir}";
+            if (isBundle)
+            {
+                switch (formatType)
+                {
+                    case TableFormatType.BIN:
+                        return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.stringBinDirectory}/{lang}";
+                    default:
+                        return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.stringJsonDirectory}/{lang}";
+                }
+            }
+            else
+            {
+                switch (formatType)
+                {
+                    case TableFormatType.BIN:
+                        return $"{Instance.defaultDirectory.resourcePath}/{Instance.defaultDirectory.stringBinDirectory}/{lang}";
+                    default:
+                        return $"{Instance.defaultDirectory.resourcePath}/{Instance.defaultDirectory.stringJsonDirectory}/{lang}";
+                }
+            }
         }
 
         private void OnDestroy()

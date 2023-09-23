@@ -18,7 +18,7 @@ namespace Devarc
             get
             {
                 if (mParticle == null)
-                    mParticle = GetComponent<ParticleSystem>();
+                    mParticle = GetComponentInChildren<ParticleSystem>(true);
                 return mParticle;
             }
         }
@@ -91,10 +91,10 @@ namespace Devarc
                 if (mReaminTime <= 0f)
                     Remove();
             }
-            //if (particle.IsAlive(true) == false)
-            //{
-            //    Remove();
-            //}
+            else if (particle.IsAlive(true) == false)
+            {
+                Remove();
+            }
         }
     }
 }

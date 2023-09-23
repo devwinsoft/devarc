@@ -17,11 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 6c387f0384c3aa44bbe5bd0046dac0a9
   m_SerializeEntries:
-  - m_GUID: 5ba66999a8b189c4db001b3ee38001b4
-    m_Address: Assets/Example/Bundles/Strings/Japanese
+  - m_GUID: 442c5c10da1ae95428cf612a5201ed5a
+    m_Address: Assets/Example/Bundles/LStrings/bin/Japanese
     m_ReadOnly: 0
     m_SerializedLabels:
-    - lstring
+    - lstring-bin
     - Japanese
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0

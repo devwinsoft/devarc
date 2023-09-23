@@ -93,7 +93,6 @@ namespace Devarc
             return value;
         }
 
-
         string read_String()
         {
             short size = read_Int16();

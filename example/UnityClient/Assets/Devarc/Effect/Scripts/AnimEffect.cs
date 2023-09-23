@@ -55,7 +55,7 @@ namespace Devarc
         {
             Controller.animator.speed = mPlaySpeed;
             Controller.PlaySpeed = mPlaySpeed;
-            Controller.PlayAnimation(animDatas.list, () =>
+            Controller.PlayAnimation(animDatas, () =>
             {
                 Remove();
             });

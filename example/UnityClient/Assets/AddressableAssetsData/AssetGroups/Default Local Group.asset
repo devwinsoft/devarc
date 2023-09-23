@@ -17,11 +17,39 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 3f7eb0b0492a6754eb75a995cbfb3401
   m_SerializeEntries:
-  - m_GUID: 03085fa7d71aa9d45b8c6ed10db45362
-    m_Address: Assets/Example/Bundles/Tables
+  - m_GUID: 67f65d67f5adbf846b9c523a1581bafa
+    m_Address: Assets/Example/Bundles/Tables/json
     m_ReadOnly: 0
     m_SerializedLabels:
-    - table
+    - table-json
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0bcf231e336f65f4a81c0b321835ead4
+    m_Address: Assets/Example/Bundles/LStrings/json/Chinese
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lstring-json
+    - Chinese
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d59c32eb4f1f5604fb95ae997e9019ba
+    m_Address: Assets/Example/Bundles/LStrings/json/English
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lstring-json
+    - English
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ba66999a8b189c4db001b3ee38001b4
+    m_Address: Assets/Example/Bundles/LStrings/json/Japanese
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lstring-json
+    - Japanese
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9457d3c961f313a409ded7ef9812f666
+    m_Address: Assets/Example/Bundles/LStrings/json/Korean
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lstring-json
+    - Korean
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5ea220b076c175b4abe2b1c42f6d4daa, type: 2}

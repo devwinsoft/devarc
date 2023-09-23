@@ -1,0 +1,10 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!49 &4900000
+TextAsset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SOUND_BUNDLE
+  m_Script: AwAAACwAAACVzScRrFNLSUxMX0FUVEFDS7RTb3VuZHMvc25kX2V4cGxvc2lvbsLKP4AAACUAAACVzScSqlNLSUxMX0hFQUyvU291bmRzL3NuZF9oZWFswso/gAAALAAAAJXNJxOsVk9JQ0VfREFNQUdFtFNvdW5kcy9zbmRfZXhwbG9zaW9uwso/gAAA
