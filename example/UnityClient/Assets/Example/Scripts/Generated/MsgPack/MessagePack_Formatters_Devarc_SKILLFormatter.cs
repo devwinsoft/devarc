@@ -28,11 +28,13 @@ namespace MessagePack.Formatters.Devarc
             }
 
             global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(4);
+            writer.WriteArrayHeader(6);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.skill_id, options);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.skillName, options);
             writer.Write(value.level);
             writer.Write(value.power);
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.Account>(formatterResolver).Serialize(ref writer, value.account, options);
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<int[]>(formatterResolver).Serialize(ref writer, value.args, options);
         }
 
         public global::Devarc.SKILL Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -62,6 +64,12 @@ namespace MessagePack.Formatters.Devarc
                         break;
                     case 3:
                         ____result.power = reader.ReadInt32();
+                        break;
+                    case 4:
+                        ____result.account = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.Account>(formatterResolver).Deserialize(ref reader, options);
+                        break;
+                    case 5:
+                        ____result.args = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<int[]>(formatterResolver).Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();

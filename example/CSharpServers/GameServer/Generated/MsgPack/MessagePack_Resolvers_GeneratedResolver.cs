@@ -47,7 +47,7 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(7)
+            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(8)
             {
                 { typeof(global::Devarc.ErrorType), 0 },
                 { typeof(global::Devarc.GenderType), 1 },
@@ -55,7 +55,8 @@ namespace MessagePack.Resolvers
                 { typeof(global::Devarc.Account), 3 },
                 { typeof(global::Devarc.CHARACTER), 4 },
                 { typeof(global::Devarc.SKILL), 5 },
-                { typeof(global::Game2C.NotifyLogin), 6 },
+                { typeof(global::Devarc.SOUND), 6 },
+                { typeof(global::Game2C.NotifyLogin), 7 },
             };
         }
 
@@ -75,7 +76,8 @@ namespace MessagePack.Resolvers
                 case 3: return new MessagePack.Formatters.Devarc.AccountFormatter();
                 case 4: return new MessagePack.Formatters.Devarc.CHARACTERFormatter();
                 case 5: return new MessagePack.Formatters.Devarc.SKILLFormatter();
-                case 6: return new MessagePack.Formatters.Game2C.NotifyLoginFormatter();
+                case 6: return new MessagePack.Formatters.Devarc.SOUNDFormatter();
+                case 7: return new MessagePack.Formatters.Game2C.NotifyLoginFormatter();
                 default: return null;
             }
         }

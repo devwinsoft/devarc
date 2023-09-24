@@ -111,14 +111,7 @@ public partial class TableManager : MonoSingleton<TableManager>
         if (mLoadTableBinCallbacks.TryGetValue(GetClassName(textAsset.name), out callback))
         {
             var data = Convert.FromBase64String(textAsset.text);
-            try
-            {
-                callback.Invoke(data, options);
-            }
-            catch (Exception e)
-            {
-                Instance.OnError?.Invoke(TableErrorType.DATA, e.Message);
-            }
+            callback.Invoke(data, options);
         }
         else if (IsCreated())
         {
@@ -283,21 +276,28 @@ public partial class TableManager : MonoSingleton<TableManager>
         yield return handle;
         if (handle.IsValid())
         {
-            switch (formatType)
+            try
             {
-                case TableFormatType.BIN:
-                    var options = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);
-                    foreach (var textAsset in handle.Result)
-                    {
-                        invokeLoadTableBin(textAsset, options);
-                    }
-                    break;
-                default:
-                    foreach (var textAsset in handle.Result)
-                    {
-                        invokeLoadTableJson(textAsset);
-                    }
-                    break;
+                switch (formatType)
+                {
+                    case TableFormatType.BIN:
+                        var options = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);
+                        foreach (var textAsset in handle.Result)
+                        {
+                            invokeLoadTableBin(textAsset, options);
+                        }
+                        break;
+                    default:
+                        foreach (var textAsset in handle.Result)
+                        {
+                            invokeLoadTableJson(textAsset);
+                        }
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(TableErrorType.DATA, addressKey);
             }
         }
         else
@@ -329,29 +329,28 @@ public partial class TableManager : MonoSingleton<TableManager>
         yield return handle;
         if (handle.IsValid())
         {
-            switch (formatType)
+            try
             {
-                case TableFormatType.BIN:
-                    if (StaticCompositeResolver.Instance.GetFormatter<GeneratedResolver>() == null)
-                    {
-                        StaticCompositeResolver.Instance.Register(
-                            GeneratedResolver.Instance,
-                            StandardResolver.Instance,
-                            MessagePack.Unity.UnityResolver.Instance
-                        );
-                    }
-                    var options = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);
-                    foreach (var textAsset in handle.Result)
-                    {
-                        invokeLoadStringBin(textAsset, options);
-                    }
-                    break;
-                default:
-                    foreach (var textAsset in handle.Result)
-                    {
-                        invokeLoadStringJson(textAsset);
-                    }
-                    break;
+                switch (formatType)
+                {
+                    case TableFormatType.BIN:
+                        var options = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);
+                        foreach (var textAsset in handle.Result)
+                        {
+                            invokeLoadStringBin(textAsset, options);
+                        }
+                        break;
+                    default:
+                        foreach (var textAsset in handle.Result)
+                        {
+                            invokeLoadStringJson(textAsset);
+                        }
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(TableErrorType.DATA, addressKey);
             }
         }
         else

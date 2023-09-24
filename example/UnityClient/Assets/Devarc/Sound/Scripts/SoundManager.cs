@@ -65,7 +65,6 @@ public class SoundManager : MonoSingleton<SoundManager>
     {
     }
 
-
     public void LoadResource(string key = null)
     {
         foreach (var data in Table.SOUND_RESOURCE.List)

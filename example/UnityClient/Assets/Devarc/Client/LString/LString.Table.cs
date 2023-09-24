@@ -12,7 +12,7 @@ namespace Devarc
     {
         public _LString_TABLE()
         {
-            TableManager.RegisterLoadTableBin("LString", (data, options) =>
+            TableManager.RegisterLoadStringBin("LString", (data, options) =>
             {
                 LoadBin(data, options);
             });

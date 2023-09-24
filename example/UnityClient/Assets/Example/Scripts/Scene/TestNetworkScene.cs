@@ -24,13 +24,10 @@ public class TestNetworkScene : BaseScene
 
     public override IEnumerator OnEnterScene()
     {
-        Debug.Log("TestNetworkScene::OnEnterScene");
-
-        AppManager.authNetwork.InitConnection(domains.captionText.text, 3000);
-
-
-
         yield return null;
+       
+        Debug.Log("TestNetworkScene::OnEnterScene");
+        AppManager.authNetwork.InitConnection(domains.captionText.text, 3000);
     }
 
 

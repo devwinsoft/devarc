@@ -32,11 +32,11 @@ namespace Devarc
 		{
 			InitLoad(data);
 			int count = ReadInt();
-			for (int i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
 			{
 				int size = ReadInt();
 				var temp = ReadBytes(size);
-				var obj = MessagePackSerializer.Deserialize<SOUND_BUNDLE>(temp, options);
+                var obj = MessagePackSerializer.Deserialize<SOUND_BUNDLE>(temp, options);
 				Add(obj.GetKey(), obj);
 			}
 		}

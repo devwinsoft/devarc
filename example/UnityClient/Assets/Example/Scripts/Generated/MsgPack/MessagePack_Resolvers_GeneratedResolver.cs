@@ -47,7 +47,7 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(9)
+            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(12)
             {
                 { typeof(global::Devarc.ErrorType), 0 },
                 { typeof(global::Devarc.GenderType), 1 },
@@ -56,8 +56,11 @@ namespace MessagePack.Resolvers
                 { typeof(global::C2Game.RequestLogin), 4 },
                 { typeof(global::Devarc.Account), 5 },
                 { typeof(global::Devarc.CHARACTER), 6 },
-                { typeof(global::Devarc.SKILL), 7 },
-                { typeof(global::Game2C.NotifyLogin), 8 },
+                { typeof(global::Devarc.LString), 7 },
+                { typeof(global::Devarc.SKILL), 8 },
+                { typeof(global::Devarc.SOUND_BUNDLE), 9 },
+                { typeof(global::Devarc.SOUND_RESOURCE), 10 },
+                { typeof(global::Game2C.NotifyLogin), 11 },
             };
         }
 
@@ -78,8 +81,11 @@ namespace MessagePack.Resolvers
                 case 4: return new MessagePack.Formatters.C2Game.RequestLoginFormatter();
                 case 5: return new MessagePack.Formatters.Devarc.AccountFormatter();
                 case 6: return new MessagePack.Formatters.Devarc.CHARACTERFormatter();
-                case 7: return new MessagePack.Formatters.Devarc.SKILLFormatter();
-                case 8: return new MessagePack.Formatters.Game2C.NotifyLoginFormatter();
+                case 7: return new MessagePack.Formatters.Devarc.LStringFormatter();
+                case 8: return new MessagePack.Formatters.Devarc.SKILLFormatter();
+                case 9: return new MessagePack.Formatters.Devarc.SOUND_BUNDLEFormatter();
+                case 10: return new MessagePack.Formatters.Devarc.SOUND_RESOURCEFormatter();
+                case 11: return new MessagePack.Formatters.Game2C.NotifyLoginFormatter();
                 default: return null;
             }
         }

@@ -72,15 +72,30 @@ public class AppManager : MonoSingleton<AppManager>
     {
 #if UNITY_EDITOR
         yield return TableManager.Instance.LoadBundleTable("table-json", TableFormatType.JSON);
-        yield return TableManager.Instance.LoadBundleString("lstring-json", TableFormatType.JSON, SystemLanguage.Korean);
+        yield return TableManager.Instance.LoadBundleString("lstring-json", TableFormatType.JSON, SystemLanguage.English);
 #else
         yield return TableManager.Instance.LoadBundleTable("table-bin", TableFormatType.BIN);
-        yield return TableManager.Instance.LoadBundleString("lstring-bin", TableFormatType.JSON, SystemLanguage.Korean);
+        yield return TableManager.Instance.LoadBundleString("lstring-bin", TableFormatType.BIN, SystemLanguage.English);
 #endif
 
         yield return EffectManager.Instance.LoadBundle("effect");
         yield return SoundManager.Instance.LoadBundle("sound");
-        //yield return SoundManager.Instance.LoadBundleSounds("voice", SystemLanguage.Korean);
+        //yield return SoundManager.Instance.LoadBundleSounds("voice", SystemLanguage.English);
+
+        foreach (var data in Table.CHARACTER.List)
+        {
+            Debug.Log(JsonUtility.ToJson(data));
+        }
+
+        foreach (var data in Table.SKILL.List)
+        {
+            Debug.Log(JsonUtility.ToJson(data));
+        }
+
+        foreach (var data in Table.SOUND_BUNDLE.List)
+        {
+            Debug.Log(JsonUtility.ToJson(data));
+        }
     }
 
 

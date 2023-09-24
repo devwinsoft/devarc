@@ -16,10 +16,10 @@
 
 namespace MessagePack.Formatters.Devarc
 {
-    public sealed class SKILLFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Devarc.SKILL>
+    public sealed class SOUNDFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Devarc.SOUND>
     {
 
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Devarc.SKILL value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Devarc.SOUND value, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (value == null)
             {
@@ -28,16 +28,15 @@ namespace MessagePack.Formatters.Devarc
             }
 
             global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(6);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.skill_id, options);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.skillName, options);
-            writer.Write(value.level);
-            writer.Write(value.power);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.Account>(formatterResolver).Serialize(ref writer, value.account, options);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<int[]>(formatterResolver).Serialize(ref writer, value.args, options);
+            writer.WriteArrayHeader(5);
+            writer.Write(value.index);
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.sound_id, options);
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.path, options);
+            writer.Write(value.loop);
+            writer.Write(value.volume);
         }
 
-        public global::Devarc.SKILL Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Devarc.SOUND Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -47,29 +46,26 @@ namespace MessagePack.Formatters.Devarc
             options.Security.DepthStep(ref reader);
             global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var ____result = new global::Devarc.SKILL();
+            var ____result = new global::Devarc.SOUND();
 
             for (int i = 0; i < length; i++)
             {
                 switch (i)
                 {
                     case 0:
-                        ____result.skill_id = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                        ____result.index = reader.ReadInt32();
                         break;
                     case 1:
-                        ____result.skillName = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                        ____result.sound_id = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
                         break;
                     case 2:
-                        ____result.level = reader.ReadInt32();
+                        ____result.path = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
                         break;
                     case 3:
-                        ____result.power = reader.ReadInt32();
+                        ____result.loop = reader.ReadBoolean();
                         break;
                     case 4:
-                        ____result.account = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.Account>(formatterResolver).Deserialize(ref reader, options);
-                        break;
-                    case 5:
-                        ____result.args = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<int[]>(formatterResolver).Deserialize(ref reader, options);
+                        ____result.volume = reader.ReadSingle();
                         break;
                     default:
                         reader.Skip();
