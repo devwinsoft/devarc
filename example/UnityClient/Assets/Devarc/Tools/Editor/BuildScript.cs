@@ -2,10 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using Devarc;
-using System.IO;
-using System;
-using System.Reflection;
 
 
 namespace Devarc
@@ -17,6 +13,7 @@ namespace Devarc
         {
             Table.Initailize();
             TableManager.SaveTable();
+            EditorUtility.DisplayDialog("Build binary tables", "Build completed.", "OK");
         }
     }
 }

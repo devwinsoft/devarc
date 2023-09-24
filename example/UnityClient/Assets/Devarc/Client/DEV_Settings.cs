@@ -68,8 +68,8 @@ namespace Devarc
             public CString bundlePath;
             public CString resourcePath;
             public CString tableBinDirectory;
-            public CString stringBinDirectory;
             public CString tableJsonDirectory;
+            public CString stringBinDirectory;
             public CString stringJsonDirectory;
         }
         public RootPathData defaultDirectory = new RootPathData();
