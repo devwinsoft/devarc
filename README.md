@@ -98,13 +98,16 @@ move /Y   *.sql    ..\Database\Tables\
 
 ## Unity: Asset Management ##
 
-#### Step 1: Create common tables and localizing table. ####
+#### Step 1: Configure DEV_Settings. ####
+![img](screenshot/example_settings.png)
+
+#### Step 2: Create common tables and localizing table. ####
 ![img](screenshot/example_lstring.png)
 
-#### Step 2: Edit addressable configuration. ####
+#### Step 3: Edit addressable configuration. ####
 ![img](screenshot/example_addressable.png)
 
-#### Step 3: Initialize TableManager. ####
+#### Step 4: Initialize TableManager. ####
 ```csharp
 TableManager.Create();
 TableManager.Instance.OnError += (errorType, args) =>
@@ -113,7 +116,7 @@ TableManager.Instance.OnError += (errorType, args) =>
 };
 ```
 
-#### Step 4: Initialize DownloadManager. ####
+#### Step 5: Initialize DownloadManager. ####
 ```csharp
 DownloadManager.Instance.AddToPatchList("effect");
 DownloadManager.Instance.AddToPatchList("sound");
@@ -134,7 +137,7 @@ DownloadManager.Instance.OnResult += () =>
 };
 ```
 
-#### Step 5: Script loading assets. ####
+#### Step 6: Script loading assets. ####
 ```csharp
 IEnumerator loadAssets()
 {
@@ -147,7 +150,7 @@ IEnumerator loadAssets()
 #endif
 }
 ```
-#### Step 6: Script unloading assets. ####
+#### Step 7: Script unloading assets. ####
 ```csharp
 void unloadAssets()
 {
@@ -157,8 +160,13 @@ void unloadAssets()
     SoundManager.Instance.UnloadResource();
 
     // Unload bundle assets...
-    TableManager.Instance.UnloadBundleString("lstring");
-    TableManager.Instance.UnloadBundleTable("table");
+#if UNITY_EDITOR
+    TableManager.Instance.UnloadBundleTable("table-json");
+    TableManager.Instance.UnloadBundleString("lstring-json");
+#else
+    TableManager.Instance.UnloadBundleTable("table-bin");
+    TableManager.Instance.UnloadBundleString("lstring-bin");
+#endif
     EffectManager.Instance.UnloadBundle("effect");
     SoundManager.Instance.UnloadBundle("sound");
 }
