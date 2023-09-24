@@ -157,7 +157,7 @@ IEnumerator loadAssets()
     yield return TableManager.Instance.LoadBundleString("lstring-json", TableFormatType.JSON, SystemLanguage.English);
 #else
     yield return TableManager.Instance.LoadBundleTable("table-bin", TableFormatType.BIN);
-    yield return TableManager.Instance.LoadBundleString("lstring-bin", TableFormatType.JSON, SystemLanguage.English);
+    yield return TableManager.Instance.LoadBundleString("lstring-bin", TableFormatType.BIN, SystemLanguage.English);
 #endif
     yield return EffectManager.Instance.LoadBundle("effect");
     yield return SoundManager.Instance.LoadBundle("sound");
