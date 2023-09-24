@@ -98,16 +98,29 @@ move /Y   *.sql    ..\Database\Tables\
 
 ## Unity: Asset Management ##
 
-#### Step 1: Create localizing table. ####
+#### Step 1: Create common tables and localizing table. ####
 ![img](screenshot/example_lstring.png)
 
 #### Step 2: Edit addressable configuration. ####
 ![img](screenshot/example_addressable.png)
 
-#### Step 3: Initialize DownloadManager. ####
+#### Step 3: Initialize TableManager. ####
+```csharp
+TableManager.Create();
+TableManager.Instance.OnError += (errorType, args) =>
+{
+    // error handling...
+};
+```
+
+#### Step 4: Initialize DownloadManager. ####
 ```csharp
 DownloadManager.Instance.AddToPatchList("effect");
 DownloadManager.Instance.AddToPatchList("sound");
+#if !UNITY_EDITOR
+DownloadManager.Instance.AddToPatchList("table-bin");
+DownloadManager.Instance.AddToPatchList("lstring-bin");
+#endif
 
 DownloadManager.Instance.OnPatch += (info) =>
 {
@@ -121,18 +134,20 @@ DownloadManager.Instance.OnResult += () =>
 };
 ```
 
-#### Step 4: Load assets. ####
+#### Step 5: Script loading assets. ####
 ```csharp
 IEnumerator loadAssets()
 {
-    yield return TableManager.Instance.LoadBundleTable("table");
-    yield return TableManager.Instance.LoadBundleString("lstring", SystemLanguage.Korean);
-
-    yield return EffectManager.Instance.LoadBundle("effect");
-    yield return SoundManager.Instance.LoadBundle("sound");
+#if UNITY_EDITOR
+        yield return TableManager.Instance.LoadBundleTable("table-json", TableFormatType.JSON);
+        yield return TableManager.Instance.LoadBundleString("lstring-json", TableFormatType.JSON, SystemLanguage.English);
+#else
+        yield return TableManager.Instance.LoadBundleTable("table-bin", TableFormatType.BIN);
+        yield return TableManager.Instance.LoadBundleString("lstring-bin", TableFormatType.JSON, SystemLanguage.English);
+#endif
 }
 ```
-#### Step 5: Unload assets. ####
+#### Step 6: Script unloading assets. ####
 ```csharp
 void unloadAssets()
 {
