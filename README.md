@@ -107,42 +107,44 @@ move /Y   *.sql    ..\Database\Tables\
 #### Step 3: Edit addressable configuration. ####
 ![img](screenshot/example_addressable.png)
 
-#### Step 4: Initialize TableManager. ####
+#### Step 4: Initialize managers. ####
 ```csharp
-TableManager.Create();
-TableManager.Instance.OnError += (errorType, args) =>
+void Awake()
 {
-    // Error handling...
-};
+    // Initialize TableManager.
+    TableManager.Create();
+    TableManager.Instance.OnError += (errorType, args) =>
+    {
+        // Error handling...
+    };
+
+    // Initialize DownloadManager.
+    #if !UNITY_EDITOR
+    DownloadManager.Instance.AddToPatchList("table-bin");
+    DownloadManager.Instance.AddToPatchList("lstring-bin");
+    #endif
+
+    DownloadManager.Instance.AddToPatchList("effect");
+    DownloadManager.Instance.AddToPatchList("sound");
+    
+    DownloadManager.Instance.OnPatch += (info) =>
+    {
+        DownloadManager.Instance.BeginDownload();
+    };
+    
+    DownloadManager.Instance.OnResult += () =>
+    {
+        // Load bundles...
+        StartCoroutine(loadAssets());
+    };
+    
+    DownloadManager.Instance.OnError += () =>
+    {
+        // Error handling...
+    };
 ```
 
-#### Step 5: Initialize DownloadManager. ####
-```csharp
-#if !UNITY_EDITOR
-DownloadManager.Instance.AddToPatchList("table-bin");
-DownloadManager.Instance.AddToPatchList("lstring-bin");
-#endif
-DownloadManager.Instance.AddToPatchList("effect");
-DownloadManager.Instance.AddToPatchList("sound");
-
-DownloadManager.Instance.OnPatch += (info) =>
-{
-    DownloadManager.Instance.BeginDownload();
-};
-
-DownloadManager.Instance.OnResult += () =>
-{
-    // Load bundles...
-    StartCoroutine(loadAssets());
-};
-
-DownloadManager.Instance.OnError += () =>
-{
-    // Error handling...
-};
-```
-
-#### Step 6: Script loading assets. ####
+#### Step 5: Script loading assets. ####
 ```csharp
 IEnumerator loadAssets()
 {
@@ -163,7 +165,7 @@ IEnumerator loadAssets()
     yield return SoundManager.Instance.LoadBundle("sound");
 }
 ```
-#### Step 7: Script unloading assets. ####
+#### Step 6: Script unloading assets. ####
 ```csharp
 void unloadAssets()
 {
