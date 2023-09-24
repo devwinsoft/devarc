@@ -51,6 +51,7 @@ namespace Devarc
             foreach (var name in removeList)
             {
                 mPrefabs.Remove(name);
+                mPool.Remove(name);
             }
         }
 

@@ -13,6 +13,7 @@ namespace Devarc
         {
             Table.Initailize();
             TableManager.SaveTable();
+            AssetDatabase.Refresh();
             EditorUtility.DisplayDialog("Build binary tables", "Build completed.", "OK");
         }
     }

@@ -39,6 +39,12 @@ namespace Devarc
         Dictionary<string, GameObject> mPrefabs = new Dictionary<string, GameObject>();
         Dictionary<string, List<T>> mPool = new Dictionary<string, List<T>>();
 
+
+        public void InitRoot(Transform root)
+        {
+            mRoot = root;
+        }
+
         public void Clear()
         {
             foreach (var list in mPool.Values)
@@ -53,16 +59,14 @@ namespace Devarc
             mPrefabs.Clear();
         }
 
-
-        public void InitRoot(Transform root)
+        public void Remove(string prefabName)
         {
-            mRoot = root;
+            mPool.Remove(prefabName);
         }
 
-
-        public T Pop(string fileName, Transform attachTr)
+        public T Pop(string prefabName, Transform attachTr)
         {
-            GameObject prefab = getPrefab(fileName);
+            GameObject prefab = getPrefab(prefabName);
             if (prefab == null)
             {
                 return null;
@@ -70,9 +74,9 @@ namespace Devarc
             return Pop(prefab, attachTr, prefab.transform.localPosition);
         }
 
-        public T Pop(string fileName, Transform attachTr, Vector3 localPos)
+        public T Pop(string prefabName, Transform attachTr, Vector3 localPos)
         {
-            GameObject prefab = getPrefab(fileName);
+            GameObject prefab = getPrefab(prefabName);
             if (prefab == null)
             {
                 return null;

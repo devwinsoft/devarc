@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using MessagePack.Resolvers;
 using Devarc;
-
+using System;
 
 public class AppManager : MonoSingleton<AppManager>
 {
@@ -18,21 +18,21 @@ public class AppManager : MonoSingleton<AppManager>
 
     protected override void onAwake()
     {
-        // Initialize TableManager
+        // Initialize TableManager,
         TableManager.Create();
         TableManager.Instance.OnError += (errorType, args) =>
         {
             Debug.Log(errorType);
         };
 
-        // Init debugging.
+        // Initialize Debugging.
         Debugging.OnAssert += (condition, message) => { Debug.Assert(condition, message); };
         Debugging.OnLog += (message) => { Debug.Log(message); };
         Debugging.OnLogWarning += (message) => { Debug.LogWarning(message); };
         Debugging.OnLogError += (message) => { Debug.LogError(message); };
         Debugging.OnLogException += (ex) => { Debug.LogException(ex); };
 
-        // Init network.
+        // Initialize network.
         mAuthNetwork = create<AuthNetwork>(transform);
         mAuthNetwork.InitProtocol("msgpack", "packet", StaticCompositeResolver.Instance);
 
@@ -40,9 +40,10 @@ public class AppManager : MonoSingleton<AppManager>
         mGameNetwork.InitProtocol("Game", StaticCompositeResolver.Instance);
 
 
-        // Init download manager.
+        // Initialize DownloadManager.
         DownloadManager.Instance.AddToPatchList("effect");
         DownloadManager.Instance.AddToPatchList("sound");
+
 
         DownloadManager.Instance.OnPatch += (info) =>
         {
@@ -57,7 +58,7 @@ public class AppManager : MonoSingleton<AppManager>
         DownloadManager.Instance.OnResult += () =>
         {
             Debug.Log($"Download completed.");
-            StartCoroutine(loadRemoteBundles());
+            StartCoroutine(LoadBundles());
         };
 
         DownloadManager.Instance.OnError += () =>
@@ -67,12 +68,34 @@ public class AppManager : MonoSingleton<AppManager>
     }
 
 
-    IEnumerator loadRemoteBundles()
+    public IEnumerator LoadBundles()
     {
-        EffectManager.Instance.Clear();
+#if UNITY_EDITOR
+        yield return TableManager.Instance.LoadBundleTable("table-json", TableFormatType.JSON);
+        yield return TableManager.Instance.LoadBundleString("lstring-json", TableFormatType.JSON, SystemLanguage.Korean);
+#else
+        yield return TableManager.Instance.LoadBundleTable("table-bin", TableFormatType.BIN);
+        yield return TableManager.Instance.LoadBundleString("lstring-bin", TableFormatType.JSON, SystemLanguage.Korean);
+#endif
+
         yield return EffectManager.Instance.LoadBundle("effect");
         yield return SoundManager.Instance.LoadBundle("sound");
-        //yield return SoundManager.Instance.LoadBundleSounds("voice", lang);
+        //yield return SoundManager.Instance.LoadBundleSounds("voice", SystemLanguage.Korean);
+    }
+
+
+    public void UnloadBundles()
+    {
+#if UNITY_EDITOR
+        TableManager.Instance.UnloadBundleTable("table-json");
+        TableManager.Instance.UnloadBundleString("lstring-json");
+#else
+        TableManager.Instance.UnloadBundleTable("table-bin");
+        TableManager.Instance.UnloadBundleString("lstring-bin");
+#endif
+
+        EffectManager.Instance.UnloadBundle("effect");
+        SoundManager.Instance.UnloadBundle("sound");
     }
 
 

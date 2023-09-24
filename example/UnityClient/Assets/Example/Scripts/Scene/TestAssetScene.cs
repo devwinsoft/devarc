@@ -26,19 +26,12 @@ public class TestAssetScene : BaseScene
 
     public override IEnumerator OnEnterScene()
     {
+        yield return null;
+
         // Load resouce assets...
         TableManager.Instance.LoadResourceTable();
         TableManager.Instance.LoadResourceString(SystemLanguage.Korean);
         SoundManager.Instance.LoadResource();
-
-        // Load bundle assets...
-#if UNITY_EDITOR
-        yield return TableManager.Instance.LoadBundleTable("table-json", TableFormatType.JSON);
-        yield return TableManager.Instance.LoadBundleString("lstring-json", TableFormatType.JSON, SystemLanguage.Korean);
-#else
-        yield return TableManager.Instance.LoadBundleTable("table-bin", TableFormatType.BIN);
-        yield return TableManager.Instance.LoadBundleString("lstring-bin", TableFormatType.JSON, SystemLanguage.Korean);
-#endif
     }
 
 
@@ -50,15 +43,7 @@ public class TestAssetScene : BaseScene
         SoundManager.Instance.UnloadResource();
 
         // Unload bundle assets...
-#if UNITY_EDITOR
-        TableManager.Instance.UnloadBundleTable("table-json");
-        TableManager.Instance.UnloadBundleString("lstring-json");
-#else
-        TableManager.Instance.UnloadBundleTable("table-bin");
-        TableManager.Instance.UnloadBundleString("lstring-bin");
-#endif
-        EffectManager.Instance.UnloadBundle("effect");
-        SoundManager.Instance.UnloadBundle("sound");
+        AppManager.Instance.UnloadBundles();
     }
 
 
