@@ -112,7 +112,7 @@ move /Y   *.sql    ..\Database\Tables\
 TableManager.Create();
 TableManager.Instance.OnError += (errorType, args) =>
 {
-    // error handling...
+    // Error handling...
 };
 ```
 
@@ -134,6 +134,11 @@ DownloadManager.Instance.OnResult += () =>
 {
     // Load bundles...
     StartCoroutine(loadAssets());
+};
+
+DownloadManager.Instance.OnError += () =>
+{
+    // Error handling...
 };
 ```
 
