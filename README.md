@@ -146,12 +146,18 @@ DownloadManager.Instance.OnError += () =>
 ```csharp
 IEnumerator loadAssets()
 {
+    // Load resouce assets...
+    TableManager.Instance.LoadResourceTable();
+    TableManager.Instance.LoadResourceString(SystemLanguage.English);
+    SoundManager.Instance.LoadResource();
+
+    // Load bundle assets...
 #if UNITY_EDITOR
-        yield return TableManager.Instance.LoadBundleTable("table-json", TableFormatType.JSON);
-        yield return TableManager.Instance.LoadBundleString("lstring-json", TableFormatType.JSON, SystemLanguage.English);
+    yield return TableManager.Instance.LoadBundleTable("table-json", TableFormatType.JSON);
+    yield return TableManager.Instance.LoadBundleString("lstring-json", TableFormatType.JSON, SystemLanguage.English);
 #else
-        yield return TableManager.Instance.LoadBundleTable("table-bin", TableFormatType.BIN);
-        yield return TableManager.Instance.LoadBundleString("lstring-bin", TableFormatType.JSON, SystemLanguage.English);
+    yield return TableManager.Instance.LoadBundleTable("table-bin", TableFormatType.BIN);
+    yield return TableManager.Instance.LoadBundleString("lstring-bin", TableFormatType.JSON, SystemLanguage.English);
 #endif
 }
 ```
