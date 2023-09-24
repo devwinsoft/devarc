@@ -118,12 +118,12 @@ TableManager.Instance.OnError += (errorType, args) =>
 
 #### Step 5: Initialize DownloadManager. ####
 ```csharp
-DownloadManager.Instance.AddToPatchList("effect");
-DownloadManager.Instance.AddToPatchList("sound");
 #if !UNITY_EDITOR
 DownloadManager.Instance.AddToPatchList("table-bin");
 DownloadManager.Instance.AddToPatchList("lstring-bin");
 #endif
+DownloadManager.Instance.AddToPatchList("effect");
+DownloadManager.Instance.AddToPatchList("sound");
 
 DownloadManager.Instance.OnPatch += (info) =>
 {
@@ -159,6 +159,8 @@ IEnumerator loadAssets()
     yield return TableManager.Instance.LoadBundleTable("table-bin", TableFormatType.BIN);
     yield return TableManager.Instance.LoadBundleString("lstring-bin", TableFormatType.JSON, SystemLanguage.English);
 #endif
+    yield return EffectManager.Instance.LoadBundle("effect");
+    yield return SoundManager.Instance.LoadBundle("sound");
 }
 ```
 #### Step 7: Script unloading assets. ####
