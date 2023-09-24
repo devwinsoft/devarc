@@ -142,6 +142,10 @@ void Awake()
     {
         // Error handling...
     };
+
+    // Begin patch process.
+    //DownloadManager.Instance.BeginPatch();
+}
 ```
 
 #### Step 5: Script loading assets. ####
