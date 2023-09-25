@@ -61,7 +61,7 @@ public partial class TableManager : MonoSingleton<TableManager>
 
     public static string GetClassName(string fileName)
     {
-        return Path.GetFileName(fileName.Split('@')[0]);
+        return Path.GetFileName(fileName.Split('@')[0]).ToLower();
     }
 
     public static void RegisterLoadTableBin(string tableName, CallbackLoadBin callback)

@@ -32,7 +32,7 @@ public class BundleSoundData : SoundData
     public override string path => data.path;
     public override float volume => data.volume;
     public override bool loop => data.loop;
-    public override bool isBundle => false;
+    public override bool isBundle => true;
 }
 
 public class ResourceSoundData : SoundData
@@ -159,8 +159,10 @@ public class SoundManager : MonoSingleton<SoundManager>
 
     void unRegister(string addressKey, bool isBundle)
     {
-        foreach (var list in mSoundDatas.Values)
+        List<string> removeKeys = new List<string>();
+        foreach (var temp in mSoundDatas)
         {
+            var list = temp.Value;
             for (int i = list.Count - 1; i >= 0; i--)
             {
                 var obj = list[i];
@@ -171,6 +173,14 @@ public class SoundManager : MonoSingleton<SoundManager>
 
                 list.RemoveAt(i);
             }
+            if (list.Count == 0)
+            {
+                removeKeys.Add(temp.Key);
+            }
+        }
+        foreach (var key in removeKeys)
+        {
+            mSoundDatas.Remove(key);
         }
     }
 

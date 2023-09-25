@@ -39,7 +39,7 @@ namespace Devarc
         public static bool IsCreated() => mInstance != null;
 
         static T mInstance;
-        bool mInitialized = false;
+        static bool mInitialized = false;
 
         public static T Create()
         {
@@ -81,7 +81,11 @@ namespace Devarc
         {
             DontDestroyOnLoad(gameObject);
             mInstance = this as T;
-            onAwake();
+            if(mInitialized == false)
+            {
+                onAwake();
+                mInitialized = true;
+            }
         }
 
         private void OnDestroy()
@@ -90,6 +94,7 @@ namespace Devarc
             if (mInstance == this)
             {
                 mInstance = null;
+                mInitialized = false;
             }
         }
 

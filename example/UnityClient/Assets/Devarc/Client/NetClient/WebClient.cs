@@ -5,14 +5,15 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Devarc;
 using MessagePack;
+using System.Net;
 
-//public class CertificateHandler_AcceptAll : CertificateHandler
-//{
-//    protected override bool ValidateCertificate(byte[] certificateData)
-//    {
-//        return true;
-//    }
-//}
+public class CertificateHandler_AcceptAll : CertificateHandler
+{
+    protected override bool ValidateCertificate(byte[] certificateData)
+    {
+        return true;
+    }
+}
 
 public abstract class WebClient : MonoBehaviour
 {
@@ -22,7 +23,6 @@ public abstract class WebClient : MonoBehaviour
         Post,
     }
     public delegate void RequestCallback<RES>(RES response, UnityWebRequest.Result errorType, string errorMsg);
-
 
     public string BaseURL => $"https://{mDomain}:{mPort}";
 
@@ -95,6 +95,7 @@ public abstract class WebClient : MonoBehaviour
                 {
                     var url = $"{BaseURL}/{mDirectory}?{mArgName}={sendData}";
                     www = UnityWebRequest.Get(url);
+                    www.certificateHandler = new CertificateHandler_AcceptAll();
                     Debug.Log($"Request Get: {url}");
                 }
                 break;
@@ -104,6 +105,7 @@ public abstract class WebClient : MonoBehaviour
                     form.AddField(mArgName, sendData);
 
                     www = UnityWebRequest.Post($"{BaseURL}/{mDirectory}", form);
+                    www.certificateHandler = new CertificateHandler_AcceptAll();
                     var url = $"{BaseURL}/{mDirectory}?{mArgName}={sendData}";
                     Debug.Log($"Request Post: {url}");
                 }
@@ -111,6 +113,7 @@ public abstract class WebClient : MonoBehaviour
         }
 
         yield return www.SendWebRequest();
+        www.certificateHandler.Dispose();
 
         if (www.result != UnityWebRequest.Result.Success)
         {
