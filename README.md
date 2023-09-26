@@ -18,7 +18,7 @@ Devarc is cross-platform development templates.
 
 #### Test Release ####
 - [Android version](http://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com/devarc.apk)
-- [WebGL version](http://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com/d/index.html)
+- [WebGL version](https://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com:3000/index.html)
 
 
 ## Install Client ##
