@@ -60,8 +60,6 @@ var bodyParser = require('body-parser');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 
-var mNextAccountID = '1';
-
 // Init session
 app.use(session(
     {
@@ -72,9 +70,10 @@ app.use(session(
         secret : 'Rs89I67YEA55cLMgi0t6oyr8568e6KtD',
         resave: false,
         saveUninitialized: true,
+        rolling : true,
         cookie: {
-            maxAge: 35999995385,
-            expires : new Date(Date.now() + 36000000000),
+            maxAge: 3600000000,
+            expires : new Date(Date.now() + 3600000000),
             //sameSite: "lax",
             secure: false
         }
@@ -200,11 +199,6 @@ C2Auth.on('RequestLogin', (obj, req, res) => {
                 else
                 {
                     var secret = 1 + Math.floor(2147483646 * Math.random());
-                    res.writeHead(200, {
-                        'Set-Cookie': `secret=${secret}`,
-                        'Content-Type': 'text/html; charset=utf-8',
-                    });
-    
                     req.session.login = true;
                     req.session.secret = secret;
                     req.session.save();
@@ -214,7 +208,7 @@ C2Auth.on('RequestLogin', (obj, req, res) => {
                     packet.secret = req.session.secret;
                 }
                 const encoded = Auth2C.pack(packet);
-                res.end(encoded);
+                res.send(encoded);
             });
     }
 });
@@ -232,11 +226,11 @@ C2Auth.on('RequestLogout', (obj, req, res) => {
                     packet.errorCode = Common.ErrorType.SUCCESS;
                 }
                 const encoded = Auth2C.pack(packet);
-                res.writeHead(200, {
-                    'Set-Cookie': `secret=0`,
-                    'Content-Type': 'text/html; charset=utf-8',
-                });
-                res.end(encoded);
+                // res.writeHead(200, {
+                //     'Set-Cookie': `secret=0`,
+                //     'Content-Type': 'text/html; charset=utf-8',
+                // });
+                res.send(encoded);
             });
     }
     else
@@ -269,11 +263,6 @@ C2Auth.on('RequestSignin', (obj, req, res) => {
                 else if (result.affectedRows > 0)
                 {
                     var secret = 1 + Math.floor(2147483646 * Math.random());
-                    res.writeHead(200, {
-                        'Set-Cookie': `secret=${secret}`,
-                        'Content-Type': 'text/html; charset=utf-8',
-                    });
-    
                     req.session.login = true;
                     req.session.secret = secret;
                     req.session.save();
