@@ -1,12 +1,13 @@
 CREATE TABLE `account` (
-  `account_id` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `account_type` enum('apple','google','guest') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `total_fail_count` int NOT NULL,
-  `today_fail_count` int NOT NULL,
-  `create_time` datetime NOT NULL,
-  `update_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`account_id`),
-  UNIQUE KEY `account_id_UNIQUE` (`account_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  `account_num` int NOT NULL AUTO_INCREMENT,
+  `account_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `account_type` enum('email','apple','google','guest') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `session_id` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `login_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`account_num`),
+  UNIQUE KEY `account_id_UNIQUE` (`account_id`),
+  UNIQUE KEY `account_num_UNIQUE` (`account_num`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
