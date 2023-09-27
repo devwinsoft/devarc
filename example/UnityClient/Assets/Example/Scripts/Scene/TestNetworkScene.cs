@@ -60,6 +60,27 @@ public class TestNetworkScene : BaseScene
     }
 
 
+    public void OnClick_RequestLoginout()
+    {
+        var request = new C2Auth.RequestLogout();
+
+        AppManager.authNetwork.InitConnection(domains.captionText.text, 3000);
+        AppManager.authNetwork.RequestLogout(request, (response, errorType, errorMsg) =>
+        {
+            switch (errorType)
+            {
+                case UnityWebRequest.Result.Success:
+                    Debug.Log(JsonUtility.ToJson(response));
+                    break;
+                default:
+                    Debug.LogError(errorMsg);
+                    break;
+            }
+        });
+    }
+
+
+
     public void OnClick_ConnectLogin()
     {
         if (AppManager.gameNetwork.IsConnected)

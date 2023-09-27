@@ -58,8 +58,9 @@ const app = express();
 var bodyParser = require('body-parser');
 //app.use(bodyParser.raw({type: 'multipart/form-data', limit : '2mb'}))
 app.use(express.urlencoded({ extended: false }));
+app.use(express.static('public'));
 
-var mNextSessionID = '1';
+var mNextAccountID = '1';
 
 // Init session
 app.use(session(
@@ -72,13 +73,15 @@ app.use(session(
         resave: false,
         saveUninitialized: true,
         cookie: {
-            maxAge: 60000,
+            maxAge: 35999995385,
+            expires : new Date(Date.now() + 36000000000),
             //sameSite: "lax",
             secure: false
-        }, genid: function(req) {
+        }
+        /*, genid: function(req) {
             var temp = mNextSessionID++ % 1000000;
             return temp.toString();
-        }
+        }*/
     }));
 
 // Init protocol.
@@ -88,9 +91,8 @@ const C2Auth = require('./Protocols/C2Auth.js');
 
 app.get('/', (req, res) =>
 {
-    res.send('This is AuthServer.');
+	res.sendfile("public/index.html");
 });
-
 
 /*
  * Google Login
@@ -101,7 +103,16 @@ app.get('/login', (req, res) => {
     url += `?client_id=${GOOGLE_CLIENT_ID}`
     url += `&redirect_uri=${GOOGLE_LOGIN_REDIRECT_URI}`
     url += '&response_type=code'
-    url += '&scope=email profile'    
+    url += '&scope=email profile'
+	res.redirect(url);
+});
+
+app.post('/login', (req, res) => {
+    let url = GOOGLE_AUTH_URI;
+    url += `?client_id=${GOOGLE_CLIENT_ID}`
+    url += `&redirect_uri=${GOOGLE_LOGIN_REDIRECT_URI}`
+    url += '&response_type=code'
+    url += '&scope=email profile'
 	res.redirect(url);
 });
 
@@ -119,16 +130,7 @@ app.get('/login/redirect', async (req, res) => {
     const resp2 = await axios.get(GOOGLE_USERINFO_URL, {
         headers: { Authorization: `Bearer ${resp.data.access_token}` }
     });
-    res.send('ok');
 });
-
-app.get('/signup/redirect', async (req, res) => {
-    const { code } = req.query;
-    console.log(`code: ${code}`);
-
-    res.json(resp.data);
-});
-
 
 /*
  * AuthServer API
@@ -165,28 +167,72 @@ app.post('/msgpack', (req, res) =>
 
 // Message Handlers...
 C2Auth.on('RequestLogin', (obj, req, res) => {
-    var password = cryptUtil.decrypt(obj.password);
-    var queryStr = `SELECT account_id FROM account WHERE account_id='${obj.accountID}' AND password=MD5('${password}');`;
-    mysqlConn.query(queryStr,
-        (err, rows, fields) => {
-            var result = new Auth2C.NotifyLogin(Common.ErrorType.UNKNOWN, '', 0);
-            if (err != null || rows.length == 0)
-            {
-                result.errorCode = Common.ErrorType.INVALID_PASSWORD;
-            }
-            else
-            {
-                req.session.secret = Math.floor(2147483647 * Math.random());
-                req.session.save();
+    if (req.session.login)
+    {
+        var packet = new Auth2C.NotifyLogin(Common.ErrorType.UNKNOWN, '', 0);
+        const encoded = Auth2C.pack(packet);
+        res.send(encoded);
+    }
+    else
+    {
+        var password = cryptUtil.decrypt(obj.password);
+        var queryStr = `UPDATE account SET session_id='${req.sessionID}', login_time=NOW() WHERE account_id='${obj.accountID}' AND password=MD5('${password}') LIMIT 1;`;
+        mysqlConn.query(queryStr,
+            (err, result) => {
+                var packet = new Auth2C.NotifyLogin(Common.ErrorType.UNKNOWN, '', 0);
+                if (result.affectedRows == 0)
+                {
+                    packet.errorCode = Common.ErrorType.INVALID_PASSWORD;
+                }
+                else
+                {
+                    var secret = 1 + Math.floor(2147483646 * Math.random());
+                    res.writeHead(200, {
+                        'Set-Cookie': `secret=${secret}`,
+                        'Content-Type': 'text/html; charset=utf-8',
+                    });
+    
+                    req.session.login = true;
+                    req.session.secret = secret;
+                    req.session.save();
+    
+                    packet.errorCode = Common.ErrorType.SUCCESS;
+                    packet.sessionID = req.sessionID;
+                    packet.secret = req.session.secret;
+                }
+                const encoded = Auth2C.pack(packet);
+                res.end(encoded);
+            });
+    }
+});
 
-                result.errorCode = Common.ErrorType.SUCCESS;
-                result.sessionID = req.sessionID;
-                result.secret = req.session.secret;
-            }
-            const encoded = Auth2C.pack(result);
-            res.send(encoded);
-            console.log(result);
-    });
+
+C2Auth.on('RequestLogout', (obj, req, res) => {
+    if (req.session.login)
+    {
+        var queryStr = `UPDATE account SET session_id='' WHERE session_id='${req.sessionID}' LIMIT 1;`;
+        mysqlConn.query(queryStr,
+            (err, result) => {
+                var packet = new Auth2C.NotifyLogout(Common.ErrorType.UNKNOWN);
+                if (result.affectedRows == 1)
+                {
+                    packet.errorCode = Common.ErrorType.SUCCESS;
+                }
+                const encoded = Auth2C.pack(packet);
+                res.writeHead(200, {
+                    'Set-Cookie': `secret=0`,
+                    'Content-Type': 'text/html; charset=utf-8',
+                });
+                res.end(encoded);
+            });
+    }
+    else
+    {
+        var packet = new Auth2C.NotifyLogout(Common.ErrorType.UNKNOWN);
+        const encoded = Auth2C.pack(packet);
+        res.send(encoded);
+    }
+    req.session.destroy();
 });
 
 
@@ -210,6 +256,6 @@ const serverOption = {
 const server = https.createServer(serverOption, app);
 server.listen(process.env.HTTP_PORT, () =>
 {
-    console.log(`Server running at http://localhost:${process.env.HTTP_PORT}/`);
+    console.log(`Server running at https://localhost:${process.env.HTTP_PORT}/`);
 });
 

@@ -32,8 +32,29 @@ class NotifyLogin
 	}
 }
 
+class NotifyLogout
+{
+	/**
+	 * @param {ErrorType} errorCode - ErrorType
+	 */
+	constructor(errorCode) {
+		this.errorCode = errorCode;
+	}
+	Init(packet) {
+		this.errorCode = packet[0];
+	}
+	ToArray() {
+		const data =
+		[
+			this.errorCode,
+		];
+		return data;
+	}
+}
+
 module.exports =
 { NotifyLogin
+, NotifyLogout
 }
 
 function createPacket(packetName, content)
@@ -43,6 +64,12 @@ function createPacket(packetName, content)
 	case 'NotifyLogin':
 		{
 			const obj = new NotifyLogin();
+			obj.Init(content);
+			return obj;
+		}
+	case 'NotifyLogout':
+		{
+			const obj = new NotifyLogout();
 			obj.Init(content);
 			return obj;
 		}

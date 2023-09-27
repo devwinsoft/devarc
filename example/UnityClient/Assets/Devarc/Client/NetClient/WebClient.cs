@@ -83,11 +83,6 @@ public abstract class WebClient : MonoBehaviour
     IEnumerator request<REQ, RES>(RequestType reqType, REQ req, RequestCallback<RES> callback)
     {
         var sendData = encodeBase64(req);
-        // Debugging...
-        {
-            var a = decodeBase64<REQ>(sendData);
-            Debug.LogWarning(JsonUtility.ToJson(a));
-        }
         UnityWebRequest www = null;
         switch (reqType)
         {

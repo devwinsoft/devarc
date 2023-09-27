@@ -47,16 +47,20 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(8)
+            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(12)
             {
                 { typeof(global::Devarc.ErrorType), 0 },
                 { typeof(global::Devarc.GenderType), 1 },
-                { typeof(global::C2Game.RequestLogin), 2 },
-                { typeof(global::Devarc.Account), 3 },
-                { typeof(global::Devarc.CHARACTER), 4 },
-                { typeof(global::Devarc.SKILL), 5 },
-                { typeof(global::Devarc.SOUND), 6 },
-                { typeof(global::Game2C.NotifyLogin), 7 },
+                { typeof(global::Auth2C.NotifyLogin), 2 },
+                { typeof(global::Auth2C.NotifyLogout), 3 },
+                { typeof(global::C2Auth.RequestLogin), 4 },
+                { typeof(global::C2Auth.RequestLogout), 5 },
+                { typeof(global::C2Game.RequestLogin), 6 },
+                { typeof(global::Devarc.Account), 7 },
+                { typeof(global::Devarc.CHARACTER), 8 },
+                { typeof(global::Devarc.SKILL), 9 },
+                { typeof(global::Devarc.SOUND), 10 },
+                { typeof(global::Game2C.NotifyLogin), 11 },
             };
         }
 
@@ -72,12 +76,16 @@ namespace MessagePack.Resolvers
             {
                 case 0: return new MessagePack.Formatters.Devarc.ErrorTypeFormatter();
                 case 1: return new MessagePack.Formatters.Devarc.GenderTypeFormatter();
-                case 2: return new MessagePack.Formatters.C2Game.RequestLoginFormatter();
-                case 3: return new MessagePack.Formatters.Devarc.AccountFormatter();
-                case 4: return new MessagePack.Formatters.Devarc.CHARACTERFormatter();
-                case 5: return new MessagePack.Formatters.Devarc.SKILLFormatter();
-                case 6: return new MessagePack.Formatters.Devarc.SOUNDFormatter();
-                case 7: return new MessagePack.Formatters.Game2C.NotifyLoginFormatter();
+                case 2: return new MessagePack.Formatters.Auth2C.NotifyLoginFormatter();
+                case 3: return new MessagePack.Formatters.Auth2C.NotifyLogoutFormatter();
+                case 4: return new MessagePack.Formatters.C2Auth.RequestLoginFormatter();
+                case 5: return new MessagePack.Formatters.C2Auth.RequestLogoutFormatter();
+                case 6: return new MessagePack.Formatters.C2Game.RequestLoginFormatter();
+                case 7: return new MessagePack.Formatters.Devarc.AccountFormatter();
+                case 8: return new MessagePack.Formatters.Devarc.CHARACTERFormatter();
+                case 9: return new MessagePack.Formatters.Devarc.SKILLFormatter();
+                case 10: return new MessagePack.Formatters.Devarc.SOUNDFormatter();
+                case 11: return new MessagePack.Formatters.Game2C.NotifyLoginFormatter();
                 default: return null;
             }
         }

@@ -52,11 +52,18 @@ public partial class TableManager : MonoSingleton<TableManager>
     protected override void onAwake()
     {
         Table.Initailize();
+#if UNITY_EDITOR
         StaticCompositeResolver.Instance.Register(
-            MessagePack.Resolvers.GeneratedResolver.Instance,
-            MessagePack.Resolvers.StandardResolver.Instance,
+            StandardResolver.Instance,
             MessagePack.Unity.UnityResolver.Instance
         );
+#else
+        StaticCompositeResolver.Instance.Register(
+            GeneratedResolver.Instance,
+            StandardResolver.Instance,
+            MessagePack.Unity.UnityResolver.Instance
+        );
+#endif
     }
 
     public static string GetClassName(string fileName)

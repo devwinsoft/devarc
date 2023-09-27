@@ -10,7 +10,7 @@ namespace Devarc
 {
     public class SocketClient : MonoBehaviour
     {
-        public string ConnString => $"ws://{mDomain}:{mPort}/{mDirectory}";
+        public string ConnString => $"wss://{mDomain}:{mPort}/{mDirectory}";
       
         string mDomain;
         int mPort;

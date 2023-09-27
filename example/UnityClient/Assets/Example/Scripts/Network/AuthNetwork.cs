@@ -7,4 +7,9 @@ public class AuthNetwork : WebClient
     {
         Post<C2Auth.RequestLogin, Auth2C.NotifyLogin>(request, callback);
     }
+
+    public void RequestLogout(C2Auth.RequestLogout request, RequestCallback<Auth2C.NotifyLogout> callback)
+    {
+        Post<C2Auth.RequestLogout, Auth2C.NotifyLogout>(request, callback);
+    }
 }

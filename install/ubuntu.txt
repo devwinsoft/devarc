@@ -31,13 +31,17 @@ vi /etc/mysql/my.cnf
 bind-address = 0.0.0.0
 
 
+<<redis>>
+/etc/redis/redis.conf
+requirepass {PASSWORD}
+
+
 <<forever>>
 npm install forever -g 
 forever start server.js
 forever start -w server.js (auto restart)
 forever list
 forever stop server.js
-
 
 
 <<ssl>>

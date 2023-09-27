@@ -1,6 +1,6 @@
 set IDL=..\..\bin\IDL.exe
 
-..\..\bin\IDL.exe -cs  .\Protocols\GameProtocol.idl  .\Defines\Common.def
+..\..\bin\IDL.exe -cs  .\Protocols\AuthProtocol.idl  .\Defines\Common.def
 copy /Y   *.cs    ..\CSharpServers\GameServer\Generated\Protocols\
 move /Y   *.cs    ..\UnityClient\Assets\Example\Scripts\Generated\Protocols\
 

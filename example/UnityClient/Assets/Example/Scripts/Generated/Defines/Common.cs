@@ -9,8 +9,9 @@ namespace Devarc
 		UNKNOWN              = 1,
 		SERVER_ERROR         = 2,
 		SESSION_EXPIRED      = 3,
-		INVALID_PASSWORD     = 4,
-		INVALID_SECRET       = 5,
+		SESSION_REMAIN       = 4,
+		INVALID_PASSWORD     = 5,
+		INVALID_SECRET       = 6,
 	}
 
 	public enum GenderType

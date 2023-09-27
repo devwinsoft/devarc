@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using MessagePack.Resolvers;
 using Devarc;
-using System;
 
 public class AppManager : MonoSingleton<AppManager>
 {
@@ -11,6 +10,9 @@ public class AppManager : MonoSingleton<AppManager>
 
     public static GameNetwork gameNetwork => Instance.mGameNetwork;
     GameNetwork mGameNetwork;
+
+    public CString Token;
+    public CString Error;
 
     public CString sessionID;
     public CInt secret;

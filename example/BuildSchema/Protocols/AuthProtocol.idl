@@ -5,6 +5,10 @@
         public string accountID;
         public string password;
     }
+
+    public class RequestLogout
+    {
+    }
 }
 
 namespace Auth2C
@@ -14,5 +18,10 @@ namespace Auth2C
         public ErrorType errorCode;
         public string sessionID;
         public int secret;
+    }
+
+    public class NotifyLogout
+    {
+        public ErrorType errorCode;
     }
 }

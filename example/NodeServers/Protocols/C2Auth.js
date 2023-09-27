@@ -28,8 +28,25 @@ class RequestLogin
 	}
 }
 
+class RequestLogout
+{
+	/**
+	 */
+	constructor() {
+	}
+	Init(packet) {
+	}
+	ToArray() {
+		const data =
+		[
+		];
+		return data;
+	}
+}
+
 module.exports =
 { RequestLogin
+, RequestLogout
 }
 
 function createPacket(packetName, content)
@@ -39,6 +56,12 @@ function createPacket(packetName, content)
 	case 'RequestLogin':
 		{
 			const obj = new RequestLogin();
+			obj.Init(content);
+			return obj;
+		}
+	case 'RequestLogout':
+		{
+			const obj = new RequestLogout();
 			obj.Init(content);
 			return obj;
 		}

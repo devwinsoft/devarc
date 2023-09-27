@@ -47,20 +47,22 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(12)
+            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(14)
             {
                 { typeof(global::Devarc.ErrorType), 0 },
                 { typeof(global::Devarc.GenderType), 1 },
                 { typeof(global::Auth2C.NotifyLogin), 2 },
-                { typeof(global::C2Auth.RequestLogin), 3 },
-                { typeof(global::C2Game.RequestLogin), 4 },
-                { typeof(global::Devarc.Account), 5 },
-                { typeof(global::Devarc.CHARACTER), 6 },
-                { typeof(global::Devarc.LString), 7 },
-                { typeof(global::Devarc.SKILL), 8 },
-                { typeof(global::Devarc.SOUND_BUNDLE), 9 },
-                { typeof(global::Devarc.SOUND_RESOURCE), 10 },
-                { typeof(global::Game2C.NotifyLogin), 11 },
+                { typeof(global::Auth2C.NotifyLogout), 3 },
+                { typeof(global::C2Auth.RequestLogin), 4 },
+                { typeof(global::C2Auth.RequestLogout), 5 },
+                { typeof(global::C2Game.RequestLogin), 6 },
+                { typeof(global::Devarc.Account), 7 },
+                { typeof(global::Devarc.CHARACTER), 8 },
+                { typeof(global::Devarc.LString), 9 },
+                { typeof(global::Devarc.SKILL), 10 },
+                { typeof(global::Devarc.SOUND_BUNDLE), 11 },
+                { typeof(global::Devarc.SOUND_RESOURCE), 12 },
+                { typeof(global::Game2C.NotifyLogin), 13 },
             };
         }
 
@@ -77,15 +79,17 @@ namespace MessagePack.Resolvers
                 case 0: return new MessagePack.Formatters.Devarc.ErrorTypeFormatter();
                 case 1: return new MessagePack.Formatters.Devarc.GenderTypeFormatter();
                 case 2: return new MessagePack.Formatters.Auth2C.NotifyLoginFormatter();
-                case 3: return new MessagePack.Formatters.C2Auth.RequestLoginFormatter();
-                case 4: return new MessagePack.Formatters.C2Game.RequestLoginFormatter();
-                case 5: return new MessagePack.Formatters.Devarc.AccountFormatter();
-                case 6: return new MessagePack.Formatters.Devarc.CHARACTERFormatter();
-                case 7: return new MessagePack.Formatters.Devarc.LStringFormatter();
-                case 8: return new MessagePack.Formatters.Devarc.SKILLFormatter();
-                case 9: return new MessagePack.Formatters.Devarc.SOUND_BUNDLEFormatter();
-                case 10: return new MessagePack.Formatters.Devarc.SOUND_RESOURCEFormatter();
-                case 11: return new MessagePack.Formatters.Game2C.NotifyLoginFormatter();
+                case 3: return new MessagePack.Formatters.Auth2C.NotifyLogoutFormatter();
+                case 4: return new MessagePack.Formatters.C2Auth.RequestLoginFormatter();
+                case 5: return new MessagePack.Formatters.C2Auth.RequestLogoutFormatter();
+                case 6: return new MessagePack.Formatters.C2Game.RequestLoginFormatter();
+                case 7: return new MessagePack.Formatters.Devarc.AccountFormatter();
+                case 8: return new MessagePack.Formatters.Devarc.CHARACTERFormatter();
+                case 9: return new MessagePack.Formatters.Devarc.LStringFormatter();
+                case 10: return new MessagePack.Formatters.Devarc.SKILLFormatter();
+                case 11: return new MessagePack.Formatters.Devarc.SOUND_BUNDLEFormatter();
+                case 12: return new MessagePack.Formatters.Devarc.SOUND_RESOURCEFormatter();
+                case 13: return new MessagePack.Formatters.Game2C.NotifyLoginFormatter();
                 default: return null;
             }
         }

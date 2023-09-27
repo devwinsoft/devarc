@@ -28,7 +28,6 @@ redisClient.on('error', (err) =>
 const https = require('https');
 const WebSocket = require('ws');
 const serverOption = {
-    ca: fs.readFileSync(process.env.SSL_CA, 'utf8'),
     key: fs.readFileSync(process.env.SSL_KEY, 'utf8'),
     cert: fs.readFileSync(process.env.SSL_CERT, 'utf8')
 };
@@ -93,10 +92,9 @@ async function init()
     // Connect
     await redisClient.connect();
 }
-init();
+await init();
 
 httpsServer.listen(process.env.SOCKET_PORT, () =>
 {
-    console.log(`GameServer running at http://localhost:${process.env.SOCKET_PORT}/`);
+    console.log(`GameServer running at https://localhost:${process.env.SOCKET_PORT}/`);
 });
-
