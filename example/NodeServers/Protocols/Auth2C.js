@@ -4,6 +4,34 @@ const ErrorType = Common.ErrorType;
 const GenderType = Common.GenderType;
 const Account = Common.Account;
 const mHandlers = {};
+class NotifySession
+{
+	/**
+	 * @param {ErrorType} errorCode - ErrorType
+	 * @param {string} sessionID - string
+	 * @param {int} secret - int
+	 */
+	constructor(errorCode, sessionID, secret) {
+		this.errorCode = errorCode;
+		this.sessionID = sessionID;
+		this.secret = secret;
+	}
+	Init(packet) {
+		this.errorCode = packet[0];
+		this.sessionID = packet[1];
+		this.secret = packet[2];
+	}
+	ToArray() {
+		const data =
+		[
+			this.errorCode,
+			this.sessionID,
+			this.secret,
+		];
+		return data;
+	}
+}
+
 class NotifyLogin
 {
 	/**
@@ -52,15 +80,72 @@ class NotifyLogout
 	}
 }
 
+class NotifySignin
+{
+	/**
+	 * @param {ErrorType} errorCode - ErrorType
+	 * @param {string} sessionID - string
+	 * @param {int} secret - int
+	 */
+	constructor(errorCode, sessionID, secret) {
+		this.errorCode = errorCode;
+		this.sessionID = sessionID;
+		this.secret = secret;
+	}
+	Init(packet) {
+		this.errorCode = packet[0];
+		this.sessionID = packet[1];
+		this.secret = packet[2];
+	}
+	ToArray() {
+		const data =
+		[
+			this.errorCode,
+			this.sessionID,
+			this.secret,
+		];
+		return data;
+	}
+}
+
+class NotifyError
+{
+	/**
+	 * @param {ErrorType} errorCode - ErrorType
+	 */
+	constructor(errorCode) {
+		this.errorCode = errorCode;
+	}
+	Init(packet) {
+		this.errorCode = packet[0];
+	}
+	ToArray() {
+		const data =
+		[
+			this.errorCode,
+		];
+		return data;
+	}
+}
+
 module.exports =
-{ NotifyLogin
+{ NotifySession
+, NotifyLogin
 , NotifyLogout
+, NotifySignin
+, NotifyError
 }
 
 function createPacket(packetName, content)
 {
 	switch (packetName)
 	{
+	case 'NotifySession':
+		{
+			const obj = new NotifySession();
+			obj.Init(content);
+			return obj;
+		}
 	case 'NotifyLogin':
 		{
 			const obj = new NotifyLogin();
@@ -70,6 +155,18 @@ function createPacket(packetName, content)
 	case 'NotifyLogout':
 		{
 			const obj = new NotifyLogout();
+			obj.Init(content);
+			return obj;
+		}
+	case 'NotifySignin':
+		{
+			const obj = new NotifySignin();
+			obj.Init(content);
+			return obj;
+		}
+	case 'NotifyError':
+		{
+			const obj = new NotifyError();
 			obj.Init(content);
 			return obj;
 		}

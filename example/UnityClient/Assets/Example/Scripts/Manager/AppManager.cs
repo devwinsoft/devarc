@@ -37,6 +37,7 @@ public class AppManager : MonoSingleton<AppManager>
         // Initialize network.
         mAuthNetwork = create<AuthNetwork>(transform);
         mAuthNetwork.InitProtocol("msgpack", "packet", StaticCompositeResolver.Instance);
+        mAuthNetwork.OnError += (errorType, errorMsg) => { Debug.LogError(errorMsg); };
 
         mGameNetwork = create<GameNetwork>(transform);
         mGameNetwork.InitProtocol("Game", StaticCompositeResolver.Instance);

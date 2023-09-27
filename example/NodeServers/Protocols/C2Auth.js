@@ -4,6 +4,22 @@ const ErrorType = Common.ErrorType;
 const GenderType = Common.GenderType;
 const Account = Common.Account;
 const mHandlers = {};
+class RequestSession
+{
+	/**
+	 */
+	constructor() {
+	}
+	Init(packet) {
+	}
+	ToArray() {
+		const data =
+		[
+		];
+		return data;
+	}
+}
+
 class RequestLogin
 {
 	/**
@@ -44,15 +60,47 @@ class RequestLogout
 	}
 }
 
+class RequestSignin
+{
+	/**
+	 * @param {string} accountID - string
+	 * @param {string} password - string
+	 */
+	constructor(accountID, password) {
+		this.accountID = accountID;
+		this.password = password;
+	}
+	Init(packet) {
+		this.accountID = packet[0];
+		this.password = packet[1];
+	}
+	ToArray() {
+		const data =
+		[
+			this.accountID,
+			this.password,
+		];
+		return data;
+	}
+}
+
 module.exports =
-{ RequestLogin
+{ RequestSession
+, RequestLogin
 , RequestLogout
+, RequestSignin
 }
 
 function createPacket(packetName, content)
 {
 	switch (packetName)
 	{
+	case 'RequestSession':
+		{
+			const obj = new RequestSession();
+			obj.Init(content);
+			return obj;
+		}
 	case 'RequestLogin':
 		{
 			const obj = new RequestLogin();
@@ -62,6 +110,12 @@ function createPacket(packetName, content)
 	case 'RequestLogout':
 		{
 			const obj = new RequestLogout();
+			obj.Init(content);
+			return obj;
+		}
+	case 'RequestSignin':
+		{
+			const obj = new RequestSignin();
 			obj.Init(content);
 			return obj;
 		}

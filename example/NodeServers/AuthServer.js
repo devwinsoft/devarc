@@ -166,10 +166,23 @@ app.post('/msgpack', (req, res) =>
 
 
 // Message Handlers...
+C2Auth.on('RequestSession', (obj, req, res) => {
+    var packet = new Auth2C.NotifySession(Common.ErrorType.UNKNOWN, '', 0);
+    if (req.session.login)
+    {
+        packet.errorCode = Common.ErrorType.SUCCESS;
+        packet.sessionID = req.sessionID;
+        packet.secret = req.session.secret;
+    }
+    const encoded = Auth2C.pack(packet);
+    res.send(encoded);
+});
+
+
 C2Auth.on('RequestLogin', (obj, req, res) => {
     if (req.session.login)
     {
-        var packet = new Auth2C.NotifyLogin(Common.ErrorType.UNKNOWN, '', 0);
+        var packet = new Auth2C.NotifyLogin(Common.ErrorType.SESSION_REMAIN, '', 0);
         const encoded = Auth2C.pack(packet);
         res.send(encoded);
     }
@@ -233,6 +246,46 @@ C2Auth.on('RequestLogout', (obj, req, res) => {
         res.send(encoded);
     }
     req.session.destroy();
+});
+
+
+C2Auth.on('RequestSignin', (obj, req, res) => {
+    if (req.session.login || !obj.accountID || !obj.password)
+    {
+        var packet = new Auth2C.NotifySignin(Common.ErrorType.UNKNOWN, '', 0);
+        const encoded = Auth2C.pack(packet);
+        res.send(encoded);
+    }
+    else
+    {
+        var password = cryptUtil.decrypt(obj.password);
+        var queryStr = `INSERT INTO account(account_id, username, password, session_id, login_time, create_time) VALUES ('${obj.accountID}', '', MD5('${password}'), '${req.sessionID}', NOW(), NOW());`;
+        mysqlConn.query(queryStr,
+            (err, result) => {
+                var packet = new Auth2C.NotifySignin(Common.ErrorType.UNKNOWN, '', 0);
+                if (err)
+                {
+                }
+                else if (result.affectedRows > 0)
+                {
+                    var secret = 1 + Math.floor(2147483646 * Math.random());
+                    res.writeHead(200, {
+                        'Set-Cookie': `secret=${secret}`,
+                        'Content-Type': 'text/html; charset=utf-8',
+                    });
+    
+                    req.session.login = true;
+                    req.session.secret = secret;
+                    req.session.save();
+    
+                    packet.errorCode = Common.ErrorType.SUCCESS;
+                    packet.sessionID = req.sessionID;
+                    packet.secret = req.session.secret;
+                }
+                const encoded = Auth2C.pack(packet);
+                res.end(encoded);
+            });
+    }
 });
 
 

@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Devarc;
 using MessagePack;
-using System.Net;
 
 public class CertificateHandler_AcceptAll : CertificateHandler
 {
@@ -22,7 +21,10 @@ public abstract class WebClient : MonoBehaviour
         Get,
         Post,
     }
-    public delegate void RequestCallback<RES>(RES response, UnityWebRequest.Result errorType, string errorMsg);
+    public delegate void RequestCallback<RES>(RES response);
+    public delegate void ErrorCallback(UnityWebRequest.Result errorType, string errorMsg);
+
+    public event ErrorCallback OnError;
 
     public string BaseURL => $"https://{mDomain}:{mPort}";
 
@@ -70,17 +72,17 @@ public abstract class WebClient : MonoBehaviour
         mHandlers.Remove(type);
     }
 
-    public void Get<REQ, RES>(REQ req, RequestCallback<RES> callback)
+    public void Get<REQ, RES>(REQ req, RequestCallback<RES> responseCallback, ErrorCallback errorCallback = null)
     {
-        StartCoroutine(request<REQ, RES>(RequestType.Get, req, callback));
+        StartCoroutine(request<REQ, RES>(RequestType.Get, req, responseCallback, errorCallback));
     }
 
-    public void Post<REQ, RES>(REQ req, RequestCallback<RES> callback)
+    public void Post<REQ, RES>(REQ req, RequestCallback<RES> responseCallback, ErrorCallback errorCallback = null)
     {
-        StartCoroutine(request<REQ, RES>(RequestType.Post, req, callback));
+        StartCoroutine(request<REQ, RES>(RequestType.Post, req, responseCallback, errorCallback));
     }
 
-    IEnumerator request<REQ, RES>(RequestType reqType, REQ req, RequestCallback<RES> callback)
+    IEnumerator request<REQ, RES>(RequestType reqType, REQ req, RequestCallback<RES> responseCallback, ErrorCallback errorCallback)
     {
         var sendData = encodeBase64(req);
         UnityWebRequest www = null;
@@ -112,16 +114,26 @@ public abstract class WebClient : MonoBehaviour
 
         if (www.result != UnityWebRequest.Result.Success)
         {
-            callback?.Invoke(default(RES), www.result, www.error);
+            errorCallback?.Invoke(www.result, www.error);
+            OnError?.Invoke(www.result, www.error);
         }
         else if (www.downloadHandler.data == null)
         {
-            callback?.Invoke(default(RES), UnityWebRequest.Result.DataProcessingError, string.Empty);
+            errorCallback?.Invoke(UnityWebRequest.Result.DataProcessingError, www.error);
+            OnError?.Invoke(UnityWebRequest.Result.DataProcessingError, www.error);
         }
         else
         {
-            RES res = UnPack<RES>(www.downloadHandler.data);
-            callback?.Invoke(res, UnityWebRequest.Result.Success, string.Empty);
+            try
+            {
+                RES res = UnPack<RES>(www.downloadHandler.data);
+                responseCallback?.Invoke(res);
+            }
+            catch (Exception e)
+            {
+                errorCallback?.Invoke(UnityWebRequest.Result.DataProcessingError, e.Message);
+                OnError?.Invoke(UnityWebRequest.Result.DataProcessingError, e.Message);
+            }
         }
     }
 
