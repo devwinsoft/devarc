@@ -24,9 +24,10 @@ Devarc is cross-platform development templates.
 ## Install Client ##
 #### Step 1: Create unity project. ####
 #### Step 2: Download packages, and import into unity project. ####
-  * https://github.com/devwinsoft/devarc/blob/main/install
+  * https://github.com/devwinsoft/devarc/tree/main/install
   * https://github.com/MessagePack-CSharp/MessagePack-CSharp/releases
   * https://github.com/psygames/UnityWebSocket
+  * [Firebase SDK](https://firebase.google.com/download/unity?hl=ko)
     
 
 ## Install C# Server ##
