@@ -10,10 +10,12 @@ namespace Devarc
         public static ILoginManager Create()
         {
             GameObject obj = new GameObject("LoginManager");
-#if UNITY_ANDROID || UNITY_IOS
-            mInstance = obj.AddComponent<LoginManager_Mobile>();
+#if UNITY_EDITOR
+            mInstance = obj.AddComponent<LoginManager_Default_Editor>();
+#elif UNITY_ANDROID || UNITY_IOS
+            mInstance = obj.AddComponent<LoginManager_Firebase>();
 #else
-            mInstance = obj.AddComponent<LoginManager_WebGL>();
+            mInstance = obj.AddComponent<LoginManager_Default_WebGL>();
 #endif
             return mInstance;
         }

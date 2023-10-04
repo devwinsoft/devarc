@@ -99,6 +99,7 @@ app.get('/', (req, res) =>
 	res.sendfile("public/index.html");
 });
 
+
 /*
  * Google Login
  *
@@ -131,14 +132,14 @@ app.get('/login/login', wrapAsync(async (req, res) => {
     });
 }));
 
+
 app.get('/login/redirect', wrapAsync(async (req, res) => {
     const { code, state } = req.query;
     console.log(`redirect: code=${code}`);
-
     redisClient.set(`code:${state}`, code, {'EX': 60});
-
     res.redirect('/google_login_success.html');
 }));
+
 
 app.get('/login/code', wrapAsync(async (req, res) => {
     const { state } = req.query;
@@ -154,11 +155,12 @@ app.get('/login/code', wrapAsync(async (req, res) => {
     res.send(code);
 }));
 
+
 app.get('/login/signin', wrapAsync(async (req, res) => {
-    const { code, code_verifier } = req.query;
+    const { code, code_verifier, redirect_uri } = req.query;
     console.log(`signin: code=${code}`);
     console.log(`signin: code_verifier=${code_verifier}`);
-    console.log(`signin: GOOGLE_LOGIN_REDIRECT_URI=${GOOGLE_LOGIN_REDIRECT_URI}`);
+    console.log(`signin: GOOGLE_LOGIN_REDIRECT_URI=${redirect_uri}`);
 
     if (!code || !code_verifier)
     {
@@ -169,7 +171,7 @@ app.get('/login/signin', wrapAsync(async (req, res) => {
         code,
         client_id: GOOGLE_CLIENT_ID,
         client_secret: GOOGLE_CLIENT_SECRET,
-        redirect_uri: GOOGLE_LOGIN_REDIRECT_URI,
+        redirect_uri: redirect_uri,
         code_verifier: code_verifier,
         scope: 'openid email profile',
         grant_type: 'authorization_code',

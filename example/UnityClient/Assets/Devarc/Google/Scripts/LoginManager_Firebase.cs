@@ -10,7 +10,7 @@ using Firebase.Extensions;
 
 namespace Devarc
 {
-    public class LoginManager_Mobile : MonoSingleton<LoginManager_Mobile>, ILoginManager
+    public class LoginManager_Firebase : MonoSingleton<LoginManager_Firebase>, ILoginManager
     {
         public static Firebase.FirebaseApp app;
         public static FirebaseAuth auth;

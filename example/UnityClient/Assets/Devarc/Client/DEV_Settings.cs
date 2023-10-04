@@ -74,6 +74,11 @@ namespace Devarc
         }
         public RootPathData defaultDirectory = new RootPathData();
 
+
+        public const string AuthorizationURI = "https://accounts.google.com/o/oauth2/v2/auth";
+        public const string UserinfoURL = "https://www.googleapis.com/oauth2/v2/userinfo";
+        public const string RevocationURI = "https://oauth2.googleapis.com/revoke";
+
         [Serializable]
         public class GoogleWebData
         {
