@@ -79,13 +79,24 @@ example/CSharpServers/GameServer/bin/
 example/CSharpServers/GameServer/obj/
 example/UnityClient/*.csproj
 example/UnityClient/*.sln
+example/UnityClient/AndroidStudio/
+example/UnityClient/Assets/Editor Default Resources.*
+example/UnityClient/Assets/Editor Default Resources/
+example/UnityClient/Assets/ExternalDependencyManager.*
+example/UnityClient/Assets/ExternalDependencyManager/
+example/UnityClient/Assets/Firebase.*
+example/UnityClient/Assets/Firebase/
+example/UnityClient/Assets/GoogleSignIn.*
+example/UnityClient/Assets/GoogleSignIn/
+example/UnityClient/Assets/GeneratedLocalRepo.*
+example/UnityClient/Assets/GeneratedLocalRepo/
+example/UnityClient/KeyStore/
 example/UnityClient/Library/
 example/UnityClient/Logs/
 example/UnityClient/obj/
 example/UnityClient/ServerData/
 example/UnityClient/Temp/
 example/UnityClient/UserSettings/
-
 src/Devarc.Net.Common/bin/
 src/Devarc.Net.Common/obj/
 src/Devarc.Net.Server/bin/

@@ -26,28 +26,17 @@ public abstract class WebClient : MonoBehaviour
 
     public event ErrorCallback OnError;
 
-    public string BaseURL => $"https://{mDomain}:{mPort}";
-
-    public string Domain => mDomain;
-    string mDomain;
-
-    public int Port => mPort;
-    int mPort;
-
+    public string URL => mURL;
+    string mURL;
     string mDirectory;
     string mArgName;
     PacketEncoder mPacketEncoder = new PacketEncoder();
     Dictionary<Type, PacketHandler> mHandlers = new Dictionary<Type, PacketHandler>();
 
 
-    public void InitConnection(string doamin, int port)
+    public void Init(string baseURL, string directory , string argName, IFormatterResolver formatterResolver)
     {
-        mDomain = doamin;
-        mPort = port;
-    }
-
-    public void InitProtocol(string directory , string argName, IFormatterResolver formatterResolver)
-    {
+        mURL = baseURL;
         mDirectory = directory;
         mArgName = argName;
         mPacketEncoder.Init(formatterResolver);
@@ -90,9 +79,12 @@ public abstract class WebClient : MonoBehaviour
         {
             case RequestType.Get:
                 {
-                    var url = $"{BaseURL}/{mDirectory}?{mArgName}={sendData}";
+                    var url = $"{URL}/{mDirectory}?{mArgName}={sendData}";
                     www = UnityWebRequest.Get(url);
-                    www.certificateHandler = new CertificateHandler_AcceptAll();
+                    if (Application.isMobilePlatform)
+                    {
+                        www.certificateHandler = new CertificateHandler_AcceptAll();
+                    }
                     Debug.Log($"Request Get: {url}");
                 }
                 break;
@@ -101,16 +93,22 @@ public abstract class WebClient : MonoBehaviour
                     WWWForm form = new WWWForm();
                     form.AddField(mArgName, sendData);
 
-                    www = UnityWebRequest.Post($"{BaseURL}/{mDirectory}", form);
-                    www.certificateHandler = new CertificateHandler_AcceptAll();
-                    var url = $"{BaseURL}/{mDirectory}?{mArgName}={sendData}";
+                    www = UnityWebRequest.Post($"{URL}/{mDirectory}", form);
+                    if (Application.isMobilePlatform)
+                    {
+                        www.certificateHandler = new CertificateHandler_AcceptAll();
+                    }
+                    var url = $"{URL}/{mDirectory}?{mArgName}={sendData}";
                     Debug.Log($"Request Post: {url}");
                 }
                 break;
         }
 
         yield return www.SendWebRequest();
-        www.certificateHandler.Dispose();
+        if (Application.isMobilePlatform)
+        {
+            www.certificateHandler.Dispose();
+        }
 
         if (www.result != UnityWebRequest.Result.Success)
         {

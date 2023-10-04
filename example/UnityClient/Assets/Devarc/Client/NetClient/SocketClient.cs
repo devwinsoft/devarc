@@ -1,20 +1,19 @@
 using MessagePack;
 using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
 using UnityEngine;
 using UnityWebSocket;
-
+using System.Net.Security;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Sockets;
 
 namespace Devarc
 {
     public class SocketClient : MonoBehaviour
     {
-        public string ConnString => $"wss://{mDomain}:{mPort}/{mDirectory}";
-      
-        string mDomain;
-        int mPort;
-        string mDirectory;
+        public string ConnString => mConnStr;
+        string mConnStr;
 
         public enum SessionStateType
         {
@@ -42,9 +41,8 @@ namespace Devarc
             mDispatcher.MainThreadTick();
         }
 
-        public void InitProtocol(string directory, IFormatterResolver formatterResolver)
+        public void InitProtocol(IFormatterResolver formatterResolver)
         {
-            mDirectory = directory;
             mPacketEncoder.Init(formatterResolver);
         }
 
@@ -105,7 +103,7 @@ namespace Devarc
         }
 
 
-        public void Connect(string domain, int port)
+        public void Connect(string connString)
         {
             switch (mCurrentState)
             {
@@ -116,9 +114,8 @@ namespace Devarc
                     break;
             }
 
-            mDomain = domain;
-            mPort = port;
-            mSocket = new WebSocket(this.ConnString);
+            mConnStr = connString;
+            mSocket = new WebSocket(connString);
             mSocket.OnOpen += onOpen;
             mSocket.OnClose += onClose;
             mSocket.OnError += onError;

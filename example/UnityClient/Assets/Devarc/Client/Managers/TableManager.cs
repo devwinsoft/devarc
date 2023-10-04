@@ -313,6 +313,7 @@ public partial class TableManager : MonoSingleton<TableManager>
         }
     }
 
+
     public void UnloadBundleTable(string addressKey)
     {
         var removeList = AssetManager.Instance.UnloadBundleAssets(addressKey);

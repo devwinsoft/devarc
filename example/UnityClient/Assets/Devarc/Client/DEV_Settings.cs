@@ -74,6 +74,18 @@ namespace Devarc
         }
         public RootPathData defaultDirectory = new RootPathData();
 
+        [Serializable]
+        public class GoogleWebData
+        {
+            public CString client_id;
+            public string login_uri;
+            public string redirect_uri;
+            public string code_uri;
+            public string signin_uri;
+            public string[] scopes;
+        }
+        public GoogleWebData googleWebData = new GoogleWebData();
+
         public static string GetDefault_BundlePath()
         {
             return Instance.defaultDirectory.bundlePath;

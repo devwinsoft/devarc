@@ -8,7 +8,7 @@ namespace Devarc
 {
     public class BuildScript
     {
-        [MenuItem("Tools/Devarc/Build/BuildTables")]
+        [MenuItem("Tools/Devarc/Build/Build Binary Tables")]
         public static void BuildForTables()
         {
             Table.Initailize();
@@ -17,6 +17,7 @@ namespace Devarc
             EditorUtility.DisplayDialog("Build binary tables", "Build completed.", "OK");
         }
 
+        [MenuItem("Tools/Devarc/Build/Build Android")]
         public static void BuildForAndroid()
         {
             PlayerSettings.Android.keyaliasPass = "1232456";

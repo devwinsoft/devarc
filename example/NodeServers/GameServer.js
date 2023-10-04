@@ -3,8 +3,13 @@ const dotenv = require('dotenv');
 const fs = require('fs');
 dotenv.config();
 
+// Init express server
+const https = require('https');
+const express = require('express');
+const session = require('express-session');
+const app = express();
 
-// Init Redis
+// Init redis
 const redis = require('redis');
 const redisClient = redis.createClient(
 {
@@ -12,7 +17,29 @@ const redisClient = redis.createClient(
     port      : process.env.REDIS_PORT,
     password  : process.env.REDIS_PASS
 });
-    
+
+
+// Init session
+const ConnectRedis = require('connect-redis').default;
+var sessions = session(
+    {
+        store: new ConnectRedis(
+            {
+                client: redisClient,
+            }),
+        secret : 'Rs89I67YEA55cLMgi0t6oyr8568e6KtD',
+        resave: false,
+        saveUninitialized: true,
+        rolling : true,
+        cookie: {
+            maxAge: 86400000,
+            expires : new Date(Date.now() + 86400000),
+            secure: false
+        }
+    }
+);
+
+
 redisClient.on('connect', () =>
 {
     console.info('Redis connected.');
@@ -87,14 +114,15 @@ C2Game.on('RequestLogin', (obj, ws) =>
     });
 });
 
-async function init()
+async function main()
 {
     // Connect
     await redisClient.connect();
-}
-await init();
 
-httpsServer.listen(process.env.SOCKET_PORT, () =>
-{
-    console.log(`GameServer running at https://localhost:${process.env.SOCKET_PORT}/`);
-});
+    httpsServer.listen(process.env.WSS_PORT, () =>
+    {
+        console.log(`GameServer running at https://localhost:${process.env.WSS_PORT}/`);
+    });
+}
+main();
+

@@ -11,6 +11,7 @@ public class AppManager : MonoSingleton<AppManager>
     public static GameNetwork gameNetwork => Instance.mGameNetwork;
     GameNetwork mGameNetwork;
 
+
     public CString Token;
     public CString Error;
 
@@ -20,8 +21,13 @@ public class AppManager : MonoSingleton<AppManager>
 
     protected override void onAwake()
     {
-        // Initialize TableManager,
+        // Create managers...
+        EffectManager.Create();
+        LoginManager.Create();
+        SoundManager.Create();
         TableManager.Create();
+
+        // Initialize TableManager,
         TableManager.Instance.OnError += (errorType, args) =>
         {
             Debug.Log(errorType);
@@ -36,11 +42,10 @@ public class AppManager : MonoSingleton<AppManager>
 
         // Initialize network.
         mAuthNetwork = create<AuthNetwork>(transform);
-        mAuthNetwork.InitProtocol("msgpack", "packet", StaticCompositeResolver.Instance);
         mAuthNetwork.OnError += (errorType, errorMsg) => { Debug.LogError(errorMsg); };
 
         mGameNetwork = create<GameNetwork>(transform);
-        mGameNetwork.InitProtocol("Game", StaticCompositeResolver.Instance);
+        mGameNetwork.InitProtocol(StaticCompositeResolver.Instance);
 
 
         // Initialize DownloadManager.
@@ -124,4 +129,6 @@ public class AppManager : MonoSingleton<AppManager>
         T compo = obj.AddComponent<T>();
         return compo;
     }
+
 }
+

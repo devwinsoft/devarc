@@ -34,7 +34,7 @@ bind-address = 0.0.0.0
 <<redis>>
 /etc/redis/redis.conf
 requirepass {PASSWORD}
-
+stop-writes-on-bgsave-error no
 
 <<forever>>
 npm install forever -g 

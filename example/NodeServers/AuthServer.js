@@ -41,27 +41,37 @@ const hash = crypto.createHash('sha256');
 // Init google secret
 const axios = require('axios');
 const fs = require('fs');
-const google_web_secret = JSON.parse(fs.readFileSync(process.env.GOOGLE_WEB_SECRET, 'utf8'));
-const GOOGLE_CLIENT_ID = google_web_secret['web']['client_id'];
-const GOOGLE_CLIENT_SECRET = google_web_secret['web']['client_secret'];
-const GOOGLE_AUTH_URI = google_web_secret['web']['auth_uri'];
-const GOOGLE_TOKEN_URL = google_web_secret['web']['token_uri'];
-const GOOGLE_LOGIN_REDIRECT_URI = google_web_secret['web']['redirect_uris'][0];
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const GOOGLE_LOGIN_REDIRECT_URI = process.env.GOOGLE_LOGIN_REDIRECT_URI;
+const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
 const GOOGLE_USERINFO_URL = 'https://www.googleapis.com/oauth2/v2/userinfo';
 
 // Init express server
 const https = require('https');
 const express = require('express');
 const session = require('express-session');
-const ConnectRedis = require('connect-redis').default;
 const app = express();
 var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 //app.use(bodyParser.raw({type: 'multipart/form-data', limit : '2mb'}))
-app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 
+const wrapAsync = (fn) => {
+    return (req, res, next) => {
+        fn(req, res, next).catch(next);
+    }
+}
+app.use((req, res, next) => { next(); });
+app.use((err, req, res, next) => {
+    res.status(500).send({ message: 'ServerError', error: err });
+});
+
+
 // Init session
-app.use(session(
+const ConnectRedis = require('connect-redis').default;
+var sessions = session(
     {
         store: new ConnectRedis(
             {
@@ -72,16 +82,12 @@ app.use(session(
         saveUninitialized: true,
         rolling : true,
         cookie: {
-            maxAge: 3600000000,
-            expires : new Date(Date.now() + 3600000000),
-            //sameSite: "lax",
+            maxAge: 86400000,
+            expires : new Date(Date.now() + 86400000),
             secure: false
         }
-        /*, genid: function(req) {
-            var temp = mNextSessionID++ % 1000000;
-            return temp.toString();
-        }*/
-    }));
+    }
+);
 
 // Init protocol.
 const Common = require('./Protocols/Common.js');
@@ -97,45 +103,117 @@ app.get('/', (req, res) =>
  * Google Login
  *
  */
-app.get('/login', (req, res) => {
-    let url = GOOGLE_AUTH_URI;
-    url += `?client_id=${GOOGLE_CLIENT_ID}`
-    url += `&redirect_uri=${GOOGLE_LOGIN_REDIRECT_URI}`
-    url += '&response_type=code'
-    url += '&scope=email profile'
-	res.redirect(url);
-});
+app.get('/login/login', wrapAsync(async (req, res) => {
+    const { account_id, access_token } = req.query;
+    console.log(`login: id=${account_id}`);
 
-app.post('/login', (req, res) => {
-    let url = GOOGLE_AUTH_URI;
-    url += `?client_id=${GOOGLE_CLIENT_ID}`
-    url += `&redirect_uri=${GOOGLE_LOGIN_REDIRECT_URI}`
-    url += '&response_type=code'
-    url += '&scope=email profile'
-	res.redirect(url);
-});
+    if (!account_id || !access_token)
+    {
+        throw Error('login: Protocol error');
+    }
 
-app.get('/login/redirect', async (req, res) => {
-    const { code } = req.query;
-    const resp = await axios.post(GOOGLE_TOKEN_URL, {
-      	code,
+    var selectQuery = `SELECT access_token FROM account WHERE account_id='${account_id}' LIMIT 1;`;
+    await mysqlConn.query(selectQuery, (err, result) =>
+    {
+        if (err)
+        {
+            throw err;
+        }
+
+        if (result[0].access_token == access_token)
+        {
+            res.send(access_token);
+        }
+        else
+        {
+            res.send('');
+        }
+    });
+}));
+
+app.get('/login/redirect', wrapAsync(async (req, res) => {
+    const { code, state } = req.query;
+    console.log(`redirect: code=${code}`);
+
+    redisClient.set(`code:${state}`, code, {'EX': 60});
+
+    res.redirect('/google_login_success.html');
+}));
+
+app.get('/login/code', wrapAsync(async (req, res) => {
+    const { state } = req.query;
+    console.log(`code: state=${state}`);
+
+    if (!state)
+    {
+        throw new Error('code: Protocol error.');
+    }
+
+    const code = await redisClient.get(`code:${state}`);
+    redisClient.del(`code:${state}`);
+    res.send(code);
+}));
+
+app.get('/login/signin', wrapAsync(async (req, res) => {
+    const { code, code_verifier } = req.query;
+    console.log(`signin: code=${code}`);
+    console.log(`signin: code_verifier=${code_verifier}`);
+    console.log(`signin: GOOGLE_LOGIN_REDIRECT_URI=${GOOGLE_LOGIN_REDIRECT_URI}`);
+
+    if (!code || !code_verifier)
+    {
+        throw new Error('code: Protocol error.');
+    }
+
+    const resp_token = await axios.post(GOOGLE_TOKEN_URL, {
+        code,
         client_id: GOOGLE_CLIENT_ID,
         client_secret: GOOGLE_CLIENT_SECRET,
         redirect_uri: GOOGLE_LOGIN_REDIRECT_URI,
+        code_verifier: code_verifier,
+        scope: 'openid email profile',
         grant_type: 'authorization_code',
     });
 
-    console.log(`access_token: ${resp.data.access_token}`);
-    const resp2 = await axios.get(GOOGLE_USERINFO_URL, {
-        headers: { Authorization: `Bearer ${resp.data.access_token}` }
+    const access_token = resp_token.data.access_token;
+    const resp_info = await axios.get(GOOGLE_USERINFO_URL, {
+        headers: { Authorization: `Bearer ${access_token}` }
     });
-});
+
+    const account_id = resp_info.data.email;
+    var updateQuery = `UPDATE account SET access_token='${access_token}', login_time=NOW() WHERE account_id='${account_id}' LIMIT 1;`;
+    mysqlConn.query(updateQuery, async (err, result) =>
+    {
+        if (err)
+        {
+            throw err;
+        }
+        
+        if (result.affectedRows == 0)
+        {
+            var insertQuery = `INSERT INTO account(account_id, account_type, access_token, login_time, create_time) VALUES ('${account_id}', 'google', '${access_token}', NOW(), NOW());`;
+            await mysqlConn.query(insertQuery, (err, result) =>
+            {
+                if (err)
+                {
+                    throw err;
+                }
+                res.send(access_token);
+            });
+        }
+        else
+        {
+            res.send(access_token);
+        }
+    });
+}));
+
 
 /*
  * AuthServer API
  *
  */
-app.get('/msgpack', (req, res) =>
+app.get('/msgpack', sessions, (req, res) =>
 {
     var packet = req.query.packet;
     try
@@ -149,7 +227,7 @@ app.get('/msgpack', (req, res) =>
     }
 });
 
-app.post('/msgpack', (req, res) =>
+app.post('/msgpack', sessions, (req, res) =>
 {
     var packet = req.body.packet;
     try
@@ -188,7 +266,7 @@ C2Auth.on('RequestLogin', (obj, req, res) => {
     else
     {
         var password = cryptUtil.decrypt(obj.password);
-        var queryStr = `UPDATE account SET session_id='${req.sessionID}', login_time=NOW() WHERE account_id='${obj.accountID}' AND password=MD5('${password}') LIMIT 1;`;
+        var queryStr = `UPDATE account SET session_id='${req.sessionID}', login_time=NOW() WHERE account_id='${obj.accountID}' AND access_token=MD5('${password}') LIMIT 1;`;
         mysqlConn.query(queryStr,
             (err, result) => {
                 var packet = new Auth2C.NotifyLogin(Common.ErrorType.UNKNOWN, '', 0);
@@ -253,7 +331,7 @@ C2Auth.on('RequestSignin', (obj, req, res) => {
     else
     {
         var password = cryptUtil.decrypt(obj.password);
-        var queryStr = `INSERT INTO account(account_id, username, password, session_id, login_time, create_time) VALUES ('${obj.accountID}', '', MD5('${password}'), '${req.sessionID}', NOW(), NOW());`;
+        var queryStr = `INSERT INTO account(account_id, username, access_token, session_id, login_time, create_time) VALUES ('${obj.accountID}', '', MD5('${password}'), '${req.sessionID}', NOW(), NOW());`;
         mysqlConn.query(queryStr,
             (err, result) => {
                 var packet = new Auth2C.NotifySignin(Common.ErrorType.UNKNOWN, '', 0);

@@ -18,15 +18,22 @@ MonoBehaviour:
       data: vbKyEUOyC4ieDR3hJBEL4INabSQRsg==
     resourcePath:
       data: vbKyEUOyC4ieDR3hJBELWxGy4oOdwxGy
-    tableSubDirectory:
-      data: 
-    stringSubDirectory:
-      data: 
     tableBinDirectory:
       data: lw1AJBGyC0CGWg==
-    stringBinDirectory:
-      data: xkdDnYZa7rILQIZa
     tableJsonDirectory:
       data: lw1AJBGyC/Cy4lo=
+    stringBinDirectory:
+      data: xkdDnYZa7rILQIZa
     stringJsonDirectory:
       data: xkdDnYZa7rIL8LLiWg==
+  googleWebData:
+    client_id:
+      data: GBipI6mSCAgvqRgIri3lDSuGLS3u7u6S5eIruy1AkhgNLYodL9iyCOIrqSS76A3h4bLo7uLi7iQRg7IRncPiWkMRWkPow+Id
+    login_uri: https://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com:3000/login/login
+    redirect_uri: https://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com:3000/login/redirect
+    code_uri: https://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com:3000/login/code
+    signin_uri: https://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com:3000/login/signin
+    scopes:
+    - openid
+    - email
+    - profile
