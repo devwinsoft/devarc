@@ -48,6 +48,17 @@ public class AppManager : MonoSingleton<AppManager>
         mGameNetwork.InitProtocol(StaticCompositeResolver.Instance);
 
 
+        // Init LoginManager
+        LoginManager.Instance.OnSignIn += (success, firstInit) =>
+        {
+            Debug.Log($"Google SignIn: success={success}, firstInit={firstInit}");
+        };
+        LoginManager.Instance.OnSignOut += (success) =>
+        {
+            Debug.Log($"SignOut: success={success}");
+        };
+
+
         // Initialize DownloadManager.
         DownloadManager.Instance.AddToPatchList("effect");
         DownloadManager.Instance.AddToPatchList("sound");

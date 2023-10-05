@@ -2,6 +2,19 @@ using UnityEngine;
 
 namespace Devarc
 {
+    public delegate void CallbackSignIn(bool success, bool firstInit);
+    public delegate void CallbackSignOut(bool success);
+
+    public interface ILoginManager
+    {
+        event CallbackSignIn OnSignIn;
+        event CallbackSignOut OnSignOut;
+        void SignIn();
+        void SignOut();
+        void LogIn(bool firstInit);
+    }
+
+
     public class LoginManager : MonoBehaviour
     {
         public static ILoginManager Instance => mInstance;

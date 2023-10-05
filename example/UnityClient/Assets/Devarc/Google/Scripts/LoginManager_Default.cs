@@ -1,30 +1,44 @@
 using System;
 using System.Collections;
-using System.Collections.Specialized;
-using System.Net.Sockets;
-using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Networking;
 
 namespace Devarc
 {
-    public abstract class LoginManager_Default : MonoBehaviour, ILoginManager
+    [Serializable]
+    public class GoogleUserToken
     {
-        protected abstract void OpenURL();
+        public string access_token;
+        public int expires_in;
+        public string id_token;
+        public string refresh_token;
+        public string scope;
+        public string token_type;
+    }
 
-        StringPrefs mPrefsAccountID = new StringPrefs("user_id", "");
-        StringPrefs mPrefsAccessToken = new StringPrefs("access_token", "");
+    [Serializable]
+    public class GoogleUserInfo
+    {
+        public string sub; // Id;
+        public string name;
+        public string given_name;
+        public string family_name;
+        public string picture;
+        public string email;
+        public bool email_verified;
+        public string locale;
+    }
 
-        protected bool mBusy1 = false;
-        protected bool mBusy2 = false;
+
+    public abstract class LoginManager_Default : LoginManager_Base, ILoginManager
+    {
+        protected abstract void signin_open();
+
         protected string state = string.Empty;
         protected string code_verifier = string.Empty;
         protected string code_challenge = string.Empty;
-
-        System.Action<bool> mCallback = null;
 
         const char Base64Character62 = '+';
         const char Base64Character63 = '/';
@@ -34,60 +48,43 @@ namespace Devarc
         const char Base64UrlCharacter63 = '_';
 
 
-        public void Clear()
+        private void OnApplicationFocus(bool focus)
         {
+            if (focus)
+            {
+                var info = DEV_Settings.Instance.googleWebData;
+                switch (mState)
+                {
+                    case STATE.NEED_SIGNIN_COMPLETE:
+                        StartCoroutine(signin_complete(info.redirect_uri, null));
+                        break;
+                    case STATE.COMPLETED:
+                        LogIn(false);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        public override void clear()
+        {
+            base.clear();
+
             state = string.Empty;
             code_challenge = string.Empty;
             code_verifier = string.Empty;
-
-            mPrefsAccountID.Value = string.Empty;
-            mPrefsAccessToken.Value = string.Empty;
         }
 
-
-        public void SignIn(System.Action<bool> callback)
+        public void SignIn()
         {
-            if (mBusy1 == false)
-            {
-                mBusy1 = true;
-                mCallback = callback;
-                StartCoroutine(open_redirect());
-            }
+            StopAllCoroutines();
+
+            mState = STATE.NEED_SIGNIN_COMPLETE;
+            signin_open();
         }
 
-        protected IEnumerator open_redirect()
-        {
-            var info = DEV_Settings.Instance.googleWebData;
-            var account_id = mPrefsAccountID.Value;
-            var access_token = mPrefsAccessToken.Value;
-
-            if (!string.IsNullOrEmpty(account_id) && !string.IsNullOrEmpty(access_token))
-            {
-                var url = $"{info.login_uri}?account_id={account_id}&access_token={access_token}";
-                var request = UnityWebRequest.Get(url);
-
-                yield return request.SendWebRequest();
-
-                if (HasError(request))
-                {
-                    mBusy1 = false;
-                    mCallback?.Invoke(false);
-                    yield break;
-                }
-
-                if (!string.IsNullOrEmpty(request.downloadHandler.text))
-                {
-                    mBusy1 = false;
-                    mCallback?.Invoke(true);
-                    yield break;
-                }
-            }
-
-            OpenURL();
-        }
-
-
-        protected IEnumerator signin_2(string redirect_uri, string code =  null)
+        protected IEnumerator signin_complete(string redirect_uri, string code =  null)
         {
             var info = DEV_Settings.Instance.googleWebData;
 
@@ -100,21 +97,17 @@ namespace Devarc
                 yield return request.SendWebRequest();
 
                 code = request.downloadHandler.text;
-                if (HasError(request))
+                if (hasError(request))
                 {
-                    mBusy1 = false;
-                    mBusy2 = false;
-                    mCallback?.Invoke(false);
+                    notifySignIn(false, true);
                     yield break;
                 }
             }
 
-            // Code expired
+            // Pednding or sign-in window is closed.
             if (string.IsNullOrEmpty(code))
             {
-                mBusy1 = false;
-                mBusy2 = false;
-                mCallback?.Invoke(false);
+                // Skip error notification.
                 yield break;
             }
 
@@ -125,11 +118,9 @@ namespace Devarc
 
                 yield return request.SendWebRequest();
 
-                if (HasError(request))
+                if (hasError(request))
                 {
-                    mBusy1 = false;
-                    mBusy2 = false;
-                    mCallback?.Invoke(false);
+                    notifySignIn(false, true);
                     yield break;
                 }
 
@@ -142,11 +133,9 @@ namespace Devarc
                 request.SetRequestHeader("Authorization", $"Bearer {mPrefsAccessToken.Value}");
                 yield return request.SendWebRequest();
 
-                if (HasError(request))
+                if (hasError(request))
                 {
-                    mBusy1 = false;
-                    mBusy2 = false;
-                    mCallback?.Invoke(false);
+                    notifySignIn(false, true);
                     yield break;
                 }
 
@@ -155,36 +144,29 @@ namespace Devarc
             }
 
             Debug.Log(mPrefsAccountID.Value);
-
-            mBusy1 = false;
-            mBusy2 = false;
-            mCallback?.Invoke(true);
+            notifySignIn(true, true);
         }
 
 
         public void SignOut()
         {
-            if (mBusy1 == false)
-            {
-                mBusy1 = true;
-                StartCoroutine(signout());
-            }
+            mState = STATE.INIT;
+            StopAllCoroutines();
+            StartCoroutine(signout());
         }
 
         protected IEnumerator signout()
         {
             if (string.IsNullOrEmpty(mPrefsAccessToken.Value))
             {
-                mBusy1 = false;
+                notifySignOut(false);
                 yield break;
             }
 
             var request = UnityWebRequest.PostWwwForm($"{DEV_Settings.RevocationURI}?token={mPrefsAccessToken.Value}", "");
             yield return request.SendWebRequest();
 
-            mBusy1 = false;
-            Clear();
-            Debug.Log($"SignOut: success={request.result == UnityWebRequest.Result.Success}");
+            notifySignOut(true);
         }
 
 
@@ -199,13 +181,5 @@ namespace Devarc
             value = value.Replace(Base64Character63, Base64UrlCharacter63); // Replace / with _
             return value;
         }
-
-        protected static bool HasError(UnityWebRequest request)
-        {
-            if (request == null) return true;
-            if (request.error != null) return true;
-            return false;
-        }
-
     }
 }

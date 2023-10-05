@@ -38,12 +38,9 @@ const cryptUtil = require("./Util/CryptUtil.js");
 const crypto = require('crypto');
 const hash = crypto.createHash('sha256');
 
-// Init google secret
+// Init google
 const axios = require('axios');
 const fs = require('fs');
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const GOOGLE_LOGIN_REDIRECT_URI = process.env.GOOGLE_LOGIN_REDIRECT_URI;
 const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
 const GOOGLE_USERINFO_URL = 'https://www.googleapis.com/oauth2/v2/userinfo';
 
@@ -157,32 +154,36 @@ app.get('/login/code', wrapAsync(async (req, res) => {
 
 
 app.get('/login/signin', wrapAsync(async (req, res) => {
-    const { code, code_verifier, redirect_uri } = req.query;
-    console.log(`signin: code=${code}`);
-    console.log(`signin: code_verifier=${code_verifier}`);
-    console.log(`signin: GOOGLE_LOGIN_REDIRECT_URI=${redirect_uri}`);
+    var { code, code_verifier, redirect_uri, account_id, access_token } = req.query;
 
     if (!code || !code_verifier)
     {
-        throw new Error('code: Protocol error.');
+        if (!account_id || !access_token)
+        {
+            throw new Error('code: Protocol error.');
+        }
+        console.log(`signin: account_id=${account_id}`);
+    }
+    else
+    {
+        console.log(`signin: code=${code}`);
+        const resp_token = await axios.post(GOOGLE_TOKEN_URL, {
+            code,
+            client_id: process.env.GOOGLE_CLIENT_ID,
+            client_secret: process.env.GOOGLE_CLIENT_SECRET,
+            redirect_uri: redirect_uri,
+            code_verifier: code_verifier,
+            scope: 'openid email profile',
+            grant_type: 'authorization_code',
+        });
+    
+        access_token = resp_token.data.access_token;
+        const resp_info = await axios.get(GOOGLE_USERINFO_URL, {
+            headers: { Authorization: `Bearer ${access_token}` }
+        });
+        account_id = resp_info.data.email;
     }
 
-    const resp_token = await axios.post(GOOGLE_TOKEN_URL, {
-        code,
-        client_id: GOOGLE_CLIENT_ID,
-        client_secret: GOOGLE_CLIENT_SECRET,
-        redirect_uri: redirect_uri,
-        code_verifier: code_verifier,
-        scope: 'openid email profile',
-        grant_type: 'authorization_code',
-    });
-
-    const access_token = resp_token.data.access_token;
-    const resp_info = await axios.get(GOOGLE_USERINFO_URL, {
-        headers: { Authorization: `Bearer ${access_token}` }
-    });
-
-    const account_id = resp_info.data.email;
     var updateQuery = `UPDATE account SET access_token='${access_token}', login_time=NOW() WHERE account_id='${account_id}' LIMIT 1;`;
     mysqlConn.query(updateQuery, async (err, result) =>
     {

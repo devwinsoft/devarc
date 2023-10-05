@@ -85,10 +85,7 @@ public class TestNetworkScene : BaseScene
 
     public void OnClick_Google_Signin()
     {
-        LoginManager.Instance.SignIn((success) =>
-        {
-            Debug.Log($"Google SignIn: success={success}");
-        });
+        LoginManager.Instance.SignIn();
     }
 
     public void OnClick_Google_Signout()

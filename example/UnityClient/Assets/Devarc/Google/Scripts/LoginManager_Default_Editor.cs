@@ -1,49 +1,48 @@
 using System;
-using System.Collections;
 using System.Collections.Specialized;
-using System.Net.Sockets;
 using System.Net;
-using System.Security.Cryptography;
-using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
-using Google;
 
 namespace Devarc
 {
     public class LoginManager_Default_Editor : LoginManager_Default
     {
-        string local_redirect_uri = "http://localhost:5000";
         HttpListener mListener = null;
 
-        static int GetAvailPort()
+        protected override void signin_open()
         {
-            var listener = new TcpListener(IPAddress.Loopback, 0);
-            listener.Start();
-            var port = ((IPEndPoint)listener.LocalEndpoint).Port;
-            listener.Stop();
-            return port;
-        }
-
-        protected override void OpenURL()
-        {
-            Clear();
+            clear();
 
             var info = DEV_Settings.Instance.googleWebData;
             state = Guid.NewGuid().ToString();
             code_verifier = Guid.NewGuid().ToString();
             code_challenge = CreateCodeChallenge(code_verifier);
 
-            var url = $"{DEV_Settings.AuthorizationURI}?response_type=code&scope={Uri.EscapeDataString(string.Join(" ", info.scopes))}&redirect_uri={Uri.EscapeDataString(local_redirect_uri)}&client_id={info.client_id}&state={state}&code_challenge={code_challenge}&code_challenge_method=S256";
+            var url = $"{DEV_Settings.AuthorizationURI}?response_type=code&scope={Uri.EscapeDataString(string.Join(" ", info.scopes))}&redirect_uri={Uri.EscapeDataString(info.loopback_uri)}&client_id={info.client_id}&state={state}&code_challenge={code_challenge}&code_challenge_method=S256";
             Application.OpenURL(url);
             AddHttpListener();
         }
 
+
+        //static int GetAvailPort()
+        //{
+        //    var listener = new TcpListener(IPAddress.Loopback, 0);
+        //    listener.Start();
+        //    var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+        //    listener.Stop();
+        //    return port;
+        //}
+
         void AddHttpListener()
         {
+            if (mListener != null)
+                return;
+
+            var info = DEV_Settings.Instance.googleWebData;
             mListener = new System.Net.HttpListener();
-            mListener.Prefixes.Add(local_redirect_uri + "/");
+            mListener.Prefixes.Add(info.loopback_uri + "/");
             mListener.Start();
 
             var context = System.Threading.SynchronizationContext.Current;
@@ -62,6 +61,7 @@ namespace Devarc
 
         void HandleHttpListener(object arg)
         {
+            var info = DEV_Settings.Instance.googleWebData;
             var result = (IAsyncResult)arg;
             //var httpListener = (System.Net.HttpListener)result.AsyncState;
             var context = mListener.EndGetContext(result);
@@ -94,7 +94,7 @@ namespace Devarc
             }
 
             var code = parameters.Get("code");
-            StartCoroutine(signin_2(local_redirect_uri, code));
+            StartCoroutine(signin_complete(info.loopback_uri, code));
         }
     }
 

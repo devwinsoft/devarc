@@ -10,29 +10,20 @@ using Firebase.Extensions;
 
 namespace Devarc
 {
-    public class LoginManager_Firebase : MonoSingleton<LoginManager_Firebase>, ILoginManager
+    public class LoginManager_Firebase : LoginManager_Base, ILoginManager
     {
         public static Firebase.FirebaseApp app;
         public static FirebaseAuth auth;
         public static FirebaseUser user;
+
         GoogleSignInConfiguration configuration;
 
-        System.Action<bool> mCallback = null;
-
-
-        static bool HasError(UnityWebRequest request)
-        {
-            if (request == null) return true;
-            if (request.error != null) return true;
-            return false;
-        }
-
-        protected override void onAwake()
+        void Awake()
         {
             configuration = new GoogleSignInConfiguration
             {
                 RequestEmail = true,
-                RequestIdToken = true,
+                RequestAuthCode = true,
                 WebClientId = "880902336083-rsba61ob5nmm0vbpbbbcgqkb9ccb1ga9.apps.googleusercontent.com"
             };
 
@@ -54,58 +45,79 @@ namespace Devarc
             });
         }
 
-        protected override void onDestroy()
+
+        void OnDestroy()
         {
             auth.StateChanged -= AuthStateChanged;
             auth = null;
         }
 
 
-        public void SignIn(System.Action<bool> callback)
+        public void SignIn()
         {
-            mCallback = callback;
             GoogleSignIn.Configuration = configuration;
             GoogleSignIn.Configuration.UseGameSignIn = false;
             GoogleSignIn.Configuration.RequestIdToken = true;
 
             GoogleSignIn.DefaultInstance.SignIn().ContinueWithOnMainThread(task =>
             {
-                if (task.IsFaulted)
+                if (task.IsFaulted || task.IsCanceled)
                 {
-                    Debug.Log("IsFaulted");
-                    using (IEnumerator<Exception> enumerator = task.Exception.InnerExceptions.GetEnumerator())
-                    {
-                        if (enumerator.MoveNext())
-                        {
-                            GoogleSignIn.SignInException error = (GoogleSignIn.SignInException)enumerator.Current;
-                            Debug.Log("Got Error: " + error.Status + " " + error.Message);
-                        }
-                        else
-                        {
-                            Debug.Log("Got Unexpected Exception?!?" + task.Exception);
-                        }
-                    }
-                }
-                else if (task.IsCanceled)
-                {
-                    Debug.Log("IsCanceled");
+                    notifySignIn(false, true);
                 }
                 else
                 {
-                    Debug.Log(task.Result.IdToken);
-
                     var user = task.Result;
-                    auth.CurrentUser.TokenAsync(true).ContinueWithOnMainThread(task =>
-                    {
-                    });
+                    StartCoroutine(signin_complete(user.Email, user.AuthCode));
                 }
             });
+        }
+
+        IEnumerator signin_complete(string account_id, string access_token)
+        {
+            var info = DEV_Settings.Instance.googleWebData;
+            mPrefsAccountID.Value = account_id;
+            mPrefsAccessToken.Value = access_token;
+
+            if (string.IsNullOrEmpty(account_id) || string.IsNullOrEmpty(access_token))
+            {
+                notifySignIn(false, true);
+                yield break;
+            }
+
+            var url = $"{info.signin_uri}?account_id={Uri.EscapeDataString(account_id)}&access_token={access_token}";
+            var request = UnityWebRequest.Get(url);
+            request.certificateHandler = new CertificateHandler_AcceptAll();
+
+            yield return request.SendWebRequest();
+            request.certificateHandler.Dispose();
+
+            if (hasError(request))
+            {
+                notifySignIn(false, true);
+                yield break;
+            }
+
+            if (string.IsNullOrEmpty(request.downloadHandler.text))
+            {
+                notifySignIn(false, true);
+                yield break;
+            }
+            notifySignIn(true, true);
         }
 
 
         public void SignOut()
         {
-            GoogleSignIn.DefaultInstance.SignOut();
+            if (string.IsNullOrEmpty(mPrefsAccessToken.Value))
+            {
+                notifySignOut(false);
+            }
+            else
+            {
+                GoogleSignIn.DefaultInstance.SignOut();
+                notifySignOut(true);
+            }
         }
 
 
@@ -126,9 +138,6 @@ namespace Devarc
                 }
             }
         }
-
-
-
 
         //void SignInWithGoogle(bool linkWithCurrentAnonUser)
         //{
