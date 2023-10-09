@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 
 namespace Devarc
@@ -29,6 +30,12 @@ namespace Devarc
         protected bool IsClass(Type type) => type.IsClass && !type.Name.ToLower().Contains("string");
         protected bool IsEnum(FieldInfo field) => field.FieldType.IsEnum;
         protected bool IsEnum(Type type) => type.IsEnum;
+
+
+        protected bool HasParentClass(Type type)
+        {
+            return type.BaseType != null && !string.IsNullOrEmpty(type.BaseType.Name) && !type.BaseType.Name.ToLower().EndsWith("object");
+        }
 
 
         protected string ToTypeName(FieldInfo finfo)

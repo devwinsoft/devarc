@@ -53,17 +53,17 @@ namespace Devarc
         }
 
 
-        public void SignIn()
+        public void Google_SignIn()
         {
-            GoogleSignIn.Configuration = configuration;
-            GoogleSignIn.Configuration.UseGameSignIn = false;
-            GoogleSignIn.Configuration.RequestIdToken = true;
+            Google.GoogleSignIn.Configuration = configuration;
+            Google.GoogleSignIn.Configuration.UseGameSignIn = false;
+            Google.GoogleSignIn.Configuration.RequestIdToken = true;
 
             GoogleSignIn.DefaultInstance.SignIn().ContinueWithOnMainThread(task =>
             {
                 if (task.IsFaulted || task.IsCanceled)
                 {
-                    notifySignIn(false, true);
+                    notifySignIn(LoginType.NONE, true);
                 }
                 else
                 {
@@ -75,17 +75,16 @@ namespace Devarc
 
         IEnumerator signin_complete(string account_id, string access_token)
         {
-            var info = DEV_Settings.Instance.googleWebData;
+            var info = DEV_Settings.Instance.loginData.google;
             mPrefsAccountID.Value = account_id;
-            mPrefsAccessToken.Value = access_token;
 
-            if (string.IsNullOrEmpty(account_id) || string.IsNullOrEmpty(access_token))
+            if (string.IsNullOrEmpty(access_token))
             {
-                notifySignIn(false, true);
+                notifySignIn(LoginType.NONE, true);
                 yield break;
             }
 
-            var url = $"{info.signin_uri}?account_id={Uri.EscapeDataString(account_id)}&access_token={access_token}";
+            var url = $"{info.base_uri}/signin?access_token={access_token}";
             var request = UnityWebRequest.Get(url);
             request.certificateHandler = new CertificateHandler_AcceptAll();
 
@@ -94,28 +93,29 @@ namespace Devarc
 
             if (hasError(request))
             {
-                notifySignIn(false, true);
+                notifySignIn(LoginType.NONE, true);
                 yield break;
             }
 
-            if (string.IsNullOrEmpty(request.downloadHandler.text))
+            var result = JsonUtility.FromJson<GoogleSigninResult>(request.downloadHandler.text);
+            if (result == null || string.IsNullOrEmpty(result.secret))
             {
-                notifySignIn(false, true);
+                notifySignIn(LoginType.NONE, true);
                 yield break;
             }
-            notifySignIn(true, true);
+            notifySignIn(LoginType.GOOGLE, true);
         }
 
 
-        public void SignOut()
+        public void Google_SignOut()
         {
-            if (string.IsNullOrEmpty(mPrefsAccessToken.Value))
+            if (mPrefsLoginType.Value == LoginType.NONE)
             {
                 notifySignOut(false);
             }
             else
             {
-                GoogleSignIn.DefaultInstance.SignOut();
+                Google.GoogleSignIn.DefaultInstance.SignOut();
                 notifySignOut(true);
             }
         }

@@ -7,6 +7,8 @@ namespace C2Auth
 	[MessagePackObject]
 	public class RequestSession
 	{
+		[Key(0)]
+		public ErrorType            errorCode;
 	}
 
 	[MessagePackObject]
@@ -16,11 +18,15 @@ namespace C2Auth
 		public string               accountID;
 		[Key(1)]
 		public string               password;
+		[Key(2)]
+		public ErrorType            errorCode;
 	}
 
 	[MessagePackObject]
 	public class RequestLogout
 	{
+		[Key(0)]
+		public ErrorType            errorCode;
 	}
 
 	[MessagePackObject]
@@ -30,6 +36,8 @@ namespace C2Auth
 		public string               accountID;
 		[Key(1)]
 		public string               password;
+		[Key(2)]
+		public ErrorType            errorCode;
 	}
 
 };

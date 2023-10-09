@@ -14,12 +14,12 @@
 #pragma warning disable SA1403 // File may only contain a single namespace
 #pragma warning disable SA1649 // File name should match first type name
 
-namespace MessagePack.Formatters.C2Auth
+namespace MessagePack.Formatters.Devarc
 {
-    public sealed class RequestLoginFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::C2Auth.RequestLogin>
+    public sealed class CustomSigninResultFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Devarc.CustomSigninResult>
     {
 
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::C2Auth.RequestLogin value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Devarc.CustomSigninResult value, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (value == null)
             {
@@ -28,13 +28,12 @@ namespace MessagePack.Formatters.C2Auth
             }
 
             global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(3);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.accountID, options);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.password, options);
+            writer.WriteArrayHeader(2);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.ErrorType>(formatterResolver).Serialize(ref writer, value.errorCode, options);
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.secret, options);
         }
 
-        public global::C2Auth.RequestLogin Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Devarc.CustomSigninResult Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -44,20 +43,17 @@ namespace MessagePack.Formatters.C2Auth
             options.Security.DepthStep(ref reader);
             global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var ____result = new global::C2Auth.RequestLogin();
+            var ____result = new global::Devarc.CustomSigninResult();
 
             for (int i = 0; i < length; i++)
             {
                 switch (i)
                 {
                     case 0:
-                        ____result.accountID = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                        ____result.errorCode = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.ErrorType>(formatterResolver).Deserialize(ref reader, options);
                         break;
                     case 1:
-                        ____result.password = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
-                        break;
-                    case 2:
-                        ____result.errorCode = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.ErrorType>(formatterResolver).Deserialize(ref reader, options);
+                        ____result.secret = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();

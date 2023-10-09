@@ -14,12 +14,12 @@
 #pragma warning disable SA1403 // File may only contain a single namespace
 #pragma warning disable SA1649 // File name should match first type name
 
-namespace MessagePack.Formatters.C2Auth
+namespace MessagePack.Formatters.Devarc
 {
-    public sealed class RequestLogoutFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::C2Auth.RequestLogout>
+    public sealed class GoogleSigninResultFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Devarc.GoogleSigninResult>
     {
 
-        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::C2Auth.RequestLogout value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Devarc.GoogleSigninResult value, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (value == null)
             {
@@ -28,11 +28,16 @@ namespace MessagePack.Formatters.C2Auth
             }
 
             global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(1);
+            writer.WriteArrayHeader(6);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.ErrorType>(formatterResolver).Serialize(ref writer, value.errorCode, options);
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.account_id, options);
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.access_token, options);
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.refresh_token, options);
+            writer.Write(value.expires_in);
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.secret, options);
         }
 
-        public global::C2Auth.RequestLogout Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::Devarc.GoogleSigninResult Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -42,7 +47,7 @@ namespace MessagePack.Formatters.C2Auth
             options.Security.DepthStep(ref reader);
             global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var ____result = new global::C2Auth.RequestLogout();
+            var ____result = new global::Devarc.GoogleSigninResult();
 
             for (int i = 0; i < length; i++)
             {
@@ -50,6 +55,21 @@ namespace MessagePack.Formatters.C2Auth
                 {
                     case 0:
                         ____result.errorCode = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.ErrorType>(formatterResolver).Deserialize(ref reader, options);
+                        break;
+                    case 1:
+                        ____result.account_id = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                        break;
+                    case 2:
+                        ____result.access_token = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                        break;
+                    case 3:
+                        ____result.refresh_token = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                        break;
+                    case 4:
+                        ____result.expires_in = reader.ReadInt32();
+                        break;
+                    case 5:
+                        ____result.secret = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();

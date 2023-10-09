@@ -8,22 +8,22 @@ namespace Auth2C
 	public class NotifySession
 	{
 		[Key(0)]
-		public ErrorType            errorCode;
-		[Key(1)]
 		public string               sessionID;
-		[Key(2)]
+		[Key(1)]
 		public int                  secret;
+		[Key(2)]
+		public ErrorType            errorCode;
 	}
 
 	[MessagePackObject]
 	public class NotifyLogin
 	{
 		[Key(0)]
-		public ErrorType            errorCode;
-		[Key(1)]
 		public string               sessionID;
-		[Key(2)]
+		[Key(1)]
 		public int                  secret;
+		[Key(2)]
+		public ErrorType            errorCode;
 	}
 
 	[MessagePackObject]
@@ -37,11 +37,11 @@ namespace Auth2C
 	public class NotifySignin
 	{
 		[Key(0)]
-		public ErrorType            errorCode;
-		[Key(1)]
 		public string               sessionID;
-		[Key(2)]
+		[Key(1)]
 		public int                  secret;
+		[Key(2)]
+		public ErrorType            errorCode;
 	}
 
 	[MessagePackObject]

@@ -1,32 +1,36 @@
 const msgpack = require('msgpack-lite');
 const Common = require('./Common.js');
 const ErrorType = Common.ErrorType;
+const CommonResult = Common.CommonResult;
+const CustomSigninResult = Common.CustomSigninResult;
+const GoogleCodeResult = Common.GoogleCodeResult;
+const GoogleSigninResult = Common.GoogleSigninResult;
 const GenderType = Common.GenderType;
 const Account = Common.Account;
 const mHandlers = {};
 class NotifySession
 {
 	/**
-	 * @param {ErrorType} errorCode - ErrorType
 	 * @param {string} sessionID - string
 	 * @param {int} secret - int
+	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(errorCode, sessionID, secret) {
-		this.errorCode = errorCode;
-		this.sessionID = sessionID;
-		this.secret = secret;
+	constructor(_sessionID, _secret, _errorCode) {
+		this.sessionID = _sessionID;
+		this.secret = _secret;
+		this.errorCode = _errorCode;
 	}
 	Init(packet) {
-		this.errorCode = packet[0];
-		this.sessionID = packet[1];
-		this.secret = packet[2];
+		this.sessionID = packet[0];
+		this.secret = packet[1];
+		this.errorCode = packet[2];
 	}
 	ToArray() {
 		const data =
 		[
-			this.errorCode,
 			this.sessionID,
 			this.secret,
+			this.errorCode,
 		];
 		return data;
 	}
@@ -35,26 +39,26 @@ class NotifySession
 class NotifyLogin
 {
 	/**
-	 * @param {ErrorType} errorCode - ErrorType
 	 * @param {string} sessionID - string
 	 * @param {int} secret - int
+	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(errorCode, sessionID, secret) {
-		this.errorCode = errorCode;
-		this.sessionID = sessionID;
-		this.secret = secret;
+	constructor(_sessionID, _secret, _errorCode) {
+		this.sessionID = _sessionID;
+		this.secret = _secret;
+		this.errorCode = _errorCode;
 	}
 	Init(packet) {
-		this.errorCode = packet[0];
-		this.sessionID = packet[1];
-		this.secret = packet[2];
+		this.sessionID = packet[0];
+		this.secret = packet[1];
+		this.errorCode = packet[2];
 	}
 	ToArray() {
 		const data =
 		[
-			this.errorCode,
 			this.sessionID,
 			this.secret,
+			this.errorCode,
 		];
 		return data;
 	}
@@ -65,8 +69,8 @@ class NotifyLogout
 	/**
 	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(errorCode) {
-		this.errorCode = errorCode;
+	constructor(_errorCode) {
+		this.errorCode = _errorCode;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -83,26 +87,26 @@ class NotifyLogout
 class NotifySignin
 {
 	/**
-	 * @param {ErrorType} errorCode - ErrorType
 	 * @param {string} sessionID - string
 	 * @param {int} secret - int
+	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(errorCode, sessionID, secret) {
-		this.errorCode = errorCode;
-		this.sessionID = sessionID;
-		this.secret = secret;
+	constructor(_sessionID, _secret, _errorCode) {
+		this.sessionID = _sessionID;
+		this.secret = _secret;
+		this.errorCode = _errorCode;
 	}
 	Init(packet) {
-		this.errorCode = packet[0];
-		this.sessionID = packet[1];
-		this.secret = packet[2];
+		this.sessionID = packet[0];
+		this.secret = packet[1];
+		this.errorCode = packet[2];
 	}
 	ToArray() {
 		const data =
 		[
-			this.errorCode,
 			this.sessionID,
 			this.secret,
+			this.errorCode,
 		];
 		return data;
 	}
@@ -113,8 +117,8 @@ class NotifyError
 	/**
 	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(errorCode) {
-		this.errorCode = errorCode;
+	constructor(_errorCode) {
+		this.errorCode = _errorCode;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];

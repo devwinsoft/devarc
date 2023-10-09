@@ -7,11 +7,55 @@ namespace Devarc
 	{
 		SUCCESS              = 0,
 		UNKNOWN              = 1,
-		SERVER_ERROR         = 2,
-		SESSION_EXPIRED      = 3,
-		SESSION_REMAIN       = 4,
-		INVALID_PASSWORD     = 5,
-		INVALID_SECRET       = 6,
+		DATABASE_ERROR       = 2,
+		PROTOCOL_ERROR       = 3,
+		SERVER_ERROR         = 4,
+		SESSION_EXPIRED      = 5,
+		SESSION_REMAIN       = 6,
+		INVALID_PASSWORD     = 7,
+		INVALID_SECRET       = 8,
+	}
+
+	[MessagePackObject]
+	public class CommonResult
+	{
+		[Key(0)]
+		public ErrorType            errorCode;
+	}
+
+	[MessagePackObject]
+	public class CustomSigninResult
+	{
+		[Key(0)]
+		public ErrorType            errorCode;
+		[Key(1)]
+		public string               secret;
+	}
+
+	[MessagePackObject]
+	public class GoogleCodeResult
+	{
+		[Key(0)]
+		public ErrorType            errorCode;
+		[Key(1)]
+		public string               code;
+	}
+
+	[MessagePackObject]
+	public class GoogleSigninResult
+	{
+		[Key(0)]
+		public ErrorType            errorCode;
+		[Key(1)]
+		public string               account_id;
+		[Key(2)]
+		public string               access_token;
+		[Key(3)]
+		public string               refresh_token;
+		[Key(4)]
+		public int                  expires_in;
+		[Key(5)]
+		public string               secret;
 	}
 
 	public enum GenderType

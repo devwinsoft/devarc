@@ -1,20 +1,20 @@
 ﻿namespace C2Auth
 {
-    public class RequestSession
+    public class RequestSession : CommonResult
     {
     }
 
-    public class RequestLogin
+    public class RequestLogin : CommonResult
     {
         public string accountID;
         public string password;
     }
 
-    public class RequestLogout
+    public class RequestLogout : CommonResult
     {
     }
 
-    public class RequestSignin
+    public class RequestSignin : CommonResult
     {
         public string accountID;
         public string password;
@@ -23,34 +23,29 @@
 
 namespace Auth2C
 {
-    public class NotifySession
+    public class NotifySession : CommonResult
     {
-        public ErrorType errorCode;
         public string sessionID;
         public int secret;
     }
 
-    public class NotifyLogin
+    public class NotifyLogin : CommonResult
     {
-        public ErrorType errorCode;
         public string sessionID;
         public int secret;
     }
 
-    public class NotifyLogout
+    public class NotifyLogout : CommonResult
     {
-        public ErrorType errorCode;
     }
 
-    public class NotifySignin
+    public class NotifySignin : CommonResult
     {
-        public ErrorType errorCode;
         public string sessionID;
         public int secret;
     }
 
-    public class NotifyError
+    public class NotifyError : CommonResult
     {
-        public ErrorType errorCode;
     }
 }

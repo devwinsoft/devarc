@@ -27,7 +27,9 @@ namespace MessagePack.Formatters.C2Auth
                 return;
             }
 
-            writer.WriteArrayHeader(0);
+            global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(1);
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.ErrorType>(formatterResolver).Serialize(ref writer, value.errorCode, options);
         }
 
         public global::C2Auth.RequestLogout Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -37,8 +39,26 @@ namespace MessagePack.Formatters.C2Auth
                 return null;
             }
 
-            reader.Skip();
-            return new global::C2Auth.RequestLogout();
+            options.Security.DepthStep(ref reader);
+            global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var ____result = new global::C2Auth.RequestLogout();
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        ____result.errorCode = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.ErrorType>(formatterResolver).Deserialize(ref reader, options);
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            reader.Depth--;
+            return ____result;
         }
     }
 

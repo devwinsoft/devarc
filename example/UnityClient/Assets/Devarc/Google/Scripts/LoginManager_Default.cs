@@ -1,44 +1,70 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using static UnityEngine.Networking.UnityWebRequest;
 
 namespace Devarc
 {
-    [Serializable]
-    public class GoogleUserToken
-    {
-        public string access_token;
-        public int expires_in;
-        public string id_token;
-        public string refresh_token;
-        public string scope;
-        public string token_type;
-    }
+    //[Serializable]
+    //public class GoogleUserToken
+    //{
+    //    public string access_token;
+    //    public int expires_in;
+    //    public string id_token;
+    //    public string refresh_token;
+    //    public string scope;
+    //    public string token_type;
+    //}
 
-    [Serializable]
-    public class GoogleUserInfo
-    {
-        public string sub; // Id;
-        public string name;
-        public string given_name;
-        public string family_name;
-        public string picture;
-        public string email;
-        public bool email_verified;
-        public string locale;
-    }
+    //[Serializable]
+    //public class GoogleUserInfo
+    //{
+    //    public string sub; // Id;
+    //    public string name;
+    //    public string given_name;
+    //    public string family_name;
+    //    public string picture;
+    //    public string email;
+    //    public bool email_verified;
+    //    public string locale;
+    //}
 
+    //[Serializable]
+    //public class SigninResult
+    //{
+    //    public string account_id;
+    //    public string access_token;
+    //    public string refresh_token;
+    //    public int expires_in;
+    //    public string secret;
+    //}
 
     public abstract class LoginManager_Default : LoginManager_Base, ILoginManager
     {
+        public const string GoogleAuthURI = "https://accounts.google.com/o/oauth2/v2/auth";
+        public const string GoogleTokenURL = "https://oauth2.googleapis.com/token";
+        public const string GoogleUserinfoURL = "https://www.googleapis.com/oauth2/v2/userinfo";
+        public const string GoogleRevokeURI = "https://oauth2.googleapis.com/revoke";
+
+
         protected abstract void signin_open();
+
+        protected StringPrefs mPrefsAccessToken = new StringPrefs("access_token", "");
+        protected StringPrefs mPrefsRefreshToken = new StringPrefs("refresh_token", "");
 
         protected string state = string.Empty;
         protected string code_verifier = string.Empty;
         protected string code_challenge = string.Empty;
+        protected string[] mScopes = new string[]
+        {
+            "openid",
+            "email",
+            "profile"
+        };
 
         const char Base64Character62 = '+';
         const char Base64Character63 = '/';
@@ -52,14 +78,14 @@ namespace Devarc
         {
             if (focus)
             {
-                var info = DEV_Settings.Instance.googleWebData;
+                var info = DEV_Settings.Instance.loginData.google;
                 switch (mState)
                 {
                     case STATE.NEED_SIGNIN_COMPLETE:
-                        StartCoroutine(signin_complete(info.redirect_uri, null));
+                        StartCoroutine(signin_complete($"{info.base_uri}/redirect", null));
                         break;
                     case STATE.COMPLETED:
-                        LogIn(false);
+                        //LogIn(false);
                         break;
                     default:
                         break;
@@ -71,12 +97,14 @@ namespace Devarc
         {
             base.clear();
 
+            mPrefsAccessToken.Value = string.Empty;
+
             state = string.Empty;
             code_challenge = string.Empty;
             code_verifier = string.Empty;
         }
 
-        public void SignIn()
+        public void Google_SignIn()
         {
             StopAllCoroutines();
 
@@ -86,69 +114,68 @@ namespace Devarc
 
         protected IEnumerator signin_complete(string redirect_uri, string code =  null)
         {
-            var info = DEV_Settings.Instance.googleWebData;
+            var info = DEV_Settings.Instance.loginData.google;
 
             // Get code
             if (string.IsNullOrEmpty(code))
             {
-                var url = $"{info.code_uri}?state={state}";
+                var url = $"{info.base_uri}/code?state={state}";
                 var request = UnityWebRequest.Get(url);
 
                 yield return request.SendWebRequest();
+                if (hasError(request))
+                {
+                    notifySignIn(LoginType.NONE, true);
+                    yield break;
+                }
 
+                state = string.Empty;
                 code = request.downloadHandler.text;
-                if (hasError(request))
+
+                // Pednding or sign-in window is closed.
+                if (string.IsNullOrEmpty(code))
                 {
-                    notifySignIn(false, true);
+                    // Skip error notification.
                     yield break;
                 }
             }
 
-            // Pednding or sign-in window is closed.
-            if (string.IsNullOrEmpty(code))
-            {
-                // Skip error notification.
-                yield break;
-            }
 
-            // Get access_token.
+            //Get secrets.
             {
-                var url = $"{info.signin_uri}?code={code}&code_verifier={code_verifier}&redirect_uri={redirect_uri}";
+                var url = $"{info.base_uri}/signin?code={code}&code_verifier={code_verifier}&redirect_uri={redirect_uri}";
                 var request = UnityWebRequest.Get(url);
 
                 yield return request.SendWebRequest();
 
                 if (hasError(request))
                 {
-                    notifySignIn(false, true);
+                    notifySignIn(LoginType.NONE, true);
                     yield break;
                 }
 
-                mPrefsAccessToken.Value = request.downloadHandler.text;
-            }
-
-            // Get account_id.
-            {
-                var request = UnityWebRequest.Get(DEV_Settings.UserinfoURL);
-                request.SetRequestHeader("Authorization", $"Bearer {mPrefsAccessToken.Value}");
-                yield return request.SendWebRequest();
-
-                if (hasError(request))
+                var result = JsonUtility.FromJson<GoogleSigninResult>(request.downloadHandler.text);
+                if (result == null || string.IsNullOrEmpty(result.secret))
                 {
-                    notifySignIn(false, true);
+                    notifySignIn(LoginType.NONE, true);
                     yield break;
                 }
 
-                var userInfo = JsonUtility.FromJson<GoogleUserInfo>(request.downloadHandler.text);
-                mPrefsAccountID.Value = userInfo.email;
+                mPrefsAccountID.Value = result.account_id;
+                mPrefsAccessToken.Value = result.access_token;
+                if (!string.IsNullOrEmpty(result.refresh_token))
+                {
+                    mPrefsRefreshToken.Value = result.refresh_token;
+                }
+                mPrefsSecret.Value = result.secret;
             }
 
             Debug.Log(mPrefsAccountID.Value);
-            notifySignIn(true, true);
+            notifySignIn(LoginType.GOOGLE, true);
         }
 
 
-        public void SignOut()
+        public void Google_SignOut()
         {
             mState = STATE.INIT;
             StopAllCoroutines();
@@ -157,15 +184,31 @@ namespace Devarc
 
         protected IEnumerator signout()
         {
-            if (string.IsNullOrEmpty(mPrefsAccessToken.Value))
+            if (mPrefsLoginType.Value == LoginType.NONE)
             {
                 notifySignOut(false);
                 yield break;
             }
 
-            var request = UnityWebRequest.PostWwwForm($"{DEV_Settings.RevocationURI}?token={mPrefsAccessToken.Value}", "");
+            string url;
+            if (!string.IsNullOrEmpty(mPrefsRefreshToken.Value))
+            {
+                url = $"{GoogleRevokeURI}?token={mPrefsRefreshToken.Value}";
+            }
+            else
+            {
+                url = $"{GoogleRevokeURI}?token={mPrefsAccessToken.Value}";
+            }
+            var request = UnityWebRequest.PostWwwForm(url, "");
             yield return request.SendWebRequest();
 
+            if (hasError(request))
+            {
+                notifySignIn(LoginType.NONE, false);
+                yield break;
+            }
+
+            mPrefsRefreshToken.Value = string.Empty;
             notifySignOut(true);
         }
 

@@ -49,9 +49,9 @@ public class AppManager : MonoSingleton<AppManager>
 
 
         // Init LoginManager
-        LoginManager.Instance.OnSignIn += (success, firstInit) =>
+        LoginManager.Instance.OnSignIn += (loginType, firstInit) =>
         {
-            Debug.Log($"Google SignIn: success={success}, firstInit={firstInit}");
+            Debug.Log($"Google SignIn: LoginType={loginType}, firstInit={firstInit}");
         };
         LoginManager.Instance.OnSignOut += (success) =>
         {
@@ -85,6 +85,7 @@ public class AppManager : MonoSingleton<AppManager>
             Debug.Log($"Download failed.");
         };
     }
+
 
 
     public IEnumerator LoadBundles()

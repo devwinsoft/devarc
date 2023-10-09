@@ -29,9 +29,9 @@ namespace MessagePack.Formatters.Auth2C
 
             global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
             writer.WriteArrayHeader(3);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.ErrorType>(formatterResolver).Serialize(ref writer, value.errorCode, options);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.sessionID, options);
             writer.Write(value.secret);
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.ErrorType>(formatterResolver).Serialize(ref writer, value.errorCode, options);
         }
 
         public global::Auth2C.NotifySession Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -51,13 +51,13 @@ namespace MessagePack.Formatters.Auth2C
                 switch (i)
                 {
                     case 0:
-                        ____result.errorCode = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.ErrorType>(formatterResolver).Deserialize(ref reader, options);
-                        break;
-                    case 1:
                         ____result.sessionID = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
                         break;
-                    case 2:
+                    case 1:
                         ____result.secret = reader.ReadInt32();
+                        break;
+                    case 2:
+                        ____result.errorCode = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.ErrorType>(formatterResolver).Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();

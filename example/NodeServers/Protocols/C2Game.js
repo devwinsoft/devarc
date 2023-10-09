@@ -1,6 +1,10 @@
 const msgpack = require('msgpack-lite');
 const Common = require('./Common.js');
 const ErrorType = Common.ErrorType;
+const CommonResult = Common.CommonResult;
+const CustomSigninResult = Common.CustomSigninResult;
+const GoogleCodeResult = Common.GoogleCodeResult;
+const GoogleSigninResult = Common.GoogleSigninResult;
 const GenderType = Common.GenderType;
 const Account = Common.Account;
 const mHandlers = {};
@@ -10,9 +14,9 @@ class RequestLogin
 	 * @param {string} sessionID - string
 	 * @param {int} secret - int
 	 */
-	constructor(sessionID, secret) {
-		this.sessionID = sessionID;
-		this.secret = secret;
+	constructor(_sessionID, _secret) {
+		this.sessionID = _sessionID;
+		this.secret = _secret;
 	}
 	Init(packet) {
 		this.sessionID = packet[0];

@@ -15,12 +15,12 @@ namespace Devarc
         {
             clear();
 
-            var info = DEV_Settings.Instance.googleWebData;
+            var info = DEV_Settings.Instance.loginData.google;
             state = Guid.NewGuid().ToString();
             code_verifier = Guid.NewGuid().ToString();
             code_challenge = CreateCodeChallenge(code_verifier);
 
-            var url = $"{DEV_Settings.AuthorizationURI}?response_type=code&scope={Uri.EscapeDataString(string.Join(" ", info.scopes))}&redirect_uri={Uri.EscapeDataString(info.loopback_uri)}&client_id={info.client_id}&state={state}&code_challenge={code_challenge}&code_challenge_method=S256";
+            var url = $"{GoogleAuthURI}?response_type=code&access_type=offline&scope={Uri.EscapeDataString(string.Join(" ", mScopes))}&redirect_uri={Uri.EscapeDataString(info.loopback_uri)}&client_id={info.client_id}&state={state}&code_challenge={code_challenge}&code_challenge_method=S256";
             Application.OpenURL(url);
             AddHttpListener();
         }
@@ -40,7 +40,7 @@ namespace Devarc
             if (mListener != null)
                 return;
 
-            var info = DEV_Settings.Instance.googleWebData;
+            var info = DEV_Settings.Instance.loginData.google;
             mListener = new System.Net.HttpListener();
             mListener.Prefixes.Add(info.loopback_uri + "/");
             mListener.Start();
@@ -61,7 +61,7 @@ namespace Devarc
 
         void HandleHttpListener(object arg)
         {
-            var info = DEV_Settings.Instance.googleWebData;
+            var info = DEV_Settings.Instance.loginData.google;
             var result = (IAsyncResult)arg;
             //var httpListener = (System.Net.HttpListener)result.AsyncState;
             var context = mListener.EndGetContext(result);
@@ -89,7 +89,7 @@ namespace Devarc
             var error = parameters.Get("error");
             if (error != null)
             {
-                //_callbackU?.Invoke(false, error, null);
+                notifySignIn(LoginType.GOOGLE, true);
                 return;
             }
 

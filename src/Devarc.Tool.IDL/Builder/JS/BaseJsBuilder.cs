@@ -54,22 +54,23 @@ namespace Devarc
                 _output.AppendLine("\t */");
                 _output.Append("\tconstructor(");
                 bool started = false;
+
                 foreach (FieldInfo finfo in fields)
                 {
                     if (started)
                     {
-                        _output.Append($", {finfo.Name}");
+                        _output.Append($", _{finfo.Name}");
                     }
                     else
                     {
                         started = true;
-                        _output.Append(finfo.Name);
+                        _output.Append($"_{finfo.Name}");
                     }
                 }
                 _output.AppendLine(") {");
                 foreach (FieldInfo finfo in _type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
                 {
-                    _output.AppendLine($"\t\tthis.{finfo.Name} = {finfo.Name};");
+                    _output.AppendLine($"\t\tthis.{finfo.Name} = _{finfo.Name};");
                 }
                 _output.AppendLine("\t}");
                 _output.AppendLine("\tInit(packet) {");

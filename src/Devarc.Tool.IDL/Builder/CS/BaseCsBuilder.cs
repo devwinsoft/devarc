@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +10,16 @@ namespace Devarc
 {
     internal abstract class BaseCsBuilder : BaseBuilder
     {
+        protected bool isParentField(Type parentType, FieldInfo field)
+        {
+            foreach (FieldInfo finfo in parentType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+            {
+                if (finfo.Name == field.Name)
+                    return true;
+            }
+            return false;
+        }
+
         protected void generate_cs_protocol(Type _type, StringBuilder _output)
         {
             if (IsClass(_type))

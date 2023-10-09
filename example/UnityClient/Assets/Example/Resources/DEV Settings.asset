@@ -26,15 +26,13 @@ MonoBehaviour:
       data: xkdDnYZa7rILQIZa
     stringJsonDirectory:
       data: xkdDnYZa7rIL8LLiWg==
-  googleWebData:
-    client_id:
-      data: GBipI6mSCAgvqRgIrp2yQA0vheJAK1odHanYQOFAQEDD7n4tQCPDw0CF7g0j6A3h4bLo7uLi7iQRg7IRncPiWkMRWkPow+Id
-    login_uri: https://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com:3000/login/login
-    redirect_uri: https://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com:3000/login/redirect
-    loopback_uri: http://localhost:5000
-    code_uri: https://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com:3000/login/code
-    signin_uri: https://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com:3000/login/signin
-    scopes:
-    - openid
-    - email
-    - profile
+  loginData:
+    custom:
+      base_uri: https://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com:3000/custom
+    google:
+      client_id:
+        data: GBipI6mSCAgvqRgIrp2yQA0vheJAK1odHanYQOFAQEDD7n4tQCPDw0CF7g0j6A3h4bLo7uLi7iQRg7IRncPiWkMRWkPow+Id
+      base_uri: https://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com:3000/google
+      loopback_uri: http://localhost:5000
+      scopes: []
+    login_uri: https://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com:3000/login

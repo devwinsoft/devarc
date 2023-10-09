@@ -28,9 +28,10 @@ namespace MessagePack.Formatters.C2Auth
             }
 
             global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(2);
+            writer.WriteArrayHeader(3);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.accountID, options);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.password, options);
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.ErrorType>(formatterResolver).Serialize(ref writer, value.errorCode, options);
         }
 
         public global::C2Auth.RequestSignin Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -54,6 +55,9 @@ namespace MessagePack.Formatters.C2Auth
                         break;
                     case 1:
                         ____result.password = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                        break;
+                    case 2:
+                        ____result.errorCode = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.ErrorType>(formatterResolver).Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();

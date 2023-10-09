@@ -75,22 +75,29 @@ namespace Devarc
         public RootPathData defaultDirectory = new RootPathData();
 
 
-        public const string AuthorizationURI = "https://accounts.google.com/o/oauth2/v2/auth";
-        public const string UserinfoURL = "https://www.googleapis.com/oauth2/v2/userinfo";
-        public const string RevocationURI = "https://oauth2.googleapis.com/revoke";
+        [Serializable]
+        public class CustomLoginData
+        {
+            public string base_uri;
+        }
 
         [Serializable]
-        public class GoogleWebData
+        public class GoogleLoginData
         {
             public CString client_id;
-            public string login_uri;
-            public string redirect_uri;
+            public string base_uri;
             public string loopback_uri;
-            public string code_uri;
-            public string signin_uri;
-            public string[] scopes;
         }
-        public GoogleWebData googleWebData = new GoogleWebData();
+
+        [Serializable]
+        public class LoginData
+        {
+            public CustomLoginData custom = new CustomLoginData();
+            public GoogleLoginData google = new GoogleLoginData();
+            public string login_uri;
+        }
+        public LoginData loginData = new LoginData();
+
 
         public static string GetDefault_BundlePath()
         {

@@ -1,20 +1,28 @@
 const msgpack = require('msgpack-lite');
 const Common = require('./Common.js');
 const ErrorType = Common.ErrorType;
+const CommonResult = Common.CommonResult;
+const CustomSigninResult = Common.CustomSigninResult;
+const GoogleCodeResult = Common.GoogleCodeResult;
+const GoogleSigninResult = Common.GoogleSigninResult;
 const GenderType = Common.GenderType;
 const Account = Common.Account;
 const mHandlers = {};
 class RequestSession
 {
 	/**
+	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor() {
+	constructor(_errorCode) {
+		this.errorCode = _errorCode;
 	}
 	Init(packet) {
+		this.errorCode = packet[0];
 	}
 	ToArray() {
 		const data =
 		[
+			this.errorCode,
 		];
 		return data;
 	}
@@ -25,20 +33,24 @@ class RequestLogin
 	/**
 	 * @param {string} accountID - string
 	 * @param {string} password - string
+	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(accountID, password) {
-		this.accountID = accountID;
-		this.password = password;
+	constructor(_accountID, _password, _errorCode) {
+		this.accountID = _accountID;
+		this.password = _password;
+		this.errorCode = _errorCode;
 	}
 	Init(packet) {
 		this.accountID = packet[0];
 		this.password = packet[1];
+		this.errorCode = packet[2];
 	}
 	ToArray() {
 		const data =
 		[
 			this.accountID,
 			this.password,
+			this.errorCode,
 		];
 		return data;
 	}
@@ -47,14 +59,18 @@ class RequestLogin
 class RequestLogout
 {
 	/**
+	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor() {
+	constructor(_errorCode) {
+		this.errorCode = _errorCode;
 	}
 	Init(packet) {
+		this.errorCode = packet[0];
 	}
 	ToArray() {
 		const data =
 		[
+			this.errorCode,
 		];
 		return data;
 	}
@@ -65,20 +81,24 @@ class RequestSignin
 	/**
 	 * @param {string} accountID - string
 	 * @param {string} password - string
+	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(accountID, password) {
-		this.accountID = accountID;
-		this.password = password;
+	constructor(_accountID, _password, _errorCode) {
+		this.accountID = _accountID;
+		this.password = _password;
+		this.errorCode = _errorCode;
 	}
 	Init(packet) {
 		this.accountID = packet[0];
 		this.password = packet[1];
+		this.errorCode = packet[2];
 	}
 	ToArray() {
 		const data =
 		[
 			this.accountID,
 			this.password,
+			this.errorCode,
 		];
 		return data;
 	}

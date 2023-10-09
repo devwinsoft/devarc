@@ -1,6 +1,10 @@
 const msgpack = require('msgpack-lite');
 const Common = require('./Common.js');
 const ErrorType = Common.ErrorType;
+const CommonResult = Common.CommonResult;
+const CustomSigninResult = Common.CustomSigninResult;
+const GoogleCodeResult = Common.GoogleCodeResult;
+const GoogleSigninResult = Common.GoogleSigninResult;
 const GenderType = Common.GenderType;
 const Account = Common.Account;
 const mHandlers = {};
@@ -10,9 +14,9 @@ class NotifyLogin
 	 * @param {ErrorType} errorCode - ErrorType
 	 * @param {Account} account - Account
 	 */
-	constructor(errorCode, account) {
-		this.errorCode = errorCode;
-		this.account = account;
+	constructor(_errorCode, _account) {
+		this.errorCode = _errorCode;
+		this.account = _account;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
