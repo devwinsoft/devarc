@@ -14,9 +14,9 @@ class NotifyLogin
 	 * @param {ErrorType} errorCode - ErrorType
 	 * @param {Account} account - Account
 	 */
-	constructor(_errorCode, _account) {
-		this.errorCode = _errorCode;
-		this.account = _account;
+	constructor(errorCode, account) {
+		this.errorCode = errorCode;
+		this.account = account;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];

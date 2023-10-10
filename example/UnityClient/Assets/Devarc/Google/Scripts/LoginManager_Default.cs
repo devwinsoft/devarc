@@ -51,7 +51,7 @@ namespace Devarc
         public const string GoogleRevokeURI = "https://oauth2.googleapis.com/revoke";
 
 
-        protected abstract void signin_open();
+        protected abstract void google_signin_open();
 
         protected StringPrefs mPrefsAccessToken = new StringPrefs("access_token", "");
         protected StringPrefs mPrefsRefreshToken = new StringPrefs("refresh_token", "");
@@ -109,7 +109,7 @@ namespace Devarc
             StopAllCoroutines();
 
             mState = STATE.NEED_SIGNIN_COMPLETE;
-            signin_open();
+            google_signin_open();
         }
 
         protected IEnumerator signin_complete(string redirect_uri, string code =  null)
@@ -130,7 +130,8 @@ namespace Devarc
                 }
 
                 state = string.Empty;
-                code = request.downloadHandler.text;
+                var result = JsonUtility.FromJson<GoogleCodeResult>(request.downloadHandler.text);
+                code = result.code;
 
                 // Pednding or sign-in window is closed.
                 if (string.IsNullOrEmpty(code))
@@ -170,7 +171,9 @@ namespace Devarc
                 mPrefsSecret.Value = result.secret;
             }
 
-            Debug.Log(mPrefsAccountID.Value);
+            Debug.Log($"account_id:{mPrefsAccountID.Value}");
+            Debug.Log($"access_token:{mPrefsAccessToken.Value}");
+            Debug.Log($"refresh_token:{mPrefsRefreshToken.Value}");
             notifySignIn(LoginType.GOOGLE, true);
         }
 
@@ -179,10 +182,10 @@ namespace Devarc
         {
             mState = STATE.INIT;
             StopAllCoroutines();
-            StartCoroutine(signout());
+            StartCoroutine(google_signout());
         }
 
-        protected IEnumerator signout()
+        protected IEnumerator google_signout()
         {
             if (mPrefsLoginType.Value == LoginType.NONE)
             {
@@ -210,6 +213,36 @@ namespace Devarc
 
             mPrefsRefreshToken.Value = string.Empty;
             notifySignOut(true);
+        }
+
+
+        public void Google_RefreshToken()
+        {
+            mState = STATE.INIT;
+            StopAllCoroutines();
+            StartCoroutine(google_refresh());
+        }
+
+
+        protected IEnumerator google_refresh()
+        {
+            var info = DEV_Settings.Instance.loginData.google;
+            var url = $"{info.base_uri}/refresh?refresh_token={mPrefsRefreshToken.Value}";
+            var request = UnityWebRequest.Get(url);
+
+            yield return request.SendWebRequest();
+            if (hasError(request))
+            {
+                yield break;
+            }
+
+            state = string.Empty;
+            var result = JsonUtility.FromJson<GoogleRefreshResult>(request.downloadHandler.text);
+            mPrefsAccessToken.Value = result.access_token;
+            mPrefsRefreshToken.Value = result.refresh_token;
+
+            Debug.Log($"access_token:{mPrefsAccessToken.Value}");
+            Debug.Log($"refresh_token:{mPrefsRefreshToken.Value}");
         }
 
 

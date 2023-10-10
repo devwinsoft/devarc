@@ -14,9 +14,9 @@ class RequestLogin
 	 * @param {string} sessionID - string
 	 * @param {int} secret - int
 	 */
-	constructor(_sessionID, _secret) {
-		this.sessionID = _sessionID;
-		this.secret = _secret;
+	constructor(sessionID, secret) {
+		this.sessionID = sessionID;
+		this.secret = secret;
 	}
 	Init(packet) {
 		this.sessionID = packet[0];

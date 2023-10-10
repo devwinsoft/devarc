@@ -59,18 +59,18 @@ namespace Devarc
                 {
                     if (started)
                     {
-                        _output.Append($", _{finfo.Name}");
+                        _output.Append($", {finfo.Name}");
                     }
                     else
                     {
                         started = true;
-                        _output.Append($"_{finfo.Name}");
+                        _output.Append(finfo.Name);
                     }
                 }
                 _output.AppendLine(") {");
                 foreach (FieldInfo finfo in _type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
                 {
-                    _output.AppendLine($"\t\tthis.{finfo.Name} = _{finfo.Name};");
+                    _output.AppendLine($"\t\tthis.{finfo.Name} = {finfo.Name};");
                 }
                 _output.AppendLine("\t}");
                 _output.AppendLine("\tInit(packet) {");

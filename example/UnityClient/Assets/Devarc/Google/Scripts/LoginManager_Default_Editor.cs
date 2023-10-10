@@ -11,7 +11,7 @@ namespace Devarc
     {
         HttpListener mListener = null;
 
-        protected override void signin_open()
+        protected override void google_signin_open()
         {
             clear();
 

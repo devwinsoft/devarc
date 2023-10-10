@@ -121,6 +121,14 @@ namespace Devarc
         }
 
 
+        public void Google_RefreshToken()
+        {
+            user.TokenAsync(true).ContinueWithOnMainThread(task =>
+            {
+            });
+        }
+
+
         void AuthStateChanged(object sender, System.EventArgs eventArgs)
         {
             if (auth.CurrentUser != user)

@@ -15,10 +15,10 @@ class NotifySession
 	 * @param {int} secret - int
 	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(_sessionID, _secret, _errorCode) {
-		this.sessionID = _sessionID;
-		this.secret = _secret;
-		this.errorCode = _errorCode;
+	constructor(sessionID, secret, errorCode) {
+		this.sessionID = sessionID;
+		this.secret = secret;
+		this.errorCode = errorCode;
 	}
 	Init(packet) {
 		this.sessionID = packet[0];
@@ -43,10 +43,10 @@ class NotifyLogin
 	 * @param {int} secret - int
 	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(_sessionID, _secret, _errorCode) {
-		this.sessionID = _sessionID;
-		this.secret = _secret;
-		this.errorCode = _errorCode;
+	constructor(sessionID, secret, errorCode) {
+		this.sessionID = sessionID;
+		this.secret = secret;
+		this.errorCode = errorCode;
 	}
 	Init(packet) {
 		this.sessionID = packet[0];
@@ -69,8 +69,8 @@ class NotifyLogout
 	/**
 	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(_errorCode) {
-		this.errorCode = _errorCode;
+	constructor(errorCode) {
+		this.errorCode = errorCode;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -91,10 +91,10 @@ class NotifySignin
 	 * @param {int} secret - int
 	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(_sessionID, _secret, _errorCode) {
-		this.sessionID = _sessionID;
-		this.secret = _secret;
-		this.errorCode = _errorCode;
+	constructor(sessionID, secret, errorCode) {
+		this.sessionID = sessionID;
+		this.secret = secret;
+		this.errorCode = errorCode;
 	}
 	Init(packet) {
 		this.sessionID = packet[0];
@@ -117,8 +117,8 @@ class NotifyError
 	/**
 	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(_errorCode) {
-		this.errorCode = _errorCode;
+	constructor(errorCode) {
+		this.errorCode = errorCode;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];

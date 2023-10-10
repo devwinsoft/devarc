@@ -213,9 +213,8 @@ app.get('/google/code', wrapAsync(async (req, res) => {
     const code = await redisClient.get(`code:${state}`);
     redisClient.del(`code:${state}`);
 
-    var packet = new Common.GoogleCodeResult( {
-        _errorCode: Common.ErrorType.SUCCESS
-    });
+    var packet = new Common.GoogleCodeResult();
+    packet.errorCode = Common.ErrorType.SUCCESS;
     packet.code = code;
     res.json(packet);
 }));
@@ -319,12 +318,11 @@ app.get('/google/refresh', wrapAsync(async (req, res) => {
         refresh_token: refresh_token,
     });
 
-    var resultData = {
-        'access_token': resp_token.data.access_token,
-        'refresh_token': resp_token.data.refresh_token,
-        'expires_in': resp_token.data.expires_in,
-    };
-    res.send(JSON.stringify(resultData));
+    var resp = new Common.GoogleRefreshResult();
+    resp.access_token = resp_token.data.access_token;
+    resp.refresh_token = resp_token.data.refresh_token;
+    resp.expires_in = resp_token.data.expires_in;
+    res.json(resp);
 }));
 
 

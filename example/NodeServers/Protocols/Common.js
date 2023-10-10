@@ -16,8 +16,8 @@ class CommonResult
 	/**
 	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(_errorCode) {
-		this.errorCode = _errorCode;
+	constructor(errorCode) {
+		this.errorCode = errorCode;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -37,9 +37,9 @@ class CustomSigninResult
 	 * @param {ErrorType} errorCode - ErrorType
 	 * @param {string} secret - string
 	 */
-	constructor(_errorCode, _secret) {
-		this.errorCode = _errorCode;
-		this.secret = _secret;
+	constructor(errorCode, secret) {
+		this.errorCode = errorCode;
+		this.secret = secret;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -61,9 +61,9 @@ class GoogleCodeResult
 	 * @param {ErrorType} errorCode - ErrorType
 	 * @param {string} code - string
 	 */
-	constructor(_errorCode, _code) {
-		this.errorCode = _errorCode;
-		this.code = _code;
+	constructor(errorCode, code) {
+		this.errorCode = errorCode;
+		this.code = code;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -89,13 +89,13 @@ class GoogleSigninResult
 	 * @param {int} expires_in - int
 	 * @param {string} secret - string
 	 */
-	constructor(_errorCode, _account_id, _access_token, _refresh_token, _expires_in, _secret) {
-		this.errorCode = _errorCode;
-		this.account_id = _account_id;
-		this.access_token = _access_token;
-		this.refresh_token = _refresh_token;
-		this.expires_in = _expires_in;
-		this.secret = _secret;
+	constructor(errorCode, account_id, access_token, refresh_token, expires_in, secret) {
+		this.errorCode = errorCode;
+		this.account_id = account_id;
+		this.access_token = access_token;
+		this.refresh_token = refresh_token;
+		this.expires_in = expires_in;
+		this.secret = secret;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -119,6 +119,38 @@ class GoogleSigninResult
 	}
 }
 
+class GoogleRefreshResult
+{
+	/**
+	 * @param {ErrorType} errorCode - ErrorType
+	 * @param {string} access_token - string
+	 * @param {string} refresh_token - string
+	 * @param {int} expires_in - int
+	 */
+	constructor(errorCode, access_token, refresh_token, expires_in) {
+		this.errorCode = errorCode;
+		this.access_token = access_token;
+		this.refresh_token = refresh_token;
+		this.expires_in = expires_in;
+	}
+	Init(packet) {
+		this.errorCode = packet[0];
+		this.access_token = packet[1];
+		this.refresh_token = packet[2];
+		this.expires_in = packet[3];
+	}
+	ToArray() {
+		const data =
+		[
+			this.errorCode,
+			this.access_token,
+			this.refresh_token,
+			this.expires_in,
+		];
+		return data;
+	}
+}
+
 const GenderType = {
 	None                 : 0,
 	Male                 : 1,
@@ -132,9 +164,9 @@ class Account
 	 * @param {string} nickName - string
 	 * @param {int} level - int
 	 */
-	constructor(_nickName, _level) {
-		this.nickName = _nickName;
-		this.level = _level;
+	constructor(nickName, level) {
+		this.nickName = nickName;
+		this.level = level;
 	}
 	Init(packet) {
 		this.nickName = packet[0];
@@ -156,6 +188,7 @@ module.exports =
 , CustomSigninResult
 , GoogleCodeResult
 , GoogleSigninResult
+, GoogleRefreshResult
 , GenderType
 , Account
 }

@@ -13,8 +13,8 @@ class RequestSession
 	/**
 	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(_errorCode) {
-		this.errorCode = _errorCode;
+	constructor(errorCode) {
+		this.errorCode = errorCode;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -35,10 +35,10 @@ class RequestLogin
 	 * @param {string} password - string
 	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(_accountID, _password, _errorCode) {
-		this.accountID = _accountID;
-		this.password = _password;
-		this.errorCode = _errorCode;
+	constructor(accountID, password, errorCode) {
+		this.accountID = accountID;
+		this.password = password;
+		this.errorCode = errorCode;
 	}
 	Init(packet) {
 		this.accountID = packet[0];
@@ -61,8 +61,8 @@ class RequestLogout
 	/**
 	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(_errorCode) {
-		this.errorCode = _errorCode;
+	constructor(errorCode) {
+		this.errorCode = errorCode;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -83,10 +83,10 @@ class RequestSignin
 	 * @param {string} password - string
 	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(_accountID, _password, _errorCode) {
-		this.accountID = _accountID;
-		this.password = _password;
-		this.errorCode = _errorCode;
+	constructor(accountID, password, errorCode) {
+		this.accountID = accountID;
+		this.password = password;
+		this.errorCode = errorCode;
 	}
 	Init(packet) {
 		this.accountID = packet[0];

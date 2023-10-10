@@ -26,6 +26,7 @@ namespace Devarc
 
         void Google_SignIn();
         void Google_SignOut();
+        void Google_RefreshToken();
 
         void LogIn(bool firstInit);
     }

@@ -58,6 +58,19 @@ namespace Devarc
 		public string               secret;
 	}
 
+	[MessagePackObject]
+	public class GoogleRefreshResult
+	{
+		[Key(0)]
+		public ErrorType            errorCode;
+		[Key(1)]
+		public string               access_token;
+		[Key(2)]
+		public string               refresh_token;
+		[Key(3)]
+		public int                  expires_in;
+	}
+
 	public enum GenderType
 	{
 		None                 = 0,

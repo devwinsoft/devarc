@@ -39,6 +39,13 @@ public class GoogleSigninResult
     public string secret;
 }
 
+public class GoogleRefreshResult
+{
+    public ErrorType errorCode;
+    public string access_token;
+    public string refresh_token;
+    public int expires_in;
+}
 
 public enum GenderType
 {
