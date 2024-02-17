@@ -48,6 +48,8 @@ namespace Devarc
                 Type enumUnderlyingType = System.Enum.GetUnderlyingType(_type);
                 Array enumValues = System.Enum.GetValues(_type);
 
+                if (_type.GetCustomAttributes<FlagsAttribute>().Any())
+                    _output.AppendLine("\t[System.Flags]");
                 _output.AppendLine($"\tpublic enum {_type.Name}");
                 _output.AppendLine("\t{");
                 for (int i = 0; i < enumValues.Length; i++)

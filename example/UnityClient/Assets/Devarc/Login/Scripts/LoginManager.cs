@@ -41,7 +41,6 @@ namespace Devarc
         {
             GameObject obj = new GameObject("LoginManager");
 #if UNITY_EDITOR
-            //mInstance = obj.AddComponent<LoginManager_Default_WebGL>();
             mInstance = obj.AddComponent<LoginManager_Default_Editor>();
 #elif UNITY_ANDROID || UNITY_IOS
             mInstance = obj.AddComponent<LoginManager_Firebase>();

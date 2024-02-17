@@ -4,7 +4,6 @@ const fs = require('fs');
 dotenv.config();
 
 // Init express server
-const https = require('https');
 const express = require('express');
 const session = require('express-session');
 const app = express();
@@ -53,18 +52,17 @@ redisClient.on('error', (err) =>
 
 // Init WebSocket Server
 const https = require('https');
-const WebSocket = require('ws');
 const serverOption = {
     key: fs.readFileSync(process.env.SSL_KEY, 'utf8'),
     cert: fs.readFileSync(process.env.SSL_CERT, 'utf8')
 };
-
 const httpsServer = https.createServer(serverOption, function(req, res)
 {
     res.writeHead(404);
     res.end();
 });
 
+const WebSocket = require('ws');
 const wss = new WebSocket.Server(
     {
         server: httpsServer,

@@ -32,7 +32,7 @@ public class BundleSoundData : SoundData
     public override string path => data.path;
     public override float volume => data.volume;
     public override bool loop => data.loop;
-    public override bool isBundle => true;
+    public override bool isBundle => false;
 }
 
 public class ResourceSoundData : SoundData
@@ -56,14 +56,15 @@ public class SoundManager : MonoSingleton<SoundManager>
 
     protected override void onAwake()
     {
-        createChannel(CHANNEL.BGM, 2);
-        createChannel(CHANNEL.EFFECT, 10);
-        createChannel(CHANNEL.UI, 10);
+        createChannel(CHANNEL.BGM, 2, false);
+        createChannel(CHANNEL.EFFECT, 10, true);
+        createChannel(CHANNEL.UI, 10, false);
     }
 
     protected override void onDestroy()
     {
     }
+
 
     public void LoadResource(string key = null)
     {
@@ -159,10 +160,8 @@ public class SoundManager : MonoSingleton<SoundManager>
 
     void unRegister(string addressKey, bool isBundle)
     {
-        List<string> removeKeys = new List<string>();
-        foreach (var temp in mSoundDatas)
+        foreach (var list in mSoundDatas.Values)
         {
-            var list = temp.Value;
             for (int i = list.Count - 1; i >= 0; i--)
             {
                 var obj = list[i];
@@ -173,14 +172,6 @@ public class SoundManager : MonoSingleton<SoundManager>
 
                 list.RemoveAt(i);
             }
-            if (list.Count == 0)
-            {
-                removeKeys.Add(temp.Key);
-            }
-        }
-        foreach (var key in removeKeys)
-        {
-            mSoundDatas.Remove(key);
         }
     }
 
@@ -192,10 +183,15 @@ public class SoundManager : MonoSingleton<SoundManager>
 
     public int PlaySound(CHANNEL channel, string soundID)
     {
-        return PlaySound(channel, soundID, 0, 0f);
+        return PlaySound(channel, soundID, 0, 0f, Vector3.zero);
     }
 
-    public int PlaySound(CHANNEL channel, string soundID, int groupID, float fadeIn)
+    public int PlaySound(CHANNEL channel, string soundID, Vector3 pos)
+    {
+        return PlaySound(channel, soundID, 0, 0f, pos);
+    }
+
+    public int PlaySound(CHANNEL channel, string soundID, int groupID, float fadeIn, Vector3 pos)
     {
         List<SoundData> list = null;
         if (mSoundDatas.TryGetValue(soundID, out list) == false || list.Count == 0)
@@ -212,7 +208,7 @@ public class SoundManager : MonoSingleton<SoundManager>
             return 0;
         }
         var chennel = mChannels[(int)channel];
-        return chennel.Play(groupID, clip, soundData.volume, soundData.loop, 0f, fadeIn);
+        return chennel.Play(groupID, clip, soundData.volume, soundData.loop, 0f, fadeIn, pos);
     }
 
 
@@ -237,7 +233,7 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
 
 
-    void createChannel(CHANNEL _channel, int _pool)
+    void createChannel(CHANNEL _channel, int _pool, bool _3d)
     {
         GameObject obj = new GameObject(_channel.ToString());
         obj.transform.parent = transform;
@@ -245,7 +241,7 @@ public class SoundManager : MonoSingleton<SoundManager>
         obj.transform.localRotation = Quaternion.identity;
 
         SoundChannel compo = obj.AddComponent<SoundChannel>();
-        compo.Init(_channel, _pool);
+        compo.Init(_channel, _pool, _3d);
         mChannels[(int)_channel] = compo;
     }
 

@@ -16,8 +16,8 @@ class CommonResult
 	/**
 	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(errorCode) {
-		this.errorCode = errorCode;
+	constructor() {
+		this.errorCode = 0;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -37,9 +37,9 @@ class CustomSigninResult
 	 * @param {ErrorType} errorCode - ErrorType
 	 * @param {string} secret - string
 	 */
-	constructor(errorCode, secret) {
-		this.errorCode = errorCode;
-		this.secret = secret;
+	constructor() {
+		this.errorCode = 0;
+		this.secret = "";
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -61,9 +61,9 @@ class GoogleCodeResult
 	 * @param {ErrorType} errorCode - ErrorType
 	 * @param {string} code - string
 	 */
-	constructor(errorCode, code) {
-		this.errorCode = errorCode;
-		this.code = code;
+	constructor() {
+		this.errorCode = 0;
+		this.code = "";
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -89,13 +89,13 @@ class GoogleSigninResult
 	 * @param {int} expires_in - int
 	 * @param {string} secret - string
 	 */
-	constructor(errorCode, account_id, access_token, refresh_token, expires_in, secret) {
-		this.errorCode = errorCode;
-		this.account_id = account_id;
-		this.access_token = access_token;
-		this.refresh_token = refresh_token;
-		this.expires_in = expires_in;
-		this.secret = secret;
+	constructor() {
+		this.errorCode = 0;
+		this.account_id = "";
+		this.access_token = "";
+		this.refresh_token = "";
+		this.expires_in = 0;
+		this.secret = "";
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -127,11 +127,11 @@ class GoogleRefreshResult
 	 * @param {string} refresh_token - string
 	 * @param {int} expires_in - int
 	 */
-	constructor(errorCode, access_token, refresh_token, expires_in) {
-		this.errorCode = errorCode;
-		this.access_token = access_token;
-		this.refresh_token = refresh_token;
-		this.expires_in = expires_in;
+	constructor() {
+		this.errorCode = 0;
+		this.access_token = "";
+		this.refresh_token = "";
+		this.expires_in = 0;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -164,9 +164,9 @@ class Account
 	 * @param {string} nickName - string
 	 * @param {int} level - int
 	 */
-	constructor(nickName, level) {
-		this.nickName = nickName;
-		this.level = level;
+	constructor() {
+		this.nickName = "";
+		this.level = 0;
 	}
 	Init(packet) {
 		this.nickName = packet[0];

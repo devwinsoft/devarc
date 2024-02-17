@@ -34,6 +34,14 @@ public abstract class EditorID_Selector<T> : ScriptableWizard
         }
     }
 
+    protected void add(int _value)
+    {
+        if (mCacheList.Contains(_value.ToString()) == false)
+        {
+            mCacheList.Add(_value.ToString());
+        }
+    }
+
     public void Init(string _searchText)
     {
         mSelect = -1;

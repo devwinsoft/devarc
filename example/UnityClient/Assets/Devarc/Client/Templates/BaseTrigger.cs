@@ -6,6 +6,7 @@ namespace Devarc
     public class BaseTrigger<KEY>
     {
         public delegate bool FUNCTION(System.Object[] args);
+        public delegate void FUNCTION_TIMER(System.Object[] args);
 
         public class TRIGGER
         {
@@ -22,9 +23,42 @@ namespace Devarc
         }
         List<TRIGGER> mTriggers = new List<TRIGGER>();
 
+        public class TRIGGER_TIMER
+        {
+            public int instanceID;
+            public float Timeout;
+            public FUNCTION_TIMER Callback;
+            public object[] Args;
+
+            float mElapsedTime = 0f;
+
+            public TRIGGER_TIMER(int _instanceID, float _timeout, FUNCTION_TIMER _callback, params object[] _args)
+            {
+                instanceID = _instanceID;
+                Timeout = _timeout;
+                Callback = _callback;
+                Args = _args;
+
+                mElapsedTime = 0f;
+            }
+
+            public bool Tick(float deltaTime)
+            {
+                mElapsedTime += deltaTime;
+                if (mElapsedTime >= Timeout)
+                {
+                    mElapsedTime -= Timeout;
+                    return true;
+                }
+                return false;
+            }
+        }
+        List<TRIGGER_TIMER> mTimers = new List<TRIGGER_TIMER>();
+
+
         public void ClearAll()
         {
-            mTriggers.Clear();
+            mTimers.Clear();
         }
 
         public void Clear(int _instanceID)
@@ -61,6 +95,34 @@ namespace Devarc
                 if (result && i < mTriggers.Count)
                 {
                     mTriggers.RemoveAt(i);
+                }
+            }
+        }
+
+
+        public void RegisterTimer(int _instanceID, float _timeout, FUNCTION_TIMER _callback, params object[] args)
+        {
+            mTimers.Add(new TRIGGER_TIMER(_instanceID, _timeout, _callback, args));
+        }
+
+        public void Tick(float deltaTime)
+        {
+            for (int i = mTimers.Count - 1; i >= 0; i--)
+            {
+                if (i >= mTimers.Count)
+                {
+                    continue;
+                }
+
+                var data = mTimers[i];
+                if (data.Tick(deltaTime) == false)
+                {
+                    continue;
+                }
+                data.Callback(data.Args);
+                if (i < mTimers.Count)
+                {
+                    mTimers.RemoveAt(i);
                 }
             }
         }

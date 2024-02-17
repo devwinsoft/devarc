@@ -15,8 +15,6 @@ namespace Devarc
 {
     public class RawTableData
     {
-        public long _crc;
-
         public bool GetBool(string value)
         {
             bool result;
@@ -26,6 +24,8 @@ namespace Devarc
 
         public bool[] GetBoolArray(string value)
         {
+            if (string.IsNullOrEmpty(value))
+                return new bool[0];
             var list = value.Split(',');
             bool[] result = new bool[list.Length];
             for (int i = 0; i < list.Length; i++)
@@ -44,6 +44,8 @@ namespace Devarc
 
         public short[] GetShortArray(string value)
         {
+            if (string.IsNullOrEmpty(value))
+                return new short[0];
             var list = value.Split(',');
             short[] result = new short[list.Length];
             for (int i = 0; i < list.Length; i++)
@@ -62,6 +64,8 @@ namespace Devarc
 
         public int[] GetIntArray(string value)
         {
+            if (string.IsNullOrEmpty(value))
+                return new int[0];
             var list = value.Split(',');
             int[] result = new int[list.Length];
             for (int i = 0; i < list.Length; i++)
@@ -80,6 +84,8 @@ namespace Devarc
 
         public float[] GetFloatArray(string value)
         {
+            if (string.IsNullOrEmpty(value))
+                return new float[0];
             var list = value.Split(',');
             float[] result = new float[list.Length];
             for (int i = 0; i < list.Length; i++)
@@ -104,11 +110,26 @@ namespace Devarc
 
         public T[] GetEnumArray<T>(string value) where T : Enum
         {
+            if (string.IsNullOrEmpty(value))
+                return new T[0];
             var list = value.Split(',');
             T[] result = new T[list.Length];
             for (int i = 0; i < list.Length; i++)
             {
                 result[i] = GetEnum<T>(list[i].Trim());
+            }
+            return result;
+        }
+
+        public string[] GetStringArray(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return new string[0];
+            var list = value.Split(',');
+            string[] result = new string[list.Length];
+            for (int i = 0; i < list.Length; i++)
+            {
+                result[i] = list[i].Trim();
             }
             return result;
         }

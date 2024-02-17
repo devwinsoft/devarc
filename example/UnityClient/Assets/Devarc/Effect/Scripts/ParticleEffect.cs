@@ -91,10 +91,10 @@ namespace Devarc
                 if (mReaminTime <= 0f)
                     Remove();
             }
-            else if (particle.IsAlive(true) == false)
-            {
-                Remove();
-            }
+            //else if (particle.IsAlive(true) == false)
+            //{
+            //    Remove();
+            //}
         }
     }
 }

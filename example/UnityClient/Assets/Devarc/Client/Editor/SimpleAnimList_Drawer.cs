@@ -61,6 +61,10 @@ namespace Devarc
             var script = property.serializedObject.targetObject as MonoBehaviour;
             var anim = script.GetComponentInChildren<Animator>();
             if (anim == null)
+                anim = script.GetComponentInParent<Animator>();
+            if (anim == null)
+                anim = script.GetComponentInChildren<Animator>();
+            if (anim == null)
                 return null;
             return anim.runtimeAnimatorController;
         }

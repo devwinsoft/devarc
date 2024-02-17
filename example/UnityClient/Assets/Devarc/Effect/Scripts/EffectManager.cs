@@ -6,14 +6,21 @@ using Devarc;
 
 namespace Devarc
 {
+    public enum EFFECT_ATTACH_TYPE
+    {
+        World,
+        Ground,
+        Unit,
+    }
+
+
     public class EffectManager : MonoSingleton<EffectManager>
     {
-        Dictionary<string, BaseEffect> mPrefabs = new Dictionary<string, BaseEffect>();
         SimplePool<BaseEffect> mPool = new SimplePool<BaseEffect>();
 
         protected override void onAwake()
         {
-            mPool.InitRoot(transform);
+            mPool.SetRoot(transform);
         }
 
         protected override void onDestroy()
@@ -31,17 +38,6 @@ namespace Devarc
         {
             var handle = AssetManager.Instance.LoadBundleAssets<GameObject>(addressKey);
             yield return handle;
-
-            if (handle.IsValid())
-            {
-                foreach (var obj in handle.Result)
-                {
-                    var compo = obj.GetComponent<BaseEffect>();
-                    if (compo == null)
-                        continue;
-                    mPrefabs.TryAdd(obj.name, compo);
-                }
-            }
         }
 
 
@@ -50,66 +46,37 @@ namespace Devarc
             var removeList = AssetManager.Instance.UnloadBundleAssets(addressKey);
             foreach (var name in removeList)
             {
-                mPrefabs.Remove(name);
                 mPool.Remove(name);
             }
         }
 
 
-        public BaseEffect CreateEffect(EffectPlayData data, Vector3 worldPos, bool flipX = false)
+        public BaseEffect CreateEffect(EFFECT_ID effectID, Transform attachTr, Vector3 offset, Vector3 localRotation, EFFECT_ATTACH_TYPE attachType)
         {
-            if (data.EffectID == null || data.EffectID.IsValid == false)
+            if (effectID == null || effectID.IsValid == false)
             {
                 return null;
             }
 
-            BaseEffect prefab = null; 
-            if (mPrefabs.TryGetValue(data.EffectID, out prefab) == false)
+            BaseEffect obj = mPool.Pop(effectID, attachTr, offset, Quaternion.Euler(localRotation));
+            switch (attachType)
             {
-                Debug.LogError($"[EffectManager::CreateEffect] Cannot find prefab: effect_id={data.EffectID.Value}");
-                return null;
+                case EFFECT_ATTACH_TYPE.Ground:
+                    Ray ray = new Ray(obj.transform.position + new Vector3(0f, 100f, 0f), Vector3.down);
+                    RaycastHit hit;
+                    if (Physics.SphereCast(ray, 0.01f, out hit, 1000f))
+                    {
+                        obj.transform.position = hit.point;
+                        obj.transform.SetParent(mPool.Root, true);
+                    }
+                    break;
+                case EFFECT_ATTACH_TYPE.Unit:
+                    break;
+                default:
+                    obj.transform.SetParent(mPool.Root, true);
+                    break;
             }
-
-            Vector3 offset = data.Offset;
-            if (flipX)
-            {
-                offset.x = -offset.x;
-            }
-
-            BaseEffect obj = mPool.Pop(prefab.gameObject, mPool.Root, worldPos + offset);
-            obj.Play(data.WaitTime);
-            return obj;
-        }
-
-
-        public BaseEffect CreateEffect(EffectPlayData data, Transform attachTr, bool flipX = false)
-        {
-            if (data == null || data.EffectID == null || data.EffectID.IsValid == false)
-            {
-                return null;
-            }
-
-            BaseEffect prefab = null;
-            if (mPrefabs.TryGetValue(data.EffectID, out prefab) == false)
-            {
-                Debug.LogError($"[EffectManager::CreateEffect] Cannot find prefab: effect_id={data.EffectID.Value}");
-                return null;
-            }
-
-            Vector3 offset = data.Offset;
-            if (flipX)
-            {
-                offset.x = -offset.x;
-            }
-
-            BaseEffect obj = mPool.Pop(prefab.gameObject, attachTr, offset);
-            if (obj == null)
-            {
-                Debug.LogErrorFormat("Cannot find effect_id: {0}", data.EffectID.Value);
-                return null;
-            }
-
-            obj.Play(data.WaitTime);
+            obj.Play();
             return obj;
         }
 

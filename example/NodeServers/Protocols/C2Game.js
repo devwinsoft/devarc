@@ -5,6 +5,7 @@ const CommonResult = Common.CommonResult;
 const CustomSigninResult = Common.CustomSigninResult;
 const GoogleCodeResult = Common.GoogleCodeResult;
 const GoogleSigninResult = Common.GoogleSigninResult;
+const GoogleRefreshResult = Common.GoogleRefreshResult;
 const GenderType = Common.GenderType;
 const Account = Common.Account;
 const mHandlers = {};
@@ -14,9 +15,9 @@ class RequestLogin
 	 * @param {string} sessionID - string
 	 * @param {int} secret - int
 	 */
-	constructor(sessionID, secret) {
-		this.sessionID = sessionID;
-		this.secret = secret;
+	constructor() {
+		this.sessionID = "";
+		this.secret = 0;
 	}
 	Init(packet) {
 		this.sessionID = packet[0];

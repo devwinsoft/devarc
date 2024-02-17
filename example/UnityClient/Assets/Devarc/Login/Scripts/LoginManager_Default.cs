@@ -82,7 +82,7 @@ namespace Devarc
                 switch (mState)
                 {
                     case STATE.NEED_SIGNIN_COMPLETE:
-                        StartCoroutine(signin_complete($"{info.base_uri}/redirect", null));
+                        StartCoroutine(google_signin_complete($"{info.base_uri}/redirect", null));
                         break;
                     case STATE.COMPLETED:
                         //LogIn(false);
@@ -109,10 +109,16 @@ namespace Devarc
             StopAllCoroutines();
 
             mState = STATE.NEED_SIGNIN_COMPLETE;
+            clear();
+
+            state = Guid.NewGuid().ToString();
+            code_verifier = Guid.NewGuid().ToString();
+            code_challenge = CreateCodeChallenge(code_verifier);
+
             google_signin_open();
         }
 
-        protected IEnumerator signin_complete(string redirect_uri, string code =  null)
+        protected IEnumerator google_signin_complete(string redirect_uri, string code =  null)
         {
             var info = DEV_Settings.Instance.loginData.google;
 
@@ -220,11 +226,11 @@ namespace Devarc
         {
             mState = STATE.INIT;
             StopAllCoroutines();
-            StartCoroutine(google_refresh());
+            StartCoroutine(google_refresh_token());
         }
 
 
-        protected IEnumerator google_refresh()
+        protected IEnumerator google_refresh_token()
         {
             var info = DEV_Settings.Instance.loginData.google;
             var url = $"{info.base_uri}/refresh?refresh_token={mPrefsRefreshToken.Value}";

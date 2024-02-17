@@ -1771,12 +1771,14 @@ MonoBehaviour:
   effectData1:
     EffectID:
       Value: fx_walk
-    Offset: {x: 0, y: 0}
+    offset: {x: 0, y: 0, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
     WaitTime: 0
   effectData2:
     EffectID:
       Value: fx_circle
-    Offset: {x: 0, y: 0}
+    offset: {x: 0, y: 0, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
     WaitTime: 0
   stringID:
     Value: 

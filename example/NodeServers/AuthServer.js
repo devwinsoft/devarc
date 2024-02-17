@@ -119,7 +119,8 @@ app.get('/custom/register', wrapAsync(async (req, res) => {
     const { account_id, passwd } = req.query;
     if (!account_id || !passwd)
     {
-        var packet = new Common.CommonResult(Common.ErrorType.PROTOCOL_ERROR);
+        var packet = new Common.CommonResult();
+        packet.errorCode = Common.ErrorType.PROTOCOL_ERROR;
         res.json(packet);
         return;
     }
@@ -131,12 +132,14 @@ app.get('/custom/register', wrapAsync(async (req, res) => {
     mysqlConn.query(queryStr, (err, result) => {
         if (err)
         {
-            var packet = new Common.CommonResult(Common.ErrorType.DATABASE_ERROR);
+            var packet = new Common.CommonResult();
+            packet.errorCode = Common.ErrorType.DATABASE_ERROR;
             res.json(packet);
         }
         else if (result.affectedRows == 0)
         {
-            var packet = new Common.CommonResult(Common.ErrorType.DATABASE_ERROR);
+            var packet = new Common.CommonResult();
+            packet.errorCode = Common.ErrorType.DATABASE_ERROR;
             res.json(packet);
         }
         else if (result.affectedRows > 0)
@@ -156,12 +159,14 @@ app.get('/custom/signin', wrapAsync(async (req, res) => {
     mysqlConn.query(queryStr, (err, result) => {
         if (err)
         {
-            var packet = new Common.CommonResult(Common.ErrorType.DATABASE_ERROR);
+            var packet = new Common.CommonResult();
+            packet.errorCode = Common.ErrorType.DATABASE_ERROR;
             res.json(packet);
         }
         else if (result.affectedRows == 0)
         {
-            var packet = new Common.CommonResult(Common.ErrorType.INVALID_PASSWORD);
+            var packet = new Common.CommonResult();
+            packet.errorCode = Common.ErrorType.INVALID_PASSWORD;
             res.json(packet);
         }
         else
@@ -205,7 +210,8 @@ app.get('/google/code', wrapAsync(async (req, res) => {
 
     if (!state)
     {
-        var packet = new Common.CommonResult(Common.ErrorType.PROTOCOL_ERROR);
+        var packet = new Common.CommonResult();
+        packet.errorCode = Common.ErrorType.PROTOCOL_ERROR;
         res.json(packet);
         return;
     }
@@ -229,7 +235,8 @@ app.get('/google/signin', wrapAsync(async (req, res) => {
     {
         if (!code || !code_verifier || !redirect_uri)
         {
-            var packet = new Common.CommonResult(Common.ErrorType.PROTOCOL_ERROR);
+            var packet = new Common.CommonResult();
+            packet.errorCode = Common.ErrorType.PROTOCOL_ERROR;
             res.json(packet);
             return;
         }
@@ -274,7 +281,8 @@ app.get('/google/signin', wrapAsync(async (req, res) => {
     {
         if (err)
         {
-            var packet = new Common.CommonResult(Common.ErrorType.DATABASE_ERROR);
+            var packet = new Common.CommonResult();
+            packet.errorCode = Common.ErrorType.DATABASE_ERROR;
             res.json(packet);
             return;
         }
@@ -286,7 +294,8 @@ app.get('/google/signin', wrapAsync(async (req, res) => {
             {
                 if (err)
                 {
-                    var packet = new Common.CommonResult(Common.ErrorType.DATABASE_ERROR);
+                    var packet = new Common.CommonResult();
+                    packet.errorCode = Common.ErrorType.DATABASE_ERROR;
                     res.json(packet);
                     return;
                 }
@@ -305,7 +314,8 @@ app.get('/google/refresh', wrapAsync(async (req, res) => {
     var { refresh_token } = req.query;
     if (!refresh_token)
     {
-        var packet = new Common.CommonResult(Common.ErrorType.PROTOCOL_ERROR);
+        var packet = new Common.CommonResult();
+        packet.errorCode = Common.ErrorType.PROTOCOL_ERROR;
         res.json(packet);
         return;
     }
@@ -336,7 +346,8 @@ app.get('/login', wrapAsync(async (req, res) => {
 
     if (!account_id || !secret)
     {
-        var packet = new Common.CommonResult(Common.ErrorType.PROTOCOL_ERROR);
+        var packet = new Common.CommonResult();
+        packet.errorCode = Common.ErrorType.PROTOCOL_ERROR;
         res.json(packet);
         return;
     }
@@ -346,17 +357,20 @@ app.get('/login', wrapAsync(async (req, res) => {
     {
         if (err)
         {
-            var packet = new Common.CommonResult(Common.ErrorType.DATABASE_ERROR);
+            var packet = new Common.CommonResult();
+            packet.errorCode = Common.ErrorType.DATABASE_ERROR;
             res.json(packet);
         }
         else if (result[0].secret != secret)
         {
-            var packet = new Common.CommonResult(Common.ErrorType.INVALID_SECRET);
+            var packet = new Common.CommonResult();
+            packet.errorCode = Common.ErrorType.INVALID_SECRET;
             res.json(packet);
         }
         else
         {
-            var packet = new Common.CommonResult(Common.ErrorType.SUCCESS);
+            var packet = new Common.CommonResult();
+            packet.errorCode = Common.ErrorType.SUCCESS;
             res.json(packet);
         }
     });
@@ -460,7 +474,8 @@ C2Auth.on('RequestLogout', (obj, req, res) => {
         var queryStr = `UPDATE account SET session_id='' WHERE session_id='${req.sessionID}' LIMIT 1;`;
         mysqlConn.query(queryStr,
             (err, result) => {
-                var packet = new Auth2C.NotifyLogout(Common.ErrorType.UNKNOWN);
+                var packet = new Auth2C.NotifyLogout();
+                packet.errorCode = Common.ErrorType.UNKNOWN;
                 if (result.affectedRows == 1)
                 {
                     packet.errorCode = Common.ErrorType.SUCCESS;
@@ -475,7 +490,8 @@ C2Auth.on('RequestLogout', (obj, req, res) => {
     }
     else
     {
-        var packet = new Auth2C.NotifyLogout(Common.ErrorType.UNKNOWN);
+        var packet = new Auth2C.NotifyLogout();
+        packet.errorCode = Common.ErrorType.UNKNOWN;
         const encoded = Auth2C.pack(packet);
         res.send(encoded);
     }
@@ -486,7 +502,8 @@ C2Auth.on('RequestLogout', (obj, req, res) => {
 C2Auth.on('RequestSignin', (obj, req, res) => {
     if (req.session.login || !obj.accountID || !obj.password)
     {
-        var packet = new Auth2C.NotifySignin(Common.ErrorType.UNKNOWN, '', 0);
+        var packet = new Auth2C.NotifySignin();
+        packet.errorCode = Common.ErrorType.UNKNOWN;
         const encoded = Auth2C.pack(packet);
         res.send(encoded);
     }
@@ -496,7 +513,8 @@ C2Auth.on('RequestSignin', (obj, req, res) => {
         var queryStr = `INSERT INTO account(account_id, passwd, session_id, login_time, create_time) VALUES ('${obj.accountID}', MD5('${password}'), '${req.sessionID}', NOW(), NOW());`;
         mysqlConn.query(queryStr,
             (err, result) => {
-                var packet = new Auth2C.NotifySignin(Common.ErrorType.UNKNOWN, '', 0);
+                var packet = new Auth2C.NotifySignin();
+                packet.errorCode = Common.ErrorType.UNKNOWN;
                 if (err)
                 {
                     console.log(err.message);

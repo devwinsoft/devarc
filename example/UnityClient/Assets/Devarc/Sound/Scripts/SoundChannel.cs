@@ -43,7 +43,7 @@ public class SoundChannel : MonoBehaviour
         mPlayDict.Clear();
     }
 
-    public void Init(CHANNEL _channel, int _playCount)
+    public void Init(CHANNEL _channel, int _playCount, bool _3d)
     {
         mChannel = _channel;
         mNextSEQ = (int)mChannel * 1000;
@@ -59,12 +59,19 @@ public class SoundChannel : MonoBehaviour
             compo.mAudio = obj.AddComponent<AudioSource>();
             compo.mAudio.playOnAwake = false;
             compo.mAudio.rolloffMode = AudioRolloffMode.Linear;
+            if (_3d)
+            {
+                compo.mAudio.dopplerLevel = 0f;
+                compo.mAudio.spatialBlend = 1f;
+                compo.mAudio.minDistance = 30f;
+                compo.mAudio.maxDistance = 100f;
+            }
             mPool.Add(compo);
         }
     }
 
 
-    public int Play(int groupID, AudioClip clip, float volumn, bool loop, float wait, float fadeIn)
+    public int Play(int groupID, AudioClip clip, float volumn, bool loop, float wait, float fadeIn, Vector3 pos)
     {
         if (groupID != 0)
         {
@@ -98,6 +105,7 @@ public class SoundChannel : MonoBehaviour
                 mPool.RemoveAt(0);
             }
         }
+        obj.transform.position = pos;
         obj.Init(generateSoundSEQ(), mChannel, groupID, clip, volumn, loop, wait, fadeIn);
         mPlayList.Add(obj);
         mPlayDict.Add(obj.SoundSEQ, obj);

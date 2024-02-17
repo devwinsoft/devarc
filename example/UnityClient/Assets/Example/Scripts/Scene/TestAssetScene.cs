@@ -54,12 +54,12 @@ public class TestAssetScene : BaseScene
 
     public void OnClick_PlayEffect1()
     {
-        EffectManager.Instance.CreateEffect(effectData1, Vector3.zero);
+        EffectManager.Instance.CreateEffect(effectData1.EffectID, transform, effectData1.offset, effectData1.rotation, EFFECT_ATTACH_TYPE.World);
     }
 
     public void OnClick_PlayEffect2()
     {
-        EffectManager.Instance.CreateEffect(effectData2, Vector3.zero);
+        EffectManager.Instance.CreateEffect(effectData2.EffectID, transform, effectData2.offset, effectData2.rotation, EFFECT_ATTACH_TYPE.World);
     }
 
     public void OnClick_PlaySound()

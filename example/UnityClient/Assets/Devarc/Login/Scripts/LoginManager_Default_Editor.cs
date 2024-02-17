@@ -13,13 +13,7 @@ namespace Devarc
 
         protected override void google_signin_open()
         {
-            clear();
-
             var info = DEV_Settings.Instance.loginData.google;
-            state = Guid.NewGuid().ToString();
-            code_verifier = Guid.NewGuid().ToString();
-            code_challenge = CreateCodeChallenge(code_verifier);
-
             var url = $"{GoogleAuthURI}?response_type=code&access_type=offline&scope={Uri.EscapeDataString(string.Join(" ", mScopes))}&redirect_uri={Uri.EscapeDataString(info.loopback_uri)}&client_id={info.client_id}&state={state}&code_challenge={code_challenge}&code_challenge_method=S256";
             Application.OpenURL(url);
             AddHttpListener();
@@ -43,6 +37,7 @@ namespace Devarc
             var info = DEV_Settings.Instance.loginData.google;
             mListener = new System.Net.HttpListener();
             mListener.Prefixes.Add(info.loopback_uri + "/");
+            mListener.AuthenticationSchemes = AuthenticationSchemes.Anonymous;
             mListener.Start();
 
             var context = System.Threading.SynchronizationContext.Current;
@@ -94,7 +89,7 @@ namespace Devarc
             }
 
             var code = parameters.Get("code");
-            StartCoroutine(signin_complete(info.loopback_uri, code));
+            StartCoroutine(google_signin_complete(info.loopback_uri, code));
         }
     }
 

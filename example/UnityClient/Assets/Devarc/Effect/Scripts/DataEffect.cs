@@ -25,7 +25,8 @@ namespace Devarc
     public class EffectPlayData
     {
         public EFFECT_ID EffectID;
-        public Vector2 Offset;
+        public Vector3 offset;
+        public Vector3 rotation;
         public float WaitTime;
     }
 }

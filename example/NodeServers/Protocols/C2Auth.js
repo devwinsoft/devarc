@@ -5,6 +5,7 @@ const CommonResult = Common.CommonResult;
 const CustomSigninResult = Common.CustomSigninResult;
 const GoogleCodeResult = Common.GoogleCodeResult;
 const GoogleSigninResult = Common.GoogleSigninResult;
+const GoogleRefreshResult = Common.GoogleRefreshResult;
 const GenderType = Common.GenderType;
 const Account = Common.Account;
 const mHandlers = {};
@@ -13,8 +14,8 @@ class RequestSession
 	/**
 	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(errorCode) {
-		this.errorCode = errorCode;
+	constructor() {
+		this.errorCode = 0;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -35,10 +36,10 @@ class RequestLogin
 	 * @param {string} password - string
 	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(accountID, password, errorCode) {
-		this.accountID = accountID;
-		this.password = password;
-		this.errorCode = errorCode;
+	constructor() {
+		this.accountID = "";
+		this.password = "";
+		this.errorCode = 0;
 	}
 	Init(packet) {
 		this.accountID = packet[0];
@@ -61,8 +62,8 @@ class RequestLogout
 	/**
 	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(errorCode) {
-		this.errorCode = errorCode;
+	constructor() {
+		this.errorCode = 0;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -83,10 +84,10 @@ class RequestSignin
 	 * @param {string} password - string
 	 * @param {ErrorType} errorCode - ErrorType
 	 */
-	constructor(accountID, password, errorCode) {
-		this.accountID = accountID;
-		this.password = password;
-		this.errorCode = errorCode;
+	constructor() {
+		this.accountID = "";
+		this.password = "";
+		this.errorCode = 0;
 	}
 	Init(packet) {
 		this.accountID = packet[0];

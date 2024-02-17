@@ -63,6 +63,7 @@ namespace Devarc
             {
                 if (task.IsFaulted || task.IsCanceled)
                 {
+                    Debug.Log("[Google_SignIn] task canceled.");
                     notifySignIn(LoginType.NONE, true);
                 }
                 else
@@ -80,6 +81,7 @@ namespace Devarc
 
             if (string.IsNullOrEmpty(access_token))
             {
+                Debug.Log("[Google_SignIn] access_token is null.");
                 notifySignIn(LoginType.NONE, true);
                 yield break;
             }
@@ -93,6 +95,7 @@ namespace Devarc
 
             if (hasError(request))
             {
+                Debug.Log("[Google_SignIn] error occured.");
                 notifySignIn(LoginType.NONE, true);
                 yield break;
             }

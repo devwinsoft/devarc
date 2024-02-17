@@ -31,14 +31,7 @@ public abstract class EditorID_Drawer<T> : PropertyDrawer
 
         EditorGUI.LabelField(position, label);
 
-        Rect lastRect = GUILayoutUtility.GetLastRect();
-        float contentWidth = lastRect.width;
-        Rect rtContent = position;
-        float indent = EditorGUIUtility.labelWidth + 20;// + EditorGUI.indentLevel * 20;
-        Rect[] rects;
-        CustomEditorUtil.SplitRect(rtContent, indent, out rects, 1f);
-
-        if (GUI.Button(rects[0], value.ToString()))
+        if (GUI.Button(CustomEditorUtil.SplitRect(position, 0.35f), value.ToString()))
         {
             show(property, value);
         }

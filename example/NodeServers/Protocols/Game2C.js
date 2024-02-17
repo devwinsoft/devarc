@@ -5,6 +5,7 @@ const CommonResult = Common.CommonResult;
 const CustomSigninResult = Common.CustomSigninResult;
 const GoogleCodeResult = Common.GoogleCodeResult;
 const GoogleSigninResult = Common.GoogleSigninResult;
+const GoogleRefreshResult = Common.GoogleRefreshResult;
 const GenderType = Common.GenderType;
 const Account = Common.Account;
 const mHandlers = {};
@@ -14,9 +15,9 @@ class NotifyLogin
 	 * @param {ErrorType} errorCode - ErrorType
 	 * @param {Account} account - Account
 	 */
-	constructor(errorCode, account) {
-		this.errorCode = errorCode;
-		this.account = account;
+	constructor() {
+		this.errorCode = 0;
+			this.account = new Account();
 	}
 	Init(packet) {
 		this.errorCode = packet[0];

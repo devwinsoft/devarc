@@ -51,7 +51,7 @@ namespace Devarc
                     case "float":
                         return $"GetFloatArray({info.fieldName})";
                     case "string":
-                        return $"({info.fieldName})";
+                        return $"GetStringArray({info.fieldName})";
                     default:
                         if (info.isClass)
                             return $"GetClass<{info.fieldType}>({info.fieldName})";

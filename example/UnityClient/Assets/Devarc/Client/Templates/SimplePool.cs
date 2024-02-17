@@ -40,7 +40,7 @@ namespace Devarc
         Dictionary<string, List<T>> mPool = new Dictionary<string, List<T>>();
 
 
-        public void InitRoot(Transform root)
+        public void SetRoot(Transform root)
         {
             mRoot = root;
         }
@@ -71,7 +71,7 @@ namespace Devarc
             {
                 return null;
             }
-            return Pop(prefab, attachTr, prefab.transform.localPosition);
+            return pop(prefab, attachTr, prefab.transform.localPosition, Quaternion.identity);
         }
 
         public T Pop(string prefabName, Transform attachTr, Vector3 localPos)
@@ -81,10 +81,20 @@ namespace Devarc
             {
                 return null;
             }
-            return Pop(prefab, attachTr, localPos);
+            return pop(prefab, attachTr, localPos, Quaternion.identity);
         }
 
-        public T Pop(GameObject prefab, Transform attachTr, Vector3 localPos)
+        public T Pop(string prefabName, Transform attachTr, Vector3 localPos, Quaternion localRot)
+        {
+            GameObject prefab = getPrefab(prefabName);
+            if (prefab == null)
+            {
+                return null;
+            }
+            return pop(prefab, attachTr, localPos, localRot);
+        }
+
+        T pop(GameObject prefab, Transform attachTr, Vector3 localPos, Quaternion localRot)
         {
             T compo;
             List<T> list;
@@ -103,7 +113,7 @@ namespace Devarc
             else
             {
                 // Instantiate
-                GameObject obj = GameObject.Instantiate<GameObject>(prefab, localPos, Quaternion.identity, attachTr);
+                GameObject obj = GameObject.Instantiate<GameObject>(prefab, localPos, localRot, attachTr);
                 compo = obj.GetComponent<T>();
                 if (compo == null)
                 {
@@ -115,8 +125,8 @@ namespace Devarc
 
             compo.transform.SetParent(attachTr);
             compo.transform.localPosition = localPos;
-            compo.transform.localRotation = prefab.transform.localRotation;
             compo.transform.localScale = prefab.transform.localScale;
+            compo.transform.localRotation = localRot;
             compo.gameObject.name = prefab.name;
             compo.gameObject.SetActive(true);
 

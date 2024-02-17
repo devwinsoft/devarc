@@ -6,6 +6,8 @@ namespace Devarc
 {
     public abstract class BaseEffect : MonoBehaviour, ISimpleObject
     {
+        public event System.Action<BaseEffect> OnRemove;
+
         public void OnPoolEvent_Pop()
         {
         }
@@ -25,11 +27,11 @@ namespace Devarc
 
 
         Vector3 mInitScale = Vector3.one;
-        float mWaitTime = -1f;
         bool mPlaying = false;
 
         public virtual void Clear()
         {
+            OnRemove = null;
             transform.localScale = mInitScale;
         }
 
@@ -49,14 +51,10 @@ namespace Devarc
             }
         }
 
-        public void Play(float _waitTime)
+        public void Play()
         {
-            mWaitTime = _waitTime;
-            if (mWaitTime <= 0f)
-            {
-                mPlaying = true;
-                onPlay();
-            }
+            mPlaying = true;
+            onPlay();
         }
 
         public void Pause()
@@ -79,6 +77,7 @@ namespace Devarc
 
         public void Remove()
         {
+            OnRemove?.Invoke(this);
             EffectManager.Instance.Remove(this);
         }
 
@@ -90,15 +89,6 @@ namespace Devarc
 
         private void LateUpdate()
         {
-            if (mWaitTime > 0f)
-            {
-                mWaitTime -= Time.deltaTime;
-                if (mWaitTime <= 0f)
-                {
-                    mPlaying = true;
-                    onPlay();
-                }
-            }
             if (mPlaying == false)
             {
                 return;

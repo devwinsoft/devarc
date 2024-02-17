@@ -52,25 +52,28 @@ namespace Devarc
                     _output.AppendLine($"\t * @param {{{typeName}}} {finfo.Name} - {typeName}");
                 }
                 _output.AppendLine("\t */");
-                _output.Append("\tconstructor(");
-                bool started = false;
-
-                foreach (FieldInfo finfo in fields)
+                _output.AppendLine("\tconstructor() {");
+                foreach (FieldInfo finfo in _type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
                 {
-                    if (started)
+                    if (IsArray(finfo))
                     {
-                        _output.Append($", {finfo.Name}");
+                        _output.AppendLine($"\t\tthis.{finfo.Name} = [];");
+                    }
+                    else if (IsClass(finfo))
+                    {
+                        _output.AppendLine($"\t\t\tthis.{finfo.Name} = new {finfo.FieldType.Name}();");
                     }
                     else
                     {
-                        started = true;
-                        _output.Append(finfo.Name);
+                        if (finfo.FieldType == typeof(string))
+                        {
+                            _output.AppendLine($"\t\tthis.{finfo.Name} = \"\";");
+                        }
+                        else
+                        {
+                            _output.AppendLine($"\t\tthis.{finfo.Name} = 0;");
+                        }
                     }
-                }
-                _output.AppendLine(") {");
-                foreach (FieldInfo finfo in _type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
-                {
-                    _output.AppendLine($"\t\tthis.{finfo.Name} = {finfo.Name};");
                 }
                 _output.AppendLine("\t}");
                 _output.AppendLine("\tInit(packet) {");

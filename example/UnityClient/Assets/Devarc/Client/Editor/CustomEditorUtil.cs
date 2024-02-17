@@ -100,6 +100,15 @@ public static class CustomEditorUtil
     }
 
 
+    public static Rect SplitRect(Rect _rect, float _ratio)
+    {
+        Rect rt = _rect;
+        rt.x += _rect.width * _ratio;
+        rt.width *= 1f - _ratio;
+        return rt;
+    }
+
+
     public static Vector3 ToUISpace(Camera _worldCam, Vector3 _worldPos, Canvas _canvas)
     {
         Vector3 screenPos = _worldCam.WorldToScreenPoint(_worldPos);

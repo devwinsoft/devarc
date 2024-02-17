@@ -5,7 +5,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using System.Diagnostics.Eventing.Reader;
+using UnityEngine.ResourceManagement.ResourceProviders;
+using UnityEngine.SceneManagement;
+
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -49,7 +52,7 @@ namespace Devarc
 
         Dictionary<Type, Dictionary<string, UnityEngine.Object>> mBundleAssets = new Dictionary<Type, Dictionary<string, UnityEngine.Object>>();
         Dictionary<Type, Dictionary<string, ResData>> mResourceAssets = new Dictionary<Type, Dictionary<string, ResData>>();
-
+        Dictionary<string, SceneInstance> mBundleScenes = new Dictionary<string, SceneInstance>();
 
 #if UNITY_EDITOR
         public static GameObject[] FindPrefabs(string searchDir)
@@ -90,7 +93,7 @@ namespace Devarc
             {
                 var tempPath = AssetDatabase.GUIDToAssetPath(guid);
                 var compo = AssetDatabase.LoadAssetAtPath<T>(tempPath);
-                if (compo != null)
+                if (compo != null && compo.name == fileName)
                     result.Add(compo);
             }
             return result.ToArray();
@@ -100,7 +103,7 @@ namespace Devarc
 
         public void UnloadResourceAsset<T>(string fileName) where T : UnityEngine.Object
         {
-            string name = fileName.ToLower();
+            string name = Path.GetFileName(fileName).ToLower();
             Type type = typeof(T);
             Dictionary<string, ResData> list = null;
 
@@ -175,8 +178,8 @@ namespace Devarc
             if (task.Status == AsyncOperationStatus.Succeeded)
             {
                 var obj = task.Result;
-                registerAsset_Bundle(obj);
-                getBundleData(key)?.Add(obj.name);
+                if (registerAsset_Bundle(obj))
+                    getBundleData(key)?.Add(obj.name);
             }
             createBundleData(key, task);
         }
@@ -185,8 +188,8 @@ namespace Devarc
         {
             var task = Addressables.LoadAssetsAsync<T>(key, (obj) =>
             {
-                registerAsset_Bundle(obj);
-                getBundleData(key)?.Add(obj.name);
+                if (registerAsset_Bundle(obj))
+                    getBundleData(key)?.Add(obj.name);
             });
             createBundleData(key, task);
             return task;
@@ -198,13 +201,34 @@ namespace Devarc
             List<string> keys = new List<string> { key, lang.ToString() };
             var task = Addressables.LoadAssetsAsync<T>(keys, (obj) =>
             {
-                registerAsset_Bundle(obj);
-                getBundleData(key)?.Add(obj.name);
+                if (registerAsset_Bundle(obj))
+                    getBundleData(key)?.Add(obj.name);
             }, Addressables.MergeMode.Intersection);
             createBundleData(key, task);
             return task;
         }
 
+        public IEnumerator LoadBundleScene(string key, LoadSceneMode mode)
+        {
+            AsyncOperationHandle<SceneInstance> task = Addressables.LoadSceneAsync(key, mode, true);
+            yield return task;
+            if (task.Status == AsyncOperationStatus.Succeeded)
+            {
+                if (mBundleScenes.TryAdd(key, task.Result) == false)
+                {
+                    Debug.LogError($"[AssetManager::LoadBundleScene] key={key}");
+                }
+            }
+        }
+
+        public IEnumerator UnLoadBundleScene(string key)
+        {
+            SceneInstance obj;
+            if (mBundleScenes.TryGetValue(key, out obj))
+            {
+                yield return Addressables.UnloadSceneAsync(obj, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
+            }
+        }
 
         public T LoadResourceAsset<T>(string filePath, SystemLanguage lang = SystemLanguage.Unknown) where T : UnityEngine.Object
         {
@@ -365,10 +389,10 @@ namespace Devarc
         }
 
 
-        void registerAsset_Bundle<T>(T obj) where T : UnityEngine.Object
+        bool registerAsset_Bundle<T>(T obj) where T : UnityEngine.Object
         {
             if (obj == null)
-                return;
+                return false;
 
             Type type = typeof(T);
             Dictionary<string, UnityEngine.Object> list = null;
@@ -382,9 +406,10 @@ namespace Devarc
             if (list.ContainsKey(name))
             {
                 Debug.LogError($"[AssetManager::registerAsset_Bundle] Already exist asset: type={type.Name}, name={name}");
-                return;
+                return false;
             }
             list.Add(name, obj);
+            return true;
         }
 
 
@@ -412,6 +437,44 @@ namespace Devarc
             data.obj = obj;
             data.dir = dir;
             list.Add(name, data);
+        }
+
+
+        public T CreateObject<T>(string prefabName, Transform attachTr = null) where T : MonoBehaviour
+        {
+            if (string.IsNullOrEmpty(prefabName))
+                return null;
+
+            GameObject prefab = GetAsset<GameObject>(prefabName);
+            if (prefab == null)
+            {
+                Debug.LogError($"[AssetManager::CreateObject] Cannot find prefab: name={prefabName}");
+                return null;
+            }
+            GameObject obj = GameObject.Instantiate(prefab, attachTr);
+            T compo = obj.GetComponent<T>();
+            if (compo == null)
+            {
+                Debug.LogError($"[AssetManager::CreateObject] Component is not attached: name={prefabName}, type={typeof(T).Name}");
+                return null;
+            }
+            obj.name = prefabName;
+            return compo;
+        }
+
+        public T GetPrefabComponent<T>(string prefabName) where T : MonoBehaviour
+        {
+            if (string.IsNullOrEmpty(prefabName))
+                return null;
+
+            GameObject prefab = GetAsset<GameObject>(prefabName);
+            if (prefab == null)
+            {
+                Debug.LogError($"[AssetManager::GetPrefabComponent] Cannot find prefab: name={prefabName}");
+                return null;
+            }
+            T compo = prefab.GetComponent<T>();
+            return compo;
         }
     }
 }
