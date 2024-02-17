@@ -59,6 +59,10 @@ namespace Devarc
             }
 
             BaseEffect obj = mPool.Pop(effectID, attachTr, offset, Quaternion.Euler(localRotation));
+            if (obj == null)
+            {
+                return null;
+            }
             switch (attachType)
             {
                 case EFFECT_ATTACH_TYPE.Ground:

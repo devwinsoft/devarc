@@ -18,14 +18,18 @@ MonoBehaviour:
       data: vbKyEUOyC4ieDR3hJBEL4INabSQRsg==
     resourcePath:
       data: vbKyEUOyC4ieDR3hJBELWxGy4oOdwxGy
+    tableDirectory:
+      data: lw1AJBGy
+    stringDirectory:
+      data: xkdDnYZa7rI=
     tableBinDirectory:
-      data: lw1AJBGyC0CGWg==
+      data: 
     tableJsonDirectory:
-      data: lw1AJBGyC/Cy4lo=
+      data: 
     stringBinDirectory:
-      data: xkdDnYZa7rILQIZa
+      data: 
     stringJsonDirectory:
-      data: xkdDnYZa7rIL8LLiWg==
+      data: 
   loginData:
     custom:
       base_uri: https://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com:3000/custom
@@ -34,5 +38,4 @@ MonoBehaviour:
         data: GBipI6mSCAgvqRgIrp2yQA0vheJAK1odHanYQOFAQEDD7n4tQCPDw0CF7g0j6A3h4bLo7uLi7iQRg7IRncPiWkMRWkPow+Id
       base_uri: https://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com:3000/google
       loopback_uri: http://localhost:5000
-      scopes: []
     login_uri: https://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com:3000/login

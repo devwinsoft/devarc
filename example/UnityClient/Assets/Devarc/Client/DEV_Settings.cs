@@ -67,10 +67,8 @@ namespace Devarc
         {
             public CString bundlePath;
             public CString resourcePath;
-            public CString tableBinDirectory;
-            public CString tableJsonDirectory;
-            public CString stringBinDirectory;
-            public CString stringJsonDirectory;
+            public CString tableDirectory;
+            public CString stringDirectory;
         }
         public RootPathData defaultDirectory = new RootPathData();
 
@@ -112,9 +110,9 @@ namespace Devarc
                 switch (formatType)
                 {
                     case TableFormatType.BIN:
-                        return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.tableBinDirectory}";
+                        return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.stringDirectory}/bin";
                     default:
-                        return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.tableJsonDirectory}";
+                        return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.tableDirectory}/json";
                 }
             }
             else
@@ -122,9 +120,9 @@ namespace Devarc
                 switch (formatType)
                 {
                     case TableFormatType.BIN:
-                        return $"{Instance.defaultDirectory.resourcePath}/{Instance.defaultDirectory.tableBinDirectory}";
+                        return $"{Instance.defaultDirectory.resourcePath}/{Instance.defaultDirectory.tableDirectory}/bin";
                     default:
-                        return $"{Instance.defaultDirectory.resourcePath}/{Instance.defaultDirectory.tableJsonDirectory}";
+                        return $"{Instance.defaultDirectory.resourcePath}/{Instance.defaultDirectory.tableDirectory}/json";
                 }
             }
         }
@@ -137,9 +135,9 @@ namespace Devarc
                 switch (formatType)
                 {
                     case TableFormatType.BIN:
-                        return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.stringBinDirectory}/{lang}";
+                        return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.stringDirectory}/bin/{lang}";
                     default:
-                        return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.stringJsonDirectory}/{lang}";
+                        return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.stringDirectory}/json/{lang}";
                 }
             }
             else
@@ -147,9 +145,9 @@ namespace Devarc
                 switch (formatType)
                 {
                     case TableFormatType.BIN:
-                        return $"{Instance.defaultDirectory.resourcePath}/{Instance.defaultDirectory.stringBinDirectory}/{lang}";
+                        return $"{Instance.defaultDirectory.resourcePath}/{Instance.defaultDirectory.stringDirectory}/bin/{lang}";
                     default:
-                        return $"{Instance.defaultDirectory.resourcePath}/{Instance.defaultDirectory.stringJsonDirectory}/{lang}";
+                        return $"{Instance.defaultDirectory.resourcePath}/{Instance.defaultDirectory.stringDirectory}/json/{lang}";
                 }
             }
         }

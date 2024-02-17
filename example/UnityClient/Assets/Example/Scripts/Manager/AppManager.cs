@@ -22,6 +22,8 @@ public class AppManager : MonoSingleton<AppManager>
     protected override void onAwake()
     {
         // Create managers...
+        AssetManager.Create();
+        DownloadManager.Create();
         EffectManager.Create();
         LoginManager.Create();
         SoundManager.Create();

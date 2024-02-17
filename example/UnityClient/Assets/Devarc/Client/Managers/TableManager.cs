@@ -212,7 +212,8 @@ public partial class TableManager : MonoSingleton<TableManager>
 
     public void LoadResourceTable()
     {
-        string resourceDir = DEV_Settings.Instance.defaultDirectory.tableJsonDirectory;
+        string resourceDir = $"{DEV_Settings.Instance.defaultDirectory.tableDirectory}/json";
+
         var list = AssetManager.Instance.LoadResourceAssets<TextAsset>(resourceDir);
         bool isEmpty = true;
         foreach (var textAsset in list)
@@ -228,7 +229,7 @@ public partial class TableManager : MonoSingleton<TableManager>
 
     public void UnloadResourceTable()
     {
-        string resourceDir = DEV_Settings.Instance.defaultDirectory.tableJsonDirectory;
+        string resourceDir = $"{DEV_Settings.Instance.defaultDirectory.tableDirectory}/json";
         var removeList = AssetManager.Instance.UnloadResourceAssets<TextAsset>(resourceDir);
         bool isEmpty = true;
         foreach (var tableName in removeList)
@@ -245,7 +246,7 @@ public partial class TableManager : MonoSingleton<TableManager>
 
     public void LoadResourceString(SystemLanguage lang)
     {
-        string resourceDir = DEV_Settings.Instance.defaultDirectory.stringJsonDirectory;
+        string resourceDir = $"{DEV_Settings.Instance.defaultDirectory.stringDirectory}/json";
         var list = AssetManager.Instance.LoadResourceAssets<TextAsset>(resourceDir, lang);
         bool isEmpty = true;
         foreach (var textAsset in list)
@@ -261,7 +262,7 @@ public partial class TableManager : MonoSingleton<TableManager>
 
     public void UnloadResourceString()
     {
-        string resourceDir = DEV_Settings.Instance.defaultDirectory.stringJsonDirectory;
+        string resourceDir = $"{DEV_Settings.Instance.defaultDirectory.stringDirectory}/json";
         var removeList = AssetManager.Instance.UnloadResourceAssets<TextAsset>(resourceDir);
         bool isEmpty = true;
         foreach (var tableName in removeList)

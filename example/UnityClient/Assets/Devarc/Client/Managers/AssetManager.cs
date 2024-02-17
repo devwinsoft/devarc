@@ -159,8 +159,8 @@ namespace Devarc
                 {
                     foreach (var list in mBundleAssets.Values)
                     {
-                        result.Add(name);
-                        list.Remove(name);
+                        if (list.Remove(name))
+                            result.Add(name);
                     }
                 }
                 bundleData.list.Clear();
