@@ -54,7 +54,7 @@ namespace Devarc
                         return $"GetStringArray({info.fieldName})";
                     default:
                         if (info.isClass)
-                            return $"GetClass<{info.fieldType}>({info.fieldName})";
+                            return $"GetClassArray<{info.fieldType}>({info.fieldName})";
                         else
                             return $"GetEnumArray<{info.fieldType}>({info.fieldName})";
                 }
