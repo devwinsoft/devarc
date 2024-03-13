@@ -82,7 +82,7 @@ namespace Devarc
                 {
                     if (IsArray(finfo))
                     {
-                        if (IsClass(finfo))
+                        if (IsClass(finfo.FieldType.GetElementType()))
                         {
                             var rawName = finfo.FieldType.Name;
                             var pureName = rawName.Substring(0, rawName.Length - 2);
@@ -118,7 +118,7 @@ namespace Devarc
                 {
                     if (IsArray(finfo))
                     {
-                        if (IsClass(finfo))
+                        if (IsClass(finfo.FieldType.GetElementType()))
                         {
                             _output.AppendLine($"\t\t\ttoArray(this.{finfo.Name}),");
                         }
