@@ -5,6 +5,8 @@ using System.Text;
 using System.IO;
 using NPOI.SS.UserModel;
 using System.Text.RegularExpressions;
+using NPOI.HSSF.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace Devarc
 {
@@ -15,6 +17,14 @@ namespace Devarc
         public void Build(string inputPath)
         {
             var doc = open(inputPath);
+            if (doc is XSSFWorkbook)
+            {
+                XSSFFormulaEvaluator.EvaluateAllFormulaCells(doc);
+            }
+            else
+            {
+                HSSFFormulaEvaluator.EvaluateAllFormulaCells(doc);
+            }
             for (int i = 0; i < doc.NumberOfSheets; i++)
             {
                 var sheet = doc.GetSheetAt(i);
@@ -60,7 +70,18 @@ namespace Devarc
                 var cell = row.GetCell(c);
                 if (cell == null)
                     continue;
-                var value = cell.ToString();
+
+                string value;
+                switch (cell.CellType)
+                {
+                    case CellType.Formula:
+                    case CellType.String:
+                        value = cell.StringCellValue;
+                        break;
+                    default:
+                        value = cell.ToString();
+                        break;
+                }
                 if (started == false)
                     started = true;
                 else
