@@ -44,7 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7763f03c35d33b45a4170be533e1b8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Url: []
   Token:
     data: 
   Error:
@@ -52,5 +51,5 @@ MonoBehaviour:
   sessionID:
     data: 
   secret:
-    data1: 1352214509
-    data2: 1352214509
+    data1: 1232528878
+    data2: 1232528878

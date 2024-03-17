@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 
 namespace Devarc
 {
@@ -69,8 +68,6 @@ namespace Devarc
 
             data1 = BitConverter.ToInt32(temp1, 0);
             data2 = BitConverter.ToInt32(temp2, 0);
-
-            setupCRC(temp1, temp2);
         }
     }
 }

@@ -7,10 +7,10 @@ namespace Devarc
     {
         protected static System.Random random = new System.Random();
 
-        [UnityEngine.SerializeField]
+        [SerializeField]
         public int data1;
 
-        [UnityEngine.SerializeField]
+        [SerializeField]
         public int data2;
 
         protected bool isValid = false;
@@ -25,24 +25,12 @@ namespace Devarc
         {
             data1 = _data1;
             data2 = _data2;
-            setupCRC(BitConverter.GetBytes(_data1), BitConverter.GetBytes(_data2));
         }
 
         protected int getRandom()
         {
             int value = random.Next();
             return value;
-        }
-
-        protected void setupCRC(byte[] temp1, byte[] temp2)
-        {
-            isValid = true;
-            crc = 0;
-            for (int i = 0; i < temp1.Length; i++)
-            {
-                crc += (i + 1) * temp1[i];
-                crc += (i + 2) * temp2[i];
-            }
         }
     }
 
