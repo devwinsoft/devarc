@@ -3,6 +3,7 @@ CREATE TABLE `SKILL` (
 	`skill_id` varchar(50) NOT NULL,
 	`skillName` varchar(255) NOT NULL,
 	`level` INT NOT NULL,
+	`errorTest` BOOLEAN NOT NULL,
 	`power` INT NOT NULL,
 	`account` varchar(255) NOT NULL,
 	`args` INT NOT NULL,

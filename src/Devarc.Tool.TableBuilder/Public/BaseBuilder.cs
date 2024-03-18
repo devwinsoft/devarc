@@ -29,8 +29,8 @@ namespace Devarc
         protected void readHeader(ISheet sheet)
         {
             mCurrentHeader = new HeaderData();
-            mCurrentHeader.SheetName = sheet.SheetName;
-            mCurrentHeader.IsDataSheet = sheet.SheetName.Contains("@") || sheet.SheetName.Contains(".");
+            mCurrentHeader.SheetName = sheet.SheetName.Split('@')[0];
+            mCurrentHeader.IsDataSheet = sheet.SheetName.Contains("@");
             mHeaderList.Add(mCurrentHeader);
 
             for (int r = 0; r < (int)RowType.Data; r++)

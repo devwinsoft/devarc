@@ -50,13 +50,9 @@ namespace Devarc
         {
             mMaxColumn = Math.Max(mMaxColumn, row.LastCellNum);
 
-            int cnt = 0;
             for (int c = 0; c < row.LastCellNum; c++) 
             {
                 var cell = row.GetCell(c);
-                if (cell == null)
-                    continue;
-                cnt++;
 
                 FieldData field = null;
                 if (rowType == RowType.Description)
@@ -68,6 +64,9 @@ namespace Devarc
                 {
                     field = fields[c];
                 }
+
+                if (cell == null)
+                    continue;
 
                 switch (rowType)
                 {
