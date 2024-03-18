@@ -50,17 +50,17 @@ namespace Devarc
 		public string               skill_id;
 		public string               skillName;
 		public string               level;
-		public string               errorTest;
 		public string               power;
 		public string               account;
+		public string               classTest;
 		public string               args;
 
 		public virtual string       get_skill_id() => (skill_id);
 		public virtual string       get_skillName() => (skillName);
 		public virtual int          get_level() => GetInt(level);
-		public virtual bool         get_errorTest() => GetBool(errorTest);
 		public virtual int          get_power() => GetInt(power);
 		public virtual Account      get_account() => GetClass<Account>(account);
+		public virtual Account[]    get_classTest() => GetClassArray<Account>(classTest);
 		public virtual int[]        get_args() => GetIntArray(args);
 	}
 
@@ -81,11 +81,11 @@ namespace Devarc
 		[Key(2)]
 		public int                  level;
 		[Key(3)]
-		public bool                 errorTest;
-		[Key(4)]
 		public int                  power;
-		[Key(5)]
+		[Key(4)]
 		public Account              account;
+		[Key(5)]
+		public Account[]            classTest;
 		[Key(6)]
 		public int[]                args;
 
@@ -94,9 +94,9 @@ namespace Devarc
 			skill_id = data.get_skill_id();
 			skillName = data.get_skillName();
 			level = data.get_level();
-			errorTest = data.get_errorTest();
 			power = data.get_power();
 			account = data.get_account();
+			classTest = data.get_classTest();
 			args = data.get_args();
 		}
 	}

@@ -1,16 +1,21 @@
 ﻿using System;
 using UnityEngine;
+using MessagePack;
 
 namespace Devarc
 {
+    [Serializable]
+    [MessagePackObject]
     public abstract class CData
     {
         protected static System.Random random = new System.Random();
 
         [SerializeField]
+		[Key(0)]
         public int data1;
 
         [SerializeField]
+		[Key(1)]
         public int data2;
 
         protected bool isValid = false;

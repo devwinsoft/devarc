@@ -4,6 +4,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using MessagePack;
 using System.Linq;
+using System.CodeDom;
 #if UNITY_2019_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -134,14 +135,42 @@ namespace Devarc
             return result;
         }
 
-        public virtual T GetClass<T>(string value) where T : new()
+        public virtual T GetClass<T>(string value) where T : class, new()
         {
+            Type type = typeof(T);
+            if (type == typeof(CInt))
+            {
+                int temp = 0;
+                int.TryParse(value, out temp);
+                var result = new CInt(temp);
+                return result as T;
+            }
+            else if (type == typeof(CFloat))
+            {
+                float temp = 0;
+                float.TryParse(value, out temp);
+                var result = new CFloat(temp);
+                return result as T;
+            }
+            else if (type == typeof(CString))
+            {
+                var result = new CString(value);
+                return result as T;
+            }
             return default(T);
         }
 
-        public virtual T[] GetClassArray<T>(string value) where T : new()
+        public virtual T[] GetClassArray<T>(string value) where T : class, new()
         {
-            return new T[0];
+            if (string.IsNullOrEmpty(value))
+                return new T[0];
+            string[] list = value.Split(",");
+            T[] results = new T[list.Length];
+            for (int i = 0; i < list.Length; i++)
+            {
+                results[i] = GetClass<T>(list[i].Trim());
+            }
+            return results;
         }
     }
 

@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using MessagePack;
 
 namespace Devarc
 {
-    [System.Serializable]
+    [Serializable]
+    [MessagePackObject]
     public class CString
     {
         public static implicit operator string(CString obj)
@@ -16,6 +19,8 @@ namespace Devarc
             return obj;
         }
 
+        [SerializeField]
+        [Key(0)]
         public string data;
 
         public string Value

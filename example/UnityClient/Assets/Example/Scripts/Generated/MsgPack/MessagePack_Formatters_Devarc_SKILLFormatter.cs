@@ -32,9 +32,9 @@ namespace MessagePack.Formatters.Devarc
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.skill_id, options);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.skillName, options);
             writer.Write(value.level);
-            writer.Write(value.errorTest);
             writer.Write(value.power);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.Account>(formatterResolver).Serialize(ref writer, value.account, options);
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.Account[]>(formatterResolver).Serialize(ref writer, value.classTest, options);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<int[]>(formatterResolver).Serialize(ref writer, value.args, options);
         }
 
@@ -64,13 +64,13 @@ namespace MessagePack.Formatters.Devarc
                         ____result.level = reader.ReadInt32();
                         break;
                     case 3:
-                        ____result.errorTest = reader.ReadBoolean();
-                        break;
-                    case 4:
                         ____result.power = reader.ReadInt32();
                         break;
-                    case 5:
+                    case 4:
                         ____result.account = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.Account>(formatterResolver).Deserialize(ref reader, options);
+                        break;
+                    case 5:
+                        ____result.classTest = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.Account[]>(formatterResolver).Deserialize(ref reader, options);
                         break;
                     case 6:
                         ____result.args = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<int[]>(formatterResolver).Deserialize(ref reader, options);
