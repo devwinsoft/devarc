@@ -42,8 +42,13 @@ namespace Devarc
         public FieldData Get(int column)
         {
             FieldData value = null;
-            fields.TryGetValue(column, out value);
-            return value;
+            if (fields.TryGetValue(column, out value))
+            {
+                if (string.IsNullOrEmpty(value.fieldName))
+                    return null;
+                return value;
+            }
+            return null;
         }
 
         public void Set(IRow row, RowType rowType)
