@@ -28,6 +28,7 @@ namespace Devarc
 
         Vector3 mInitScale = Vector3.one;
         bool mPlaying = false;
+        bool mRemoved = false;
 
         public virtual void Clear()
         {
@@ -51,32 +52,50 @@ namespace Devarc
             }
         }
 
+        public void Init()
+        {
+            mPlaying = true;
+            mRemoved = false;
+            onPlay();
+        }
+
         public void Play()
         {
+            if (mRemoved)
+                return;
             mPlaying = true;
             onPlay();
         }
 
         public void Pause()
         {
+            if (mRemoved)
+                return;
             mPlaying = false;
             onPause();
         }
 
         public void Resume()
         {
+            if (mRemoved)
+                return;
             mPlaying = true;
             onResume();
         }
 
         public void Stop()
         {
+            if (mRemoved)
+                return;
             mPlaying = false;
             onStop();
         }
 
         public void Remove()
         {
+            if (mRemoved)
+                return;
+            mRemoved = true;
             OnRemove?.Invoke(this);
             EffectManager.Instance.Remove(this);
         }

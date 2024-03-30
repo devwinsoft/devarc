@@ -9,8 +9,8 @@ public class TestAssetScene : BaseScene
     public CHARACTER_ID charID;
     public SKILL_ID skillID;
     public SOUND_ID soundID;
-    public EffectPlayData effectData1;
-    public EffectPlayData effectData2;
+    public EffectDataPlay effectData1;
+    public EffectDataPlay effectData2;
     public STRING_ID stringID;
 
 

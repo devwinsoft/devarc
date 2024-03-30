@@ -22,7 +22,7 @@ namespace Devarc
 
 
     [System.Serializable]
-    public class EffectPlayData
+    public class EffectDataPlay
     {
         public EFFECT_ID EffectID;
         public Vector3 offset;

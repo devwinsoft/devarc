@@ -6,7 +6,7 @@ using Devarc;
 
 namespace Devarc
 {
-    public class ParticleEffect : BaseEffect
+    public class EffectPlayParticle : BaseEffect
     {
         public float playTime;
         public float fadeOutTime;
@@ -91,10 +91,10 @@ namespace Devarc
                 if (mReaminTime <= 0f)
                     Remove();
             }
-            //else if (particle.IsAlive(true) == false)
-            //{
-            //    Remove();
-            //}
+            else if (particle.IsAlive(true) == false)
+            {
+                Remove();
+            }
         }
     }
 }

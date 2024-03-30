@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Devarc
 {
-    public class AnimEffect : BaseEffect
+    public class EffectPlayAnim : BaseEffect
     {
         public SimpleAnimList animDatas;
 

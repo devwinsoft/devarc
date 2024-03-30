@@ -80,7 +80,7 @@ namespace Devarc
                     obj.transform.SetParent(mPool.Root, true);
                     break;
             }
-            obj.Play();
+            obj.Init();
             return obj;
         }
 
