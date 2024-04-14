@@ -16,7 +16,7 @@ namespace Devarc
 
     public class EffectManager : MonoSingleton<EffectManager>
     {
-        SimplePool<BaseEffect> mPool = new SimplePool<BaseEffect>();
+        SimplePool<BaseEffectPlay> mPool = new SimplePool<BaseEffectPlay>();
 
         protected override void onAwake()
         {
@@ -51,14 +51,14 @@ namespace Devarc
         }
 
 
-        public BaseEffect CreateEffect(EFFECT_ID effectID, Transform attachTr, Vector3 offset, Vector3 localRotation, EFFECT_ATTACH_TYPE attachType)
+        public BaseEffectPlay CreateEffect(EFFECT_ID effectID, Transform attachTr, Vector3 offset, Vector3 localRotation, EFFECT_ATTACH_TYPE attachType)
         {
             if (effectID == null || effectID.IsValid == false)
             {
                 return null;
             }
 
-            BaseEffect obj = mPool.Pop(effectID, attachTr, offset, Quaternion.Euler(localRotation));
+            BaseEffectPlay obj = mPool.Pop(effectID, attachTr, offset, Quaternion.Euler(localRotation));
             if (obj == null)
             {
                 return null;
@@ -85,7 +85,7 @@ namespace Devarc
         }
 
 
-        public void Remove(BaseEffect _effect)
+        public void Remove(BaseEffectPlay _effect)
         {
             if (_effect == null)
             {

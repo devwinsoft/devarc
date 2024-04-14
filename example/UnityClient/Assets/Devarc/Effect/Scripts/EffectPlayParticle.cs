@@ -6,56 +6,58 @@ using Devarc;
 
 namespace Devarc
 {
-    public class EffectPlayParticle : BaseEffect
+    public class EffectPlayParticle : BaseEffectPlay
     {
         public float playTime;
         public float fadeOutTime;
 
         float mReaminTime = 0f;
-
-        public ParticleSystem particle
-        {
-            get
-            {
-                if (mParticle == null)
-                    mParticle = GetComponentInChildren<ParticleSystem>(true);
-                return mParticle;
-            }
-        }
-        ParticleSystem mParticle = null;
+        ParticleSystem[] mParticles = null;
 
         public override void Clear()
         {
-            particle.Stop(true);
-            particle.Clear(true);
+            foreach (var particle in mParticles)
+            {
+                particle.Stop(true);
+                particle.Clear(true);
+            }
             base.Clear();
         }
 
         public override void onAwake()
         {
-            mParticle = GetComponent<ParticleSystem>();
+            mParticles = GetComponentsInChildren<ParticleSystem>();
         }
 
         protected override void onPause()
         {
-            if (particle.isPlaying)
+            foreach (var particle in mParticles)
             {
-                particle.Pause(true);
+                if (particle.isPlaying)
+                {
+                    particle.Pause();
+                }
             }
         }
 
         protected override void onResume()
         {
-            if (particle.isPaused)
+            foreach (var particle in mParticles)
             {
-                particle.Play(true);
+                if (particle.isPaused)
+                {
+                    particle.Play();
+                }
             }
         }
 
         protected override void onPlay()
         {
             mReaminTime = playTime;
-            particle.Play(true);
+            foreach (var particle in mParticles)
+            {
+                particle.Play();
+            }
             if (playTime > 0f)
             {
                 Invoke("Stop", playTime);
@@ -64,18 +66,15 @@ namespace Devarc
 
         protected override void onStop()
         {
-            if (particle.isPlaying)
+            foreach (var particle in mParticles)
             {
                 particle.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-                transform.SetParent(EffectManager.Instance.transform, true);
-                if (fadeOutTime > 0f)
-                {
-                    Invoke("Remove", fadeOutTime);
-                }
-                else
-                {
-                    Remove();
-                }
+            }
+
+            transform.SetParent(EffectManager.Instance.transform, true);
+            if (fadeOutTime > 0f)
+            {
+                Invoke("Remove", fadeOutTime);
             }
             else
             {
@@ -91,11 +90,22 @@ namespace Devarc
                 if (mReaminTime <= 0f)
                     Remove();
             }
-            else if (particle.IsAlive(true) == false)
+            else
             {
-                Remove();
+                bool isAlive = false;
+                foreach (var particle in mParticles)
+                {
+                    if (particle.IsAlive(true))
+                    {
+                        isAlive = true;
+                    }
+                }
+
+                if (isAlive == false)
+                {
+                    Remove();
+                }
             }
         }
     }
 }
-

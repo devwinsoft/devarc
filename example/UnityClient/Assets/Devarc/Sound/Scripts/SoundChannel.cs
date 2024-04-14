@@ -1,4 +1,4 @@
-﻿using Devarc;
+using Devarc;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +11,7 @@ public class SoundChannel : MonoBehaviour
     List<SoundPlay> mPool = new List<SoundPlay>();
     List<SoundPlay> mPlayList = new List<SoundPlay>();
     Dictionary<int, SoundPlay> mPlayDict = new Dictionary<int, SoundPlay>();
+    Dictionary<string, float> mCooltimes = new Dictionary<string, float>();
 
     public bool IsPlaying
     {
@@ -71,7 +72,23 @@ public class SoundChannel : MonoBehaviour
     }
 
 
-    public int Play(int groupID, AudioClip clip, float volumn, bool loop, float wait, float fadeIn, Vector3 pos)
+    public void StartCooltime(string soundID, float cooltime)
+    {
+        mCooltimes[soundID] = Time.realtimeSinceStartup + cooltime;
+    }
+
+    public bool IsCooltime(string soundID)
+    {
+        float realTime = 0f;
+        if (mCooltimes.TryGetValue(soundID, out realTime) == false)
+        {
+            return false;
+        }
+        return realTime > Time.realtimeSinceStartup;
+    }
+
+
+    public int Play(int groupID, AudioClip clip, float volumn, SoundData soundData, float wait, float fadeIn, Vector3 pos)
     {
         if (groupID != 0)
         {
@@ -106,7 +123,8 @@ public class SoundChannel : MonoBehaviour
             }
         }
         obj.transform.position = pos;
-        obj.Init(generateSoundSEQ(), mChannel, groupID, clip, volumn, loop, wait, fadeIn);
+        obj.gameObject.SetActive(true);
+        obj.Init(generateSoundSEQ(), soundData.sound_id, groupID, clip, volumn, soundData.loop, wait, fadeIn);
         mPlayList.Add(obj);
         mPlayDict.Add(obj.SoundSEQ, obj);
         return obj.SoundSEQ;
@@ -156,6 +174,14 @@ public class SoundChannel : MonoBehaviour
         }
     }
 
+    public void StopAll()
+    {
+        for (int i = mPlayList.Count - 1; i >= 0; i--)
+        {
+            SoundPlay sound = mPlayList[i];
+            stop(sound);
+        }
+    }
 
     public void StopGroup(int groupID)
     {
@@ -194,13 +220,19 @@ public class SoundChannel : MonoBehaviour
         return mNextSEQ;
     }
 
-    void stop(SoundPlay _play)
+    void stop(SoundPlay obj)
     {
-        int soundSEQ = _play.SoundSEQ;
-        _play.Stop();
+        int soundSEQ = obj.SoundSEQ;
+        obj.Stop();
 
-        mPlayList.Remove(_play);
+        mPlayList.Remove(obj);
         mPlayDict.Remove(soundSEQ);
-        mPool.Add(_play);
+        obj.gameObject.SetActive(false);
+        mPool.Add(obj);
+
+        if (IsCooltime(obj.SoundID) == false)
+        {
+            mCooltimes.Remove(obj.SoundID);
+        }
     }
 }

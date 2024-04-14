@@ -10,12 +10,14 @@ namespace Devarc
 		public string               path;
 		public string               loop;
 		public string               volume;
+		public string               cooltime;
 
 		public virtual int          get_index() => GetInt(index);
 		public virtual string       get_sound_id() => (sound_id);
 		public virtual string       get_path() => (path);
 		public virtual bool         get_loop() => GetBool(loop);
 		public virtual float        get_volume() => GetFloat(volume);
+		public virtual float        get_cooltime() => GetFloat(cooltime);
 	}
 
 	[System.Serializable]
@@ -38,6 +40,8 @@ namespace Devarc
 		public bool                 loop;
 		[Key(4)]
 		public float                volume;
+		[Key(5)]
+		public float                cooltime;
 
 		public void Initialize(_SOUND_BUNDLE data)
 		{
@@ -46,6 +50,7 @@ namespace Devarc
 			path = data.get_path();
 			loop = data.get_loop();
 			volume = data.get_volume();
+			cooltime = data.get_cooltime();
 		}
 	}
 
@@ -58,6 +63,7 @@ namespace Devarc
 		public string               path;
 		public string               loop;
 		public string               volume;
+		public string               cooltime;
 
 		public virtual int          get_index() => GetInt(index);
 		public virtual string       get_key() => (key);
@@ -65,6 +71,7 @@ namespace Devarc
 		public virtual string       get_path() => (path);
 		public virtual bool         get_loop() => GetBool(loop);
 		public virtual float        get_volume() => GetFloat(volume);
+		public virtual float        get_cooltime() => GetFloat(cooltime);
 	}
 
 	[System.Serializable]
@@ -89,6 +96,8 @@ namespace Devarc
 		public bool                 loop;
 		[Key(5)]
 		public float                volume;
+		[Key(6)]
+		public float                cooltime;
 
 		public void Initialize(_SOUND_RESOURCE data)
 		{
@@ -98,6 +107,7 @@ namespace Devarc
 			path = data.get_path();
 			loop = data.get_loop();
 			volume = data.get_volume();
+			cooltime = data.get_cooltime();
 		}
 	}
 

@@ -24,12 +24,6 @@ public class SoundPlay : MonoBehaviour
     }
     SOUND_PLAY_STATE mState = SOUND_PLAY_STATE.STOP;
 
-    public CHANNEL Channel
-    {
-        get { return mChannel; }
-    }
-    CHANNEL mChannel;
-
     public int GroupID
     {
         get { return mGroupID; }
@@ -42,6 +36,9 @@ public class SoundPlay : MonoBehaviour
     }
     int mSoundSEQ;
 
+    public string SoundID => mSoundID;
+    string mSoundID;
+
     public AudioSource mAudio;
 
     float mVolumn;
@@ -49,10 +46,10 @@ public class SoundPlay : MonoBehaviour
     float mFadingTime; // fade-in / fade-out time
     float mElapsedTime = 0f;
 
-    public void Init(int _soundSEQ, CHANNEL _channel, int _ownerID, AudioClip _clip, float _volumn, bool _loop, float _waitTime, float _fadeInTime)
+    public void Init(int _soundSEQ, string _soundID, int _ownerID, AudioClip _clip, float _volumn, bool _loop, float _waitTime, float _fadeInTime)
     {
         mSoundSEQ = _soundSEQ;
-        mChannel = _channel;
+        mSoundID = _soundID;
         mGroupID = _ownerID;
         mVolumn = _volumn;
         mWaitTime = _waitTime;

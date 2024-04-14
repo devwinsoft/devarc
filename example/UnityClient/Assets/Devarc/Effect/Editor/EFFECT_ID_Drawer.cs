@@ -7,17 +7,17 @@ using UnityEngine.AddressableAssets;
 namespace Devarc
 {
     [CustomPropertyDrawer(typeof(EFFECT_ID))]
-    public class EFFECT_ID_Drawer : EditorID_Drawer<BaseEffect>
+    public class EFFECT_ID_Drawer : EditorID_Drawer<BaseEffectPlay>
     {
-        protected override EditorID_Selector<BaseEffect> getSelector()
+        protected override EditorID_Selector<BaseEffectPlay> getSelector()
         {
             return EFFECT_ID_Selector.Instance;
         }
     }
 
-    public class EFFECT_ID_Selector : EditorID_Selector<BaseEffect>
+    public class EFFECT_ID_Selector : EditorID_Selector<BaseEffectPlay>
     {
-        public new static EditorID_Selector<BaseEffect> Instance
+        public new static EditorID_Selector<BaseEffectPlay> Instance
         {
             get
             {
@@ -33,7 +33,7 @@ namespace Devarc
 
         public override void Reload()
         {
-            foreach (var obj in AssetManager.FindPrefabs<BaseEffect>("*", DEV_Settings.GetDefault_BundlePath()))
+            foreach (var obj in AssetManager.FindPrefabs<BaseEffectPlay>("*", DEV_Settings.GetDefault_BundlePath()))
             {
                 add(obj.name);
             }

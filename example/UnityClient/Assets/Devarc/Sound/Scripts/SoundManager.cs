@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -9,6 +9,7 @@ public enum CHANNEL
     BGM,
     EFFECT,
     UI,
+    VOICE,
     MAX,
 }
 
@@ -18,6 +19,7 @@ public abstract class SoundData
     public abstract string key { get; }
     public abstract string path { get; }
     public abstract float volume { get; }
+    public abstract float cooltime { get; }
     public abstract bool loop { get; }
     public abstract bool isBundle { get; }
 }
@@ -31,6 +33,7 @@ public class BundleSoundData : SoundData
     public override string key => addressKey;
     public override string path => data.path;
     public override float volume => data.volume;
+    public override float cooltime => data.cooltime;
     public override bool loop => data.loop;
     public override bool isBundle => false;
 }
@@ -43,6 +46,7 @@ public class ResourceSoundData : SoundData
     public override string key => data.key;
     public override string path => data.path;
     public override float volume => data.volume;
+    public override float cooltime => data.cooltime;
     public override bool loop => data.loop;
     public override bool isBundle => false;
 }
@@ -57,8 +61,9 @@ public class SoundManager : MonoSingleton<SoundManager>
     protected override void onAwake()
     {
         createChannel(CHANNEL.BGM, 2, false);
-        createChannel(CHANNEL.EFFECT, 10, true);
-        createChannel(CHANNEL.UI, 10, false);
+        createChannel(CHANNEL.EFFECT, 32, true);
+        createChannel(CHANNEL.VOICE, 2, false);
+        createChannel(CHANNEL.UI, 4, false);
     }
 
     protected override void onDestroy()
@@ -193,6 +198,9 @@ public class SoundManager : MonoSingleton<SoundManager>
 
     public int PlaySound(CHANNEL channel, string soundID, int groupID, float fadeIn, Vector3 pos)
     {
+        if (string.IsNullOrEmpty(soundID))
+            return 0;
+
         List<SoundData> list = null;
         if (mSoundDatas.TryGetValue(soundID, out list) == false || list.Count == 0)
         {
@@ -207,8 +215,16 @@ public class SoundManager : MonoSingleton<SoundManager>
             Debug.LogError($"[SoundManager] Cannot find audio clip: sound_id={soundID}, path={soundData.path}");
             return 0;
         }
-        var chennel = mChannels[(int)channel];
-        return chennel.Play(groupID, clip, soundData.volume, soundData.loop, 0f, fadeIn, pos);
+        var obj = mChannels[(int)channel];
+        if (obj.IsCooltime(soundData.sound_id))
+        {
+            return 0;
+        }
+        if (soundData.cooltime > 0f)
+        {
+            obj.StartCooltime(soundID, soundData.cooltime);
+        }
+        return obj.Play(groupID, clip, soundData.volume, soundData, 0f, fadeIn, pos);
     }
 
 
@@ -225,6 +241,11 @@ public class SoundManager : MonoSingleton<SoundManager>
     public void Stop(CHANNEL channel, int _soundSEQ)
     {
         mChannels[(int)channel].Stop(_soundSEQ);
+    }
+
+    public void StopAll(CHANNEL channel)
+    {
+        mChannels[(int)channel].StopAll();
     }
 
     public void StopGroup(CHANNEL channel, int _soundSEQ)
