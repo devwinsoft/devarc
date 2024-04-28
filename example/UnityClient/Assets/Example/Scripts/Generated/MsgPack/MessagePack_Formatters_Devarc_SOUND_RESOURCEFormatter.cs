@@ -28,13 +28,14 @@ namespace MessagePack.Formatters.Devarc
             }
 
             global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(6);
+            writer.WriteArrayHeader(7);
             writer.Write(value.index);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.key, options);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.sound_id, options);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.path, options);
             writer.Write(value.loop);
             writer.Write(value.volume);
+            writer.Write(value.cooltime);
         }
 
         public global::Devarc.SOUND_RESOURCE Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -70,6 +71,9 @@ namespace MessagePack.Formatters.Devarc
                         break;
                     case 5:
                         ____result.volume = reader.ReadSingle();
+                        break;
+                    case 6:
+                        ____result.cooltime = reader.ReadSingle();
                         break;
                     default:
                         reader.Skip();

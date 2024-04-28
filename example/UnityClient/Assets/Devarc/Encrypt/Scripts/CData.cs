@@ -5,7 +5,6 @@ using MessagePack;
 namespace Devarc
 {
     [Serializable]
-    [MessagePackObject]
     public abstract class CData
     {
         protected static System.Random random = new System.Random();

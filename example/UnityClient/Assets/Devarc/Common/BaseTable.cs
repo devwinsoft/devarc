@@ -137,26 +137,6 @@ namespace Devarc
 
         public virtual T GetClass<T>(string value) where T : class, new()
         {
-            Type type = typeof(T);
-            if (type == typeof(CInt))
-            {
-                int temp = 0;
-                int.TryParse(value, out temp);
-                var result = new CInt(temp);
-                return result as T;
-            }
-            else if (type == typeof(CFloat))
-            {
-                float temp = 0;
-                float.TryParse(value, out temp);
-                var result = new CFloat(temp);
-                return result as T;
-            }
-            else if (type == typeof(CString))
-            {
-                var result = new CString(value);
-                return result as T;
-            }
             return default(T);
         }
 

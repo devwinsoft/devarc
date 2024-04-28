@@ -60,14 +60,10 @@ namespace Devarc
                 var cell = row.GetCell(c);
 
                 FieldData field = null;
-                if (rowType == RowType.Description)
+                if (fields.TryGetValue((int)c, out field) == false)
                 {
                     field = new FieldData();
                     fields[c] = field;
-                }
-                else
-                {
-                    field = fields[c];
                 }
 
                 if (cell == null)

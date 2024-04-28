@@ -5,7 +5,6 @@ using MessagePack;
 namespace Devarc
 {
     [Serializable]
-    [MessagePackObject]
     public class CString
     {
         public static implicit operator string(CString obj)

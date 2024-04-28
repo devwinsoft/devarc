@@ -55,6 +55,20 @@ public class SimpleAnimList
             return false;
         return true;
     }
+
+    public float GetPlayLength()
+    {
+        float time = 0f;
+        foreach (var data in list)
+        {
+            if (data.Repeat == ANIM_PLAY_COUNT.Loop)
+                return -1f;
+            if (data.Speed <= 0f)
+                return -1f;
+            time += data.Clip.length * (float)data.Repeat / data.Speed;
+        }
+        return time;
+    }
 }
 
 
