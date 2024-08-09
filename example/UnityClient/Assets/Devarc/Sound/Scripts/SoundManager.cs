@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using Devarc;
+using UnityEditor.MemoryProfiler;
 
 public enum CHANNEL
 {
@@ -180,10 +180,24 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
     }
 
-
     public bool IsPlaying(CHANNEL channel)
     {
         return mChannels[(int)channel].IsPlaying;
+    }
+
+    public int PlaySound(CHANNEL channel, int index)
+    {
+        {
+            var tableData = Table.SOUND_BUNDLE.Get(index);
+            if (tableData != null)
+                return PlaySound(channel, tableData.sound_id, 0, 0f, Vector3.zero);
+        }
+        {
+            var tableData = Table.SOUND_RESOURCE.Get(index);
+            if (tableData != null)
+                return PlaySound(channel, tableData.sound_id, 0, 0f, Vector3.zero);
+        }
+        return 0;
     }
 
     public int PlaySound(CHANNEL channel, string soundID)
@@ -216,13 +230,13 @@ public class SoundManager : MonoSingleton<SoundManager>
             return 0;
         }
         var obj = mChannels[(int)channel];
-        if (obj.IsCooltime(soundData.sound_id))
+        if (obj.IsCooltime(groupID, soundData.sound_id))
         {
             return 0;
         }
         if (soundData.cooltime > 0f)
         {
-            obj.StartCooltime(soundID, soundData.cooltime);
+            obj.StartCooltime(groupID, soundID, soundData.cooltime);
         }
         return obj.Play(groupID, clip, soundData.volume, soundData, 0f, fadeIn, pos);
     }
@@ -231,11 +245,6 @@ public class SoundManager : MonoSingleton<SoundManager>
     public void FadeOut(CHANNEL channel, float _fadeOutTime)
     {
         mChannels[(int)channel].FadeOutAll(_fadeOutTime);
-    }
-
-    public void FadeOutGroup(CHANNEL channel, int groupID, float _fadeOutTime)
-    {
-        mChannels[(int)channel].FadeOutGroup(groupID, _fadeOutTime);
     }
 
     public void Stop(CHANNEL channel, int _soundSEQ)
@@ -247,12 +256,6 @@ public class SoundManager : MonoSingleton<SoundManager>
     {
         mChannels[(int)channel].StopAll();
     }
-
-    public void StopGroup(CHANNEL channel, int _soundSEQ)
-    {
-        mChannels[(int)channel].StopGroup(_soundSEQ);
-    }
-
 
     void createChannel(CHANNEL _channel, int _pool, bool _3d)
     {

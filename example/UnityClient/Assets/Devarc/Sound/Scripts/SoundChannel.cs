@@ -11,7 +11,7 @@ public class SoundChannel : MonoBehaviour
     List<SoundPlay> mPool = new List<SoundPlay>();
     List<SoundPlay> mPlayList = new List<SoundPlay>();
     Dictionary<int, SoundPlay> mPlayDict = new Dictionary<int, SoundPlay>();
-    Dictionary<string, float> mCooltimes = new Dictionary<string, float>();
+    Dictionary<int, Dictionary<string, float>> mCooltimes = new Dictionary<int, Dictionary<string, float>>();
 
     public bool IsPlaying
     {
@@ -72,40 +72,52 @@ public class SoundChannel : MonoBehaviour
     }
 
 
-    public void StartCooltime(string soundID, float cooltime)
+    public void StartCooltime(int group, string soundID, float cooltime)
     {
-        mCooltimes[soundID] = Time.realtimeSinceStartup + cooltime;
+        Dictionary<string, float> list = null;
+        if (mCooltimes.TryGetValue(group, out list) == false)
+        {
+            list = new Dictionary<string, float>();
+            mCooltimes.Add(group, list);
+        }
+        list[soundID] = Time.realtimeSinceStartup + cooltime;
     }
 
-    public bool IsCooltime(string soundID)
+    public bool IsCooltime(int group, string soundID)
     {
-        float realTime = 0f;
-        if (mCooltimes.TryGetValue(soundID, out realTime) == false)
+        Dictionary<string, float> list = null;
+        if (mCooltimes.TryGetValue(group, out list) == false)
         {
             return false;
         }
-        return realTime > Time.realtimeSinceStartup;
+
+        float releaseTime = 0f;
+        if (list.TryGetValue(soundID, out releaseTime) == false)
+        {
+            return false;
+        }
+        return releaseTime > Time.realtimeSinceStartup;
+    }
+
+    public void StopCooltime(int group, string soundID)
+    {
+        Dictionary<string, float> list = null;
+        if (mCooltimes.TryGetValue(group, out list) == false)
+        {
+            return;
+        }
+
+        float releaseTime = 0f;
+        if (list.TryGetValue(soundID, out releaseTime) == false)
+        {
+            return;
+        }
+        list.Remove(soundID);
     }
 
 
     public int Play(int groupID, AudioClip clip, float volumn, SoundData soundData, float wait, float fadeIn, Vector3 pos)
     {
-        if (groupID != 0)
-        {
-            for (int i = mPlayList.Count - 1; i >= 0; i--)
-            {
-                SoundPlay playData = mPlayList[i];
-                if (playData.GroupID == groupID
-                    && playData.mAudio.clip != null
-                    && playData.mAudio.isPlaying
-                    && string.Equals(playData.mAudio.clip.name, clip.name))
-                {
-                    stop(playData);
-                    break;
-                }
-            }
-        }
-
         SoundPlay obj = null;
         if (mPool.Count > 0)
         {
@@ -146,25 +158,6 @@ public class SoundChannel : MonoBehaviour
         }
     }
 
-    public void FadeOutGroup(int groupID, float _fadeOut)
-    {
-        for (int i = mPlayList.Count - 1; i >= 0; i--)
-        {
-            SoundPlay sound = mPlayList[i];
-            if (sound.GroupID != groupID)
-                continue;
-            if (_fadeOut <= 0f)
-            {
-                stop(sound);
-            }
-            else
-            {
-                sound.FadeOut(_fadeOut);
-            }
-        }
-    }
-
-
     public void Stop(int _soundSEQ)
     {
         SoundPlay obj;
@@ -182,18 +175,6 @@ public class SoundChannel : MonoBehaviour
             stop(sound);
         }
     }
-
-    public void StopGroup(int groupID)
-    {
-        for (int i = mPlayList.Count - 1; i >= 0; i--)
-        {
-            SoundPlay sound = mPlayList[i];
-            if (sound.GroupID != groupID)
-                continue;
-            stop(sound);
-        }
-    }
-
 
     private void Update()
     {
@@ -230,9 +211,6 @@ public class SoundChannel : MonoBehaviour
         obj.gameObject.SetActive(false);
         mPool.Add(obj);
 
-        if (IsCooltime(obj.SoundID) == false)
-        {
-            mCooltimes.Remove(obj.SoundID);
-        }
+        StopCooltime(obj.GroupID, obj.SoundID);
     }
 }

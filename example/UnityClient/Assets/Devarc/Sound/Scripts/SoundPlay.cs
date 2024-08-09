@@ -1,6 +1,7 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class SoundPlay : MonoBehaviour
 {
@@ -24,17 +25,11 @@ public class SoundPlay : MonoBehaviour
     }
     SOUND_PLAY_STATE mState = SOUND_PLAY_STATE.STOP;
 
-    public int GroupID
-    {
-        get { return mGroupID; }
-    }
-    int mGroupID;
-
-    public int SoundSEQ
-    {
-        get { return mSoundSEQ; }
-    }
+    public int SoundSEQ => mSoundSEQ;
     int mSoundSEQ;
+
+    public int GroupID => mGroupID;
+    int mGroupID;
 
     public string SoundID => mSoundID;
     string mSoundID;
@@ -46,11 +41,11 @@ public class SoundPlay : MonoBehaviour
     float mFadingTime; // fade-in / fade-out time
     float mElapsedTime = 0f;
 
-    public void Init(int _soundSEQ, string _soundID, int _ownerID, AudioClip _clip, float _volumn, bool _loop, float _waitTime, float _fadeInTime)
+    public void Init(int _soundSEQ, string _soundID, int _group, AudioClip _clip, float _volumn, bool _loop, float _waitTime, float _fadeInTime)
     {
         mSoundSEQ = _soundSEQ;
         mSoundID = _soundID;
-        mGroupID = _ownerID;
+        mGroupID = _group;
         mVolumn = _volumn;
         mWaitTime = _waitTime;
         mFadingTime = _fadeInTime;

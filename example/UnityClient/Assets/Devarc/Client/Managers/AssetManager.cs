@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
@@ -77,6 +77,9 @@ namespace Devarc
             {
                 var tempPath = AssetDatabase.GUIDToAssetPath(guid);
                 var obj = AssetDatabase.LoadAssetAtPath<GameObject>(tempPath);
+                var tempName = Path.GetFileName(fileName);
+                if (string.Equals(fileName, tempName, StringComparison.OrdinalIgnoreCase) == false)
+                    continue;
                 var compo = obj.GetComponent<T>();
                 if (compo != null)
                     result.Add(compo);
@@ -92,8 +95,11 @@ namespace Devarc
             foreach (var guid in list)
             {
                 var tempPath = AssetDatabase.GUIDToAssetPath(guid);
+                var tempName = Path.GetFileName(fileName);
+                if (string.Equals(fileName, tempName, StringComparison.OrdinalIgnoreCase) == false)
+                    continue;
                 var compo = AssetDatabase.LoadAssetAtPath<T>(tempPath);
-                if (compo != null && compo.name == fileName)
+                if (compo != null)
                     result.Add(compo);
             }
             return result.ToArray();
@@ -160,7 +166,9 @@ namespace Devarc
                     foreach (var list in mBundleAssets.Values)
                     {
                         if (list.Remove(name))
+                        {
                             result.Add(name);
+                        }
                     }
                 }
                 bundleData.list.Clear();
@@ -226,6 +234,7 @@ namespace Devarc
             SceneInstance obj;
             if (mBundleScenes.TryGetValue(key, out obj))
             {
+                mBundleScenes.Remove(key);
                 yield return Addressables.UnloadSceneAsync(obj, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
             }
         }
@@ -276,6 +285,9 @@ namespace Devarc
 
         public T GetAsset<T>(string fileName) where T : UnityEngine.Object
         {
+            if (string.IsNullOrEmpty(fileName))
+                return null;
+
             Type type = typeof(T);
             string name = Path.GetFileNameWithoutExtension(fileName).ToLower();
 
@@ -394,6 +406,10 @@ namespace Devarc
             if (obj == null)
                 return false;
 
+            // 네이밍 정책.
+            if (obj.name.StartsWith("@"))
+                return false;
+
             Type type = typeof(T);
             Dictionary<string, UnityEngine.Object> list = null;
             if (mBundleAssets.TryGetValue(type, out list) == false)
@@ -439,6 +455,65 @@ namespace Devarc
             list.Add(name, data);
         }
 
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //// TODO
+        Dictionary<string, Sprite> mSprites = new Dictionary<string, Sprite>();
+
+        public Sprite LoadSprite(string textureName)
+        {
+            Sprite sprite = null;
+            if (string.IsNullOrEmpty(textureName))
+                return null;
+            if (mSprites.TryGetValue(textureName, out sprite))
+                return sprite;
+            var texture = GetAsset<Texture2D>(textureName);
+            if (texture == null)
+            {
+                Debug.LogWarning($"[AssetManager::LoadSprite] Cannot load texture: textureName={textureName}");
+                return null;
+            }
+            if (texture.width != texture.height || (texture.width % 32) != 0)
+            {
+                Debug.LogWarning($"[AssetManager::LoadSprite] Invalid texture size: textureName={textureName}");
+                return null;
+            }
+            Rect rect = new Rect(0, 0, texture.width, texture.width);
+            sprite = Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f));
+            mSprites.Add(textureName, sprite);
+            return sprite;
+        }
+
+        public GameObject CreateResObject(string prefabName, Transform attachTr = null)
+        {
+            var prefab = Resources.Load<GameObject>(prefabName);
+            if (prefab == null)
+            {
+                Debug.LogError($"Cannot find prefab: prefab_name={prefabName}");
+                return null;
+            }
+            var obj = Instantiate(prefab, attachTr);
+            return obj;
+        }
+
+        public T CreateResObject<T>(string prefabName, Transform attachTr = null) where T : Component
+        {
+            var prefab = Resources.Load<GameObject>(prefabName);
+            if (prefab == null)
+            {
+                Debug.LogError($"Cannot find prefab: prefab_name={prefabName}");
+                return null;
+            }
+            var obj = Instantiate(prefab, attachTr);
+            var compo = obj.GetComponent<T>();
+            if (compo == null)
+            {
+                Debug.LogError($"Cannot find component: prefab_name={prefabName}, type={typeof(T).Name}");
+                return null;
+            }
+            return compo;
+        }
 
         public T CreateObject<T>(string prefabName, Transform attachTr = null) where T : MonoBehaviour
         {
