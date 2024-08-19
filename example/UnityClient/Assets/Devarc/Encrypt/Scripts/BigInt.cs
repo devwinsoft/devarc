@@ -10,7 +10,7 @@ namespace Devarc
     public struct CBigInt : IComparable, IComparable<CBigInt>
     {
         static string[] symbols = new string[]
-        { "K", "M", "G", "T"
+        { "", "K", "M", "G", "T"
         , "aa", "ab", "ac", "ad", "ae", "af", "ag", "ah", "ai", "aj", "ak", "al", "am", "an", "ao", "ap", "aq", "ar", "as", "at", "au", "av", "aw", "ax", "ay", "az"
         , "ba", "bb", "bc", "bd", "be", "bf", "bg", "bh", "bi", "bj", "bk", "bl", "bm", "bn", "bo", "bp", "bq", "br", "bs", "bt", "bu", "bv", "bw", "bx", "by", "bz"
         , "ca", "cb", "cc", "cd", "ce", "cf", "cg", "ch", "ci", "cj", "ck", "cl", "cm", "cn", "co", "cp", "cq", "cr", "cs", "ct", "cu", "cv", "cw", "cx", "cy", "cz"
@@ -46,11 +46,20 @@ namespace Devarc
         {
             mBase = _base;
             mPow = _pow;
+            while (mBase > 10f)
+            {
+                mBase /= 10f;
+                mPow++;
+            }
+            while (mBase < 1f)
+            {
+                mBase *= 10f;
+                mPow--;
+            }
         }
 
         public CBigInt(double value)
         {
-            mBase = 0f;
             mPow = 0;
             var temp = value;
             while (temp > 10f)
@@ -74,13 +83,25 @@ namespace Devarc
                 var mode = mPow % 3;
                 var display = mBase.Value * Mathf.Pow(10f, mode);
                 var symbol = getSymbol();
-                return string.Format("{0:N2} {1}", display, symbol);
+                var remain = Mathf.RoundToInt(display * 100f) % 100;
+                if (remain == 0)
+                {
+                    return string.Format("{0:N0} {1}", display, symbol);
+                }
+                else if ((remain % 10) == 0)
+                {
+                    return string.Format("{0:N1} {1}", display, symbol);
+                }
+                else
+                {
+                    return string.Format("{0:N2} {1}", display, symbol);
+                }
             }
         }
 
         string getSymbol()
         {
-            int i = Mathf.Max(0, (mPow - 3) / 3);
+            int i = Mathf.Max(0, mPow / 3);
             if (i < symbols.Length)
                 return symbols[i];
             return string.Format("E^{0}", i);
@@ -128,6 +149,43 @@ namespace Devarc
             value.mBase += Mathf.Pow(0.1f, value.mPow - p2.mPow) * p2.mBase;
             return value;
         }
+
+        public static CBigInt operator *(CBigInt p1, CBigInt p2)
+        {
+            var value = new CBigInt();
+            value.mPow = p1.mPow + p2.mPow;
+            value.mBase = p1.mBase * p2.mBase;
+            while (value.mBase > 10f)
+            {
+                value.mBase /= 10f;
+                value.mPow++;
+            }
+            return value;
+        }
+
+        public static CBigInt operator *(CBigInt p1, double p2)
+        {
+            return p1 * new CBigInt(p2);
+        }
+
+        public static CBigInt operator /(CBigInt p1, CBigInt p2)
+        {
+            var value = new CBigInt();
+            value.mPow = p1.mPow - p2.mPow;
+            value.mBase = p1.mBase / p2.mBase;
+            while (value.mBase < 1f)
+            {
+                value.mBase *= 10f;
+                value.mPow--;
+            }
+            return value;
+        }
+
+        public static CBigInt operator /(CBigInt p1, double p2)
+        {
+            return p1 / new CBigInt(p2);
+        }
+
 
         public static bool operator <(CBigInt p1, CBigInt p2)
         {
