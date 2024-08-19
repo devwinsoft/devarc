@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEditor;
-using System.Collections;
 
 namespace Devarc
 {
@@ -26,16 +25,22 @@ namespace Devarc
 
 		public override void Reload()
 		{
-			Table.LString.Clear();
-			foreach (var textAsset in AssetManager.FindAssets<TextAsset>("*", DEV_Settings.GetStringPath(DEV_Settings.Instance.editorLanguage, true, TableFormatType.JSON)))
+			var language = SystemLanguage.Korean;
+
+            Table.LString.Clear();
+			foreach (var textAsset in AssetManager.FindAssets<TextAsset>("*", DEV_Settings.GetStringPath(language, true, TableFormatType.JSON)))
 			{
 				Table.LString.LoadJson(textAsset.text);
 			}
-			foreach (var textAsset in AssetManager.FindAssets<TextAsset>("*", DEV_Settings.GetStringPath(DEV_Settings.Instance.editorLanguage, false, TableFormatType.JSON)))
+			foreach (var textAsset in AssetManager.FindAssets<TextAsset>("*", DEV_Settings.GetStringPath(language, false, TableFormatType.JSON)))
 			{
 				Table.LString.LoadJson(textAsset.text);
 			}
-			foreach (var obj in Table.LString.List) add(obj.id);
-		}
+            foreach (var obj in Table.LString.List)
+            {
+                string value = obj.value.Trim();
+                add(obj.id, $"{obj.id} ({value.Substring(0, Mathf.Min(value.Length, 10))})");
+            }
+        }
 	}
 }

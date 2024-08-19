@@ -22,14 +22,6 @@ MonoBehaviour:
       data: lw1AJBGy
     stringDirectory:
       data: xkdDnYZa7rI=
-    tableBinDirectory:
-      data: 
-    tableJsonDirectory:
-      data: 
-    stringBinDirectory:
-      data: 
-    stringJsonDirectory:
-      data: 
   loginData:
     custom:
       base_uri: https://ec2-52-78-42-13.ap-northeast-2.compute.amazonaws.com:3000/custom

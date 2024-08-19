@@ -58,10 +58,6 @@ namespace Devarc
         }
 #endif
 
-
-        public SystemLanguage editorLanguage;
-
-
         [Serializable]
         public class RootPathData
         {

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -13,8 +13,9 @@ public abstract class EditorID_Selector<T> : ScriptableWizard
     const int COLS = 4;
 
     SerializedProperty mProperty;
-    List<string> mCacheList = new List<string>();
-    string[] mList;
+    Dictionary<string, string> mCacheList = new Dictionary<string, string>();
+    string[] mKeyList;
+    string[] mDisplayList;
     int mSelect = -1;
     string mSearchText = string.Empty;
     Vector2 scrollPosition = Vector2.zero;
@@ -26,19 +27,23 @@ public abstract class EditorID_Selector<T> : ScriptableWizard
         msInstance = null;
     }
 
-    protected void add(string _value)
+    protected void add(string _value, string _display = null)
     {
-        if (mCacheList.Contains(_value) == false)
+        if (mCacheList.ContainsKey(_value) == false)
         {
-            mCacheList.Add(_value);
+            if (string.IsNullOrEmpty(_display))
+                mCacheList.Add(_value, _value);
+            else
+                mCacheList.Add(_value, _display);
         }
     }
 
     protected void add(int _value)
     {
-        if (mCacheList.Contains(_value.ToString()) == false)
+        string temp = _value.ToString();
+        if (mCacheList.ContainsKey(temp) == false)
         {
-            mCacheList.Add(_value.ToString());
+            mCacheList.Add(temp, temp);
         }
     }
 
@@ -47,15 +52,17 @@ public abstract class EditorID_Selector<T> : ScriptableWizard
         mSelect = -1;
         if (string.IsNullOrEmpty(mSearchText))
         {
-            mList = new string[mCacheList.Count + 1];
-            mList[0] = "none";
+            mKeyList = new string[mCacheList.Count + 1];
+            mDisplayList = new string[mCacheList.Count + 1];
+            mKeyList[0] = "";
+            mDisplayList[0] = "none";
             var enumer = mCacheList.GetEnumerator();
             for (int i = 1; enumer.MoveNext(); i++)
             {
-                var temp = enumer.Current;
-                mList[i] = temp;
+                mKeyList[i] = enumer.Current.Key;
+                mDisplayList[i] = enumer.Current.Value;
 
-                if (string.Equals(_searchText, temp))
+                if (string.Equals(_searchText, enumer.Current.Key))
                 {
                     mSelect = i;
                 }
@@ -63,28 +70,31 @@ public abstract class EditorID_Selector<T> : ScriptableWizard
         }
         else
         {
-            List<string> tmpList = new List<string>();
+            List<KeyValuePair<string,string>> tmpList = new List<KeyValuePair<string, string>>();
             int tmpCount = 0;
 
             var enumer = mCacheList.GetEnumerator();
             while (enumer.MoveNext())
             {
                 var temp = enumer.Current;
-                if (temp.Contains(mSearchText) == false)
+                if (temp.Key.Contains(mSearchText) == false)
                     continue;
-                tmpList.Add(temp);
-                if (string.Equals(_searchText, temp))
+                tmpList.Add(new KeyValuePair<string, string>(temp.Key, temp.Value));
+                if (string.Equals(_searchText, temp.Key))
                 {
                     mSelect = tmpCount;
                 }
                 tmpCount++;
             }
 
-            mList = new string[tmpList.Count + 1];
-            mList[0] = "none";
+            mKeyList = new string[tmpList.Count + 1];
+            mDisplayList = new string[tmpList.Count + 1];
+            mKeyList[0] = "";
+            mDisplayList[0] = "none";
             for (int i = 0; i < tmpList.Count; i++)
             {
-                mList[i + 1] = tmpList[i];
+                mKeyList[i + 1] = tmpList[i].Key;
+                mDisplayList[i + 1] = tmpList[i].Value;
             }
         }
     }
@@ -110,7 +120,7 @@ public abstract class EditorID_Selector<T> : ScriptableWizard
 
     void OnGUI()
     {
-        if (mList == null)
+        if (mDisplayList == null)
         {
             GUI.Label(new Rect(10, 15, 1000, 20), "Loading...");
             return;
@@ -125,36 +135,36 @@ public abstract class EditorID_Selector<T> : ScriptableWizard
         }
 
         Rect rtScrollContainer = new Rect(0, 50, 1200, 850);
-        Rect rtScrollView = new Rect(0, 0, 1160, 34 * ((mList.Length + COLS - 1) / COLS));
-        Rect rtButtons = new Rect(10, 0, 1160, 32 * ((mList.Length + COLS - 1) / COLS));
+        Rect rtScrollView = new Rect(0, 0, 1160, 34 * ((mDisplayList.Length + COLS - 1) / COLS));
+        Rect rtButtons = new Rect(10, 0, 1160, 32 * ((mDisplayList.Length + COLS - 1) / COLS));
 
         scrollPosition = GUI.BeginScrollView(rtScrollContainer, scrollPosition, rtScrollView, false, true);
-        int curSelect = GUI.SelectionGrid(rtButtons, mSelect, mList, COLS);
+        int curSelect = GUI.SelectionGrid(rtButtons, mSelect, mDisplayList, COLS);
         if (curSelect != mSelect)
         {
             mSelect = curSelect;
             if (mProperty != null)
             {
                 mProperty.serializedObject.Update();
-                string value;
+                string key;
                 if (mSelect == 0)
-                    value = "";
+                    key = "";
                 else
-                    value = mList[mSelect];
+                    key = mKeyList[mSelect];
                 var prop = mProperty.FindPropertyRelative("Value");
                 switch (prop.propertyType)
                 {
                     case SerializedPropertyType.Integer:
                         {
                             int temp;
-                            int.TryParse(value, out temp);
+                            int.TryParse(key, out temp);
                             prop.intValue = temp;
                         }
                         break;
                     case SerializedPropertyType.Enum:
                         for (int i = 0; i < prop.enumNames.Length; i++)
                         {
-                            if (string.Equals(prop.enumNames[i], value))
+                            if (string.Equals(prop.enumNames[i], key))
                             {
                                 // TODO:
                                 prop.enumValueIndex = i;
@@ -164,7 +174,7 @@ public abstract class EditorID_Selector<T> : ScriptableWizard
                         break;
                     case SerializedPropertyType.String:
                         {
-                            prop.stringValue = value;
+                            prop.stringValue = key;
                         }
                         break;
                     default:
