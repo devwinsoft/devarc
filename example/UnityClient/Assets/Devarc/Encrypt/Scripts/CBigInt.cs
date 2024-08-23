@@ -17,22 +17,24 @@ namespace Devarc
 
         public CBigInt(float _base, int _pow)
         {
-            mBase = 1f;
-            mPow = 0;
+            var tmpBase = 1f;
+            var tmpPow = 0;
             for (int i = 0; i < _pow; i++)
             {
-                mBase *= _base;
-                while (mBase > 10f)
+                tmpBase *= _base;
+                while (tmpBase > 10f)
                 {
-                    mBase /= 10f;
-                    mPow++;
+                    tmpBase /= 10f;
+                    tmpPow++;
                 }
-                while (mBase < 1f)
+                while (tmpBase < 1f)
                 {
-                    mBase *= 10f;
-                    mPow--;
+                    tmpBase *= 10f;
+                    tmpPow--;
                 }
             }
+            mBase = tmpBase;
+            mPow = tmpPow;
         }
 
         public CBigInt(double value)
