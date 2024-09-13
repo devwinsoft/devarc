@@ -13,6 +13,9 @@ public class TestAssetScene : BaseScene
     public EffectDataPlay effectData2;
     public STRING_ID stringID;
 
+    public SInt x;
+    public SFloat y;
+
 
     protected override void onAwake()
     {
