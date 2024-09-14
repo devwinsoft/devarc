@@ -1,13 +1,10 @@
 using System;
-using System.CodeDom;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Devarc
 {
+    [System.Serializable]
     public struct CBigInt : IComparable, IComparable<CBigInt>
     {
         static string[] symbol_0 = new string[] { "", "K", "M", "G", "T"};

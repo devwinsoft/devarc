@@ -13,10 +13,6 @@ public class TestAssetScene : BaseScene
     public EffectDataPlay effectData2;
     public STRING_ID stringID;
 
-    public SInt x;
-    public SFloat y;
-
-
     protected override void onAwake()
     {
         if (!AppManager.IsCreated())
@@ -35,9 +31,6 @@ public class TestAssetScene : BaseScene
         TableManager.Instance.LoadResourceTable();
         TableManager.Instance.LoadResourceString(SystemLanguage.Korean);
         SoundManager.Instance.LoadResource();
-
-        Debug.Log(new CBigInt(1.9f, 100));
-        Debug.Log(new CBigInt(1.9f, 1000));
     }
 
 
