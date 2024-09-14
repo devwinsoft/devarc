@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Devarc
 {
@@ -39,19 +40,20 @@ namespace Devarc
 
         public CBigInt(double value)
         {
-            mPow = 0;
-            var temp = value;
-            while (temp > 10f)
+            var tmpBase = value;
+            var tmpPow = 0;
+            while (tmpBase > 10f)
             {
-                temp /= 10f;
-                mPow++;
+                tmpBase /= 10f;
+                tmpPow++;
             }
-            while (temp < 1f)
+            while (tmpBase < 1f)
             {
-                temp *= 10f;
-                mPow--;
+                tmpBase *= 10f;
+                tmpPow--;
             }
-            mBase = (float)temp;
+            mBase = (float)tmpBase;
+            mPow = tmpPow;
         }
 
         public override string ToString()
@@ -104,6 +106,21 @@ namespace Devarc
             return new string(list.ToArray());
         }
 
+        static (float mBase, int mPow) getData(float _base, int _pow)
+        {
+            while (_base > 10f)
+            {
+                _base /= 10f;
+                _pow++;
+            }
+            while (_base < 1f)
+            {
+                _base *= 10f;
+                _pow--;
+            }
+            return (_base, _pow);
+        }
+
         public int CompareTo(object obj)
         {
             if (obj.GetType() == typeof(int))
@@ -140,23 +157,24 @@ namespace Devarc
 
         public static CBigInt operator +(CBigInt p1, CBigInt p2)
         {
+            float tmpBase = 0f;
+            int tmpPow = Mathf.Max(p1.mPow, p2.mPow);
+            tmpBase += Mathf.Pow(0.1f, tmpPow - p1.mPow) * p1.mBase;
+            tmpBase += Mathf.Pow(0.1f, tmpPow - p2.mPow) * p2.mBase;
+
+            var data = getData(tmpBase, tmpPow);
             var value = new CBigInt();
-            value.mPow = Mathf.Max(p1.mPow, p2.mPow);
-            value.mBase += Mathf.Pow(0.1f, value.mPow - p1.mPow) * p1.mBase;
-            value.mBase += Mathf.Pow(0.1f, value.mPow - p2.mPow) * p2.mBase;
+            value.mBase = data.mBase;
+            value.mPow = data.mPow;
             return value;
         }
 
         public static CBigInt operator *(CBigInt p1, CBigInt p2)
         {
+            var data = getData(p1.mBase * p2.mBase, p1.mPow + p2.mPow);
             var value = new CBigInt();
-            value.mPow = p1.mPow + p2.mPow;
-            value.mBase = p1.mBase * p2.mBase;
-            while (value.mBase > 10f)
-            {
-                value.mBase /= 10f;
-                value.mPow++;
-            }
+            value.mBase = data.mBase;
+            value.mPow = data.mPow;
             return value;
         }
 
@@ -167,14 +185,10 @@ namespace Devarc
 
         public static CBigInt operator /(CBigInt p1, CBigInt p2)
         {
+            var data = getData(p1.mBase / p2.mBase, p1.mPow - p2.mPow);
             var value = new CBigInt();
-            value.mPow = p1.mPow - p2.mPow;
-            value.mBase = p1.mBase / p2.mBase;
-            while (value.mBase < 1f)
-            {
-                value.mBase *= 10f;
-                value.mPow--;
-            }
+            value.mBase = data.mBase;
+            value.mPow = data.mPow;
             return value;
         }
 

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using Devarc;
-
+using System.Net.Http.Headers;
 
 public class TestAssetScene : BaseScene
 {
@@ -35,6 +35,9 @@ public class TestAssetScene : BaseScene
         TableManager.Instance.LoadResourceTable();
         TableManager.Instance.LoadResourceString(SystemLanguage.Korean);
         SoundManager.Instance.LoadResource();
+
+        Debug.Log(new CBigInt(1.9f, 100));
+        Debug.Log(new CBigInt(1.9f, 1000));
     }
 
 
