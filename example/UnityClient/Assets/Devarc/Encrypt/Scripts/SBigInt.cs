@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Devarc
 {
     [System.Serializable]
-    public class CBigInt : BaseTableElement<CBigInt>, ITableElement<CBigInt>, IComparable, IComparable<CBigInt>
+    public struct SBigInt : IComparable, IComparable<SBigInt>
     {
         static string[] symbol_0 = new string[] { "", "K", "M", "G", "T"};
         static string[] symbol_1 = new string[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
@@ -13,13 +13,7 @@ namespace Devarc
         public SFloat mBase; // < 10
         public SInt mPow;
 
-        public CBigInt()
-        {
-            mBase = null;
-            mPow = null;
-        }
-
-        public CBigInt(float _base, int _pow)
+        public SBigInt(float _base, int _pow)
         {
             var tmpBase = 1f;
             var tmpPow = 0;
@@ -41,7 +35,7 @@ namespace Devarc
             mPow = tmpPow;
         }
 
-        public CBigInt(double value)
+        public SBigInt(double value)
         {
             var tmpBase = value;
             var tmpPow = 0;
@@ -129,23 +123,23 @@ namespace Devarc
             if (obj.GetType() == typeof(int))
             {
                 var value = (int)obj;
-                return CompareTo(new CBigInt(value));
+                return CompareTo(new SBigInt(value));
             }
             if (obj.GetType() == typeof(float))
             {
                 var value = (float)obj;
-                return CompareTo(new CBigInt(value));
+                return CompareTo(new SBigInt(value));
             }
             if (obj.GetType() == typeof(double))
             {
                 var value = (double)obj;
-                return CompareTo(new CBigInt(value));
+                return CompareTo(new SBigInt(value));
             }
             Debug.LogError($"[BigInt::CompareTo] Not implemented: type={obj.GetType()}");
             return 0;
         }
 
-        public int CompareTo(CBigInt other)
+        public int CompareTo(SBigInt other)
         {
             if (this.mPow > other.mPow)
                 return 1;
@@ -158,7 +152,7 @@ namespace Devarc
             return 0;
         }
 
-        public static CBigInt operator +(CBigInt p1, CBigInt p2)
+        public static SBigInt operator +(SBigInt p1, SBigInt p2)
         {
             float tmpBase = 0f;
             int tmpPow = Mathf.Max(p1.mPow, p2.mPow);
@@ -166,47 +160,47 @@ namespace Devarc
             tmpBase += Mathf.Pow(0.1f, tmpPow - p2.mPow) * p2.mBase;
 
             var data = getData(tmpBase, tmpPow);
-            var value = new CBigInt();
+            var value = new SBigInt();
             value.mBase = data.mBase;
             value.mPow = data.mPow;
             return value;
         }
 
-        public static CBigInt operator *(CBigInt p1, CBigInt p2)
+        public static SBigInt operator *(SBigInt p1, SBigInt p2)
         {
             var data = getData(p1.mBase * p2.mBase, p1.mPow + p2.mPow);
-            var value = new CBigInt();
+            var value = new SBigInt();
             value.mBase = data.mBase;
             value.mPow = data.mPow;
             return value;
         }
 
-        public static CBigInt operator *(CBigInt p1, double p2)
+        public static SBigInt operator *(SBigInt p1, double p2)
         {
-            return p1 * new CBigInt(p2);
+            return p1 * new SBigInt(p2);
         }
 
-        public static CBigInt operator /(CBigInt p1, CBigInt p2)
+        public static SBigInt operator /(SBigInt p1, SBigInt p2)
         {
             var data = getData(p1.mBase / p2.mBase, p1.mPow - p2.mPow);
-            var value = new CBigInt();
+            var value = new SBigInt();
             value.mBase = data.mBase;
             value.mPow = data.mPow;
             return value;
         }
 
-        public static CBigInt operator /(CBigInt p1, double p2)
+        public static SBigInt operator /(SBigInt p1, double p2)
         {
-            return p1 / new CBigInt(p2);
+            return p1 / new SBigInt(p2);
         }
 
 
-        public static bool operator <(CBigInt p1, CBigInt p2)
+        public static bool operator <(SBigInt p1, SBigInt p2)
         {
             return p1.CompareTo(p2) < 0;
         }
 
-        public static bool operator >(CBigInt p1, CBigInt p2)
+        public static bool operator >(SBigInt p1, SBigInt p2)
         {
             return p1.CompareTo(p2) > 0;
         }

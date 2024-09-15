@@ -7,5 +7,6 @@ CREATE TABLE `SKILL` (
 	`account` varchar(255) NOT NULL,
 	`classTest` varchar(255) NOT NULL,
 	`args` INT NOT NULL,
+	`cost` varchar(255) NOT NULL,
 	PRIMARY KEY (`skill_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci

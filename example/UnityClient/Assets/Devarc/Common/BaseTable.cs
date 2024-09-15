@@ -4,10 +4,8 @@ using System.Buffers;
 using System.Collections.Generic;
 using MessagePack;
 using System.Linq;
-using System.CodeDom;
 #if UNITY_2019_1_OR_NEWER
 using UnityEngine;
-using UnityEngine.UIElements;
 #else
 using Newtonsoft.Json;
 #endif
@@ -135,12 +133,12 @@ namespace Devarc
             return result;
         }
 
-        public virtual T GetClass<T>(string value) where T : class, new()
+        public T GetClass<T>(string value) where T : BaseTableElement<T>, ITableElement<T>, new()
         {
-            return default(T);
+            return ITableElement<T>.Value.Parse(value);
         }
 
-        public virtual T[] GetClassArray<T>(string value) where T : class, new()
+        public virtual T[] GetClassArray<T>(string value) where T : BaseTableElement<T>, ITableElement<T>, new()
         {
             if (string.IsNullOrEmpty(value))
                 return new T[0];
@@ -154,6 +152,15 @@ namespace Devarc
         }
     }
 
+    public interface ITableElement<T> where T : new()
+    {
+        public static T Value = new T();
+    }
+
+    public class BaseTableElement<T> where T : ITableElement<T>, new()
+    {
+        public virtual T Parse(string value) => default(T);
+    }
 
     public interface ITableData<RAW, KEY>
     {

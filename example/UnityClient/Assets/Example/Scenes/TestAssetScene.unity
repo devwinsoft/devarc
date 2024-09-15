@@ -1809,21 +1809,6 @@ MonoBehaviour:
     WaitTime: 0
   stringID:
     Value: 
-  abc:
-    data: 
-  x:
-    save1: 1479847775
-    save2: 1479847775
-  y:
-    save1: -1378321551
-    save2: -1378321551
-  z:
-    mBase:
-      save1: 0
-      save2: 0
-    mPow:
-      save1: 0
-      save2: 0
 --- !u!1 &1203824541
 GameObject:
   m_ObjectHideFlags: 0

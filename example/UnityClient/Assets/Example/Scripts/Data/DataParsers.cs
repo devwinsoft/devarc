@@ -4,13 +4,19 @@ using UnityEngine;
 
 namespace Devarc
 {
-    public partial class _SKILL
+    public partial class Account
     {
-        public override Account GetClass<Account>(string value)
+        public override Account Parse(string value)
         {
-            Account obj = new Account();
             string[] list = value.Split(',');
-            return obj;
+            if (list.Length > 1)
+            {
+                Account account = new Account();
+                int.TryParse(list[1], out account.level);
+                account.nickName = list[2];
+                return account;
+            }
+            return null;
         }
     }
 }

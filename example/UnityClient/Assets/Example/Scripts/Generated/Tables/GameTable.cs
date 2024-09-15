@@ -54,6 +54,7 @@ namespace Devarc
 		public string               account;
 		public string               classTest;
 		public string               args;
+		public string               cost;
 
 		public virtual string       get_skill_id() => (skill_id);
 		public virtual string       get_skillName() => (skillName);
@@ -62,6 +63,7 @@ namespace Devarc
 		public virtual Account      get_account() => GetClass<Account>(account);
 		public virtual Account[]    get_classTest() => GetClassArray<Account>(classTest);
 		public virtual int[]        get_args() => GetIntArray(args);
+		public virtual CBigInt      get_cost() => GetClass<CBigInt>(cost);
 	}
 
 	[System.Serializable]
@@ -88,6 +90,8 @@ namespace Devarc
 		public Account[]            classTest;
 		[Key(6)]
 		public int[]                args;
+		[Key(7)]
+		public CBigInt              cost;
 
 		public void Initialize(_SKILL data)
 		{
@@ -98,6 +102,7 @@ namespace Devarc
 			account = data.get_account();
 			classTest = data.get_classTest();
 			args = data.get_args();
+			cost = data.get_cost();
 		}
 	}
 

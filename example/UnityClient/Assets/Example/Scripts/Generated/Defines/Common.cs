@@ -17,14 +17,14 @@ namespace Devarc
 	}
 
 	[MessagePackObject]
-	public class CommonResult
+	public partial class CommonResult : BaseTableElement<CommonResult>, ITableElement<CommonResult>
 	{
 		[Key(0)]
 		public ErrorType            errorCode;
 	}
 
 	[MessagePackObject]
-	public class CustomSigninResult
+	public partial class CustomSigninResult : BaseTableElement<CustomSigninResult>, ITableElement<CustomSigninResult>
 	{
 		[Key(0)]
 		public ErrorType            errorCode;
@@ -33,7 +33,7 @@ namespace Devarc
 	}
 
 	[MessagePackObject]
-	public class GoogleCodeResult
+	public partial class GoogleCodeResult : BaseTableElement<GoogleCodeResult>, ITableElement<GoogleCodeResult>
 	{
 		[Key(0)]
 		public ErrorType            errorCode;
@@ -42,7 +42,7 @@ namespace Devarc
 	}
 
 	[MessagePackObject]
-	public class GoogleSigninResult
+	public partial class GoogleSigninResult : BaseTableElement<GoogleSigninResult>, ITableElement<GoogleSigninResult>
 	{
 		[Key(0)]
 		public ErrorType            errorCode;
@@ -59,7 +59,7 @@ namespace Devarc
 	}
 
 	[MessagePackObject]
-	public class GoogleRefreshResult
+	public partial class GoogleRefreshResult : BaseTableElement<GoogleRefreshResult>, ITableElement<GoogleRefreshResult>
 	{
 		[Key(0)]
 		public ErrorType            errorCode;
@@ -79,7 +79,7 @@ namespace Devarc
 	}
 
 	[MessagePackObject]
-	public class Account
+	public partial class Account : BaseTableElement<Account>, ITableElement<Account>
 	{
 		[Key(0)]
 		public string               nickName;

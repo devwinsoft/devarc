@@ -25,7 +25,7 @@ namespace Devarc
             if (IsClass(_type))
             {
                 _output.AppendLine($"\t[MessagePackObject]");
-                _output.AppendLine($"\tpublic class {_type.Name}");
+                _output.AppendLine($"\tpublic partial class {_type.Name} : BaseTableElement<{_type.Name}>, ITableElement<{_type.Name}>");
                 _output.AppendLine("\t{");
                 int fcount = 0;
                 foreach (FieldInfo finfo in _type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
