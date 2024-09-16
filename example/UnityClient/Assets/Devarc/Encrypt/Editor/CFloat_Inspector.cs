@@ -22,18 +22,18 @@ namespace Devarc
 
         protected override void OnGUIDrawProperty(Rect position, SerializedProperty property, GUIContent label)
         {
-            SerializedProperty propData1 = property.FindPropertyRelative("data1");
-            SerializedProperty propData2 = property.FindPropertyRelative("data2");
+            SerializedProperty propData1 = property.FindPropertyRelative("data.save1");
+            SerializedProperty propData2 = property.FindPropertyRelative("data.save2");
 
-            script.Init(propData1.intValue, propData2.intValue);
+            script.data.Init(propData1.intValue, propData2.intValue);
 
-            float prevValue = script.Value;
+            float prevValue = script.GetValue();
             float nextValue = EditorGUI.FloatField(position, label, prevValue);
             if (prevValue != nextValue)
             {
                 script = nextValue;
-                propData1.intValue = script.data1;
-                propData2.intValue = script.data2;
+                propData1.intValue = script.data.save1;
+                propData2.intValue = script.data.save2;
             }
         }
     }

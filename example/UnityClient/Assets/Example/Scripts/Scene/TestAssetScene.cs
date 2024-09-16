@@ -11,7 +11,6 @@ public class TestAssetScene : BaseScene
     public SOUND_ID soundID;
     public EffectDataPlay effectData1;
     public EffectDataPlay effectData2;
-    public STRING_ID stringID;
 
     protected override void onAwake()
     {
