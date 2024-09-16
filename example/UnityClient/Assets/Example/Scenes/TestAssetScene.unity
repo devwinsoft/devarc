@@ -1807,8 +1807,6 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0}
     WaitTime: 0
-  x:
-    data: 
 --- !u!1 &1203824541
 GameObject:
   m_ObjectHideFlags: 0
