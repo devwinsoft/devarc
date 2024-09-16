@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Devarc
 {
-    [System.Serializable]
+    [Serializable]
     public struct SBigInt : IComparable, IComparable<SBigInt>
     {
         static string[] symbol_0 = new string[] { "", "K", "M", "G", "T"};
@@ -57,14 +57,14 @@ namespace Devarc
         {
             if (mPow < 3)
             {
-                var fValue = mBase.Value * Mathf.Pow(10f, mPow.Value);
+                var fValue = mBase.GetValue() * Mathf.Pow(10f, mPow.GetValue());
                 var iValue = Mathf.RoundToInt(fValue);
                 return iValue.ToString();
             }
             else
             {
                 var mode = mPow % 3;
-                var display = mBase.Value * Mathf.Pow(10f, mode);
+                var display = mBase.GetValue() * Mathf.Pow(10f, mode);
                 var symbol = getSymbol();
                 var remain = Mathf.RoundToInt(display * 100f) % 100;
                 if (remain == 0)

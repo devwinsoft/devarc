@@ -1,11 +1,13 @@
 ﻿using System;
-using UnityEngine;
+using MessagePack;
 
 namespace Devarc
 {
-    [System.Serializable]
+    [MessagePackObject]
+    [Serializable]
     public class CFloat : BaseTableElement<CFloat>, ITableElement<CFloat>
     {
+		[Key(0)]
         public CData data = new CData();
    
         public CFloat()

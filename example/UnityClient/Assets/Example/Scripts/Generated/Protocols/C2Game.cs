@@ -5,7 +5,7 @@ using Devarc;
 namespace C2Game
 {
 	[MessagePackObject]
-	public class RequestLogin
+	public partial class RequestLogin : BaseTableElement<RequestLogin>, ITableElement<RequestLogin>
 	{
 		[Key(0)]
 		public string               sessionID;

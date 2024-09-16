@@ -1,28 +1,20 @@
 ﻿using System;
 using UnityEngine;
+using MessagePack;
 
 namespace Devarc
 {
-    [System.Serializable]
+    [Serializable]
     public class SInt
     {
-        public static implicit operator int(SInt obj)
-        {
-            if (obj == null)
-                return 0;
-            return obj.get();
-        }
-        public static implicit operator ulong(SInt obj)
-        {
-            if (obj == null)
-                return 0;
-            return (ulong)obj.get();
-        }
-        public static implicit operator SInt(int _value)
-        {
-            return new SInt(_value);
-        }
+        [SerializeField]
+        public int save1 = 0;
 
+        [SerializeField]
+        public int save2 = 0;
+
+        byte[] data1 = new byte[4];
+        byte[] data2 = new byte[4];
         public SInt()
         {
             seed();
@@ -34,18 +26,6 @@ namespace Devarc
             set(_value);
         }
 
-        public int Value
-        {
-            get { return get(); }
-            set { set(value); }
-        }
-
-        byte[] data1 = new byte[4];
-        byte[] data2 = new byte[4];
-
-        [SerializeField] public int save1 = 0;
-        [SerializeField] public int save2 = 0;
-
         public void LoadData(int v1, int v2)
         {
             Array.Copy(BitConverter.GetBytes(v1), data1, 4);
@@ -53,6 +33,10 @@ namespace Devarc
             save1 = v1;
             save2 = v2;
         }
+
+        public int GetValue() => get();
+
+        public void SetValue(int value) => set(value);
 
         int get()
         {
@@ -89,6 +73,26 @@ namespace Devarc
                 data2[i] = (byte)(0xff & random.Next());
             }
         }
+
+        public static implicit operator int(SInt obj)
+        {
+            if (obj == null)
+                return 0;
+            return obj.get();
+        }
+
+        public static implicit operator ulong(SInt obj)
+        {
+            if (obj == null)
+                return 0;
+            return (ulong)obj.get();
+        }
+
+        public static implicit operator SInt(int _value)
+        {
+            return new SInt(_value);
+        }
+
     }
 }
 

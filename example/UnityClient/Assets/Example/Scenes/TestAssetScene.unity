@@ -1807,16 +1807,13 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0}
     WaitTime: 0
-  stringID:
-    Value: 
   x:
-    data:
-      save1: 1699174187
-      save2: 1699174187
+    save1: -203640304
+    save2: -203640304
   y:
     data:
-      save1: 838979409
-      save2: 838979409
+      save1: 239931902
+      save2: 239931902
 --- !u!1 &1203824541
 GameObject:
   m_ObjectHideFlags: 0

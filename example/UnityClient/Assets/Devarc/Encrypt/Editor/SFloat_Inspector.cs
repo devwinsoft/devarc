@@ -25,7 +25,7 @@ namespace Devarc
 
             script.LoadData(propData1.intValue, propData2.intValue);
 
-            float prevValue = script.Value;
+            float prevValue = script.GetValue();
             float nextValue = EditorGUI.FloatField(position, label, prevValue);
             if (prevValue != nextValue)
             {

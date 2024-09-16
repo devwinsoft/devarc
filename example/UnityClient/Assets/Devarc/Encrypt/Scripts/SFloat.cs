@@ -1,21 +1,20 @@
 ﻿using System;
 using UnityEngine;
+using MessagePack;
 
 namespace Devarc
 {
-    [System.Serializable]
+    [Serializable]
     public class SFloat
     {
-        public static implicit operator float(SFloat obj)
-        {
-            if (obj == null)
-                return 0f;
-            return obj.get();
-        }
-        public static implicit operator SFloat(float _value)
-        {
-            return new SFloat(_value);
-        }
+        [SerializeField]
+        public int save1 = 0;
+
+        [SerializeField]
+        public int save2 = 0;
+
+        byte[] data1 = new byte[4];
+        byte[] data2 = new byte[4];
 
         public SFloat()
         {
@@ -28,17 +27,6 @@ namespace Devarc
             set(_value);
         }
 
-        public float Value
-        {
-            get { return get(); }
-        }
-
-        byte[] data1 = new byte[4];
-        byte[] data2 = new byte[4];
-
-        [SerializeField] public int save1 = 0;
-        [SerializeField] public int save2 = 0;
-
         public void LoadData(int v1, int v2)
         {
             Array.Copy(BitConverter.GetBytes(v1), data1, 4);
@@ -46,6 +34,10 @@ namespace Devarc
             save1 = v1;
             save2 = v2;
         }
+
+        public float GetValue() => get();
+
+        public void SetValue(int value) => set(value);
 
         float get()
         {
@@ -80,6 +72,18 @@ namespace Devarc
             {
                 data2[i] = (byte)(0xff & random.Next());
             }
+        }
+
+        public static implicit operator float(SFloat obj)
+        {
+            if (obj == null)
+                return 0f;
+            return obj.get();
+        }
+
+        public static implicit operator SFloat(float _value)
+        {
+            return new SFloat(_value);
         }
     }
 }

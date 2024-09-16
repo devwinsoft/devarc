@@ -1,17 +1,22 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using MessagePack;
 
 namespace Devarc
 {
-    [System.Serializable]
+    [MessagePackObject]
+    [Serializable]
     public class CBigInt : BaseTableElement<CBigInt>, ITableElement<CBigInt>, IComparable, IComparable<CBigInt>
     {
         static string[] symbol_0 = new string[] { "", "K", "M", "G", "T"};
         static string[] symbol_1 = new string[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
 
-        public SFloat mBase; // < 10
-        public SInt mPow;
+        [Key(0)]
+        public CFloat mBase; // < 10
+
+        [Key(1)]
+        public CInt mPow;
 
         public CBigInt()
         {
@@ -63,14 +68,14 @@ namespace Devarc
         {
             if (mPow < 3)
             {
-                var fValue = mBase.Value * Mathf.Pow(10f, mPow.Value);
+                var fValue = mBase.GetValue() * Mathf.Pow(10f, mPow.GetValue());
                 var iValue = Mathf.RoundToInt(fValue);
                 return iValue.ToString();
             }
             else
             {
                 var mode = mPow % 3;
-                var display = mBase.Value * Mathf.Pow(10f, mode);
+                var display = mBase.GetValue() * Mathf.Pow(10f, mode);
                 var symbol = getSymbol();
                 var remain = Mathf.RoundToInt(display * 100f) % 100;
                 if (remain == 0)

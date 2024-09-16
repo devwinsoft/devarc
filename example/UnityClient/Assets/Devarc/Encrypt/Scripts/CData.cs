@@ -4,26 +4,20 @@ using MessagePack;
 
 namespace Devarc
 {
+	[MessagePackObject]
     [Serializable]
     public class CData
     {
         protected static System.Random random = new System.Random();
 
-        [SerializeField]
 		[Key(0)]
         public int save1;
 
-        [SerializeField]
 		[Key(1)]
         public int save2;
 
         protected bool isValid = false;
         protected int crc = 0;
-
-        public bool IsValid
-        {
-            get { return isValid; }
-        }
 
         public void Init(int _save1, int _save2)
         {

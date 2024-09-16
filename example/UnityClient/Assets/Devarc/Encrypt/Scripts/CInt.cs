@@ -1,10 +1,13 @@
 ﻿using System;
+using MessagePack;
 
 namespace Devarc
 {
-    [System.Serializable]
+    [MessagePackObject]
+    [Serializable]
     public class CInt : BaseTableElement<CInt>, ITableElement<CInt>
     {
+		[Key(0)]
         public CData data = new CData();
 
         public CInt()

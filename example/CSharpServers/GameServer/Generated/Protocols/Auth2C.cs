@@ -5,7 +5,7 @@ using Devarc;
 namespace Auth2C
 {
 	[MessagePackObject]
-	public class NotifySession
+	public partial class NotifySession : BaseTableElement<NotifySession>, ITableElement<NotifySession>
 	{
 		[Key(0)]
 		public string               sessionID;
@@ -16,7 +16,7 @@ namespace Auth2C
 	}
 
 	[MessagePackObject]
-	public class NotifyLogin
+	public partial class NotifyLogin : BaseTableElement<NotifyLogin>, ITableElement<NotifyLogin>
 	{
 		[Key(0)]
 		public string               sessionID;
@@ -27,14 +27,14 @@ namespace Auth2C
 	}
 
 	[MessagePackObject]
-	public class NotifyLogout
+	public partial class NotifyLogout : BaseTableElement<NotifyLogout>, ITableElement<NotifyLogout>
 	{
 		[Key(0)]
 		public ErrorType            errorCode;
 	}
 
 	[MessagePackObject]
-	public class NotifySignin
+	public partial class NotifySignin : BaseTableElement<NotifySignin>, ITableElement<NotifySignin>
 	{
 		[Key(0)]
 		public string               sessionID;
@@ -45,7 +45,7 @@ namespace Auth2C
 	}
 
 	[MessagePackObject]
-	public class NotifyError
+	public partial class NotifyError : BaseTableElement<NotifyError>, ITableElement<NotifyError>
 	{
 		[Key(0)]
 		public ErrorType            errorCode;

@@ -5,14 +5,14 @@ using Devarc;
 namespace C2Auth
 {
 	[MessagePackObject]
-	public class RequestSession
+	public partial class RequestSession : BaseTableElement<RequestSession>, ITableElement<RequestSession>
 	{
 		[Key(0)]
 		public ErrorType            errorCode;
 	}
 
 	[MessagePackObject]
-	public class RequestLogin
+	public partial class RequestLogin : BaseTableElement<RequestLogin>, ITableElement<RequestLogin>
 	{
 		[Key(0)]
 		public string               accountID;
@@ -23,14 +23,14 @@ namespace C2Auth
 	}
 
 	[MessagePackObject]
-	public class RequestLogout
+	public partial class RequestLogout : BaseTableElement<RequestLogout>, ITableElement<RequestLogout>
 	{
 		[Key(0)]
 		public ErrorType            errorCode;
 	}
 
 	[MessagePackObject]
-	public class RequestSignin
+	public partial class RequestSignin : BaseTableElement<RequestSignin>, ITableElement<RequestSignin>
 	{
 		[Key(0)]
 		public string               accountID;
