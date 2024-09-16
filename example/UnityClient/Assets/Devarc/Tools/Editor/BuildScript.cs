@@ -14,7 +14,7 @@ namespace Devarc
             Table.Initailize();
             TableManager.SaveTable();
             AssetDatabase.Refresh();
-            EditorUtility.DisplayDialog("Build binary tables", "Build completed.", "OK");
+            EditorUtility.DisplayDialog("Build binary tables", "Work completed: Build binary tables.", "OK");
         }
 
         [MenuItem("Tools/Devarc/Build/Build Android")]

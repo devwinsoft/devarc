@@ -1808,12 +1808,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 0, z: 0}
     WaitTime: 0
   x:
-    save1: -203640304
-    save2: -203640304
-  y:
-    data:
-      save1: 239931902
-      save2: 239931902
+    data: 
 --- !u!1 &1203824541
 GameObject:
   m_ObjectHideFlags: 0
