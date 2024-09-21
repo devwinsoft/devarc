@@ -45,6 +45,8 @@ namespace Devarc
                 for (int r = (int)RowType.Data; r <= sheet.LastRowNum; r++)
                 {
                     var row = sheet.GetRow(r);
+                    if (row == null)
+                        continue;
                     onReadRow(row, sw, isFirstLine);
                     isFirstLine = false;
                 }

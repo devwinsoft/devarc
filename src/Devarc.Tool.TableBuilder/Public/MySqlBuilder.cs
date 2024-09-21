@@ -76,8 +76,10 @@ namespace Devarc
                 sw.WriteLine($"truncate `{sheet.SheetName}`;");
                 for (int r = (int)RowType.Data; r <= sheet.LastRowNum; r++)
                 {
-                    var row = sheet.GetRow(r);
                     var started = false;
+                    var row = sheet.GetRow(r);
+                    if (row == null)
+                        continue;
 
                     sw.Write($"insert into `{sheet.SheetName}` (");
                     for (int c = 0; c < row.LastCellNum; c++)

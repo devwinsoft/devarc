@@ -57,6 +57,9 @@ namespace Devarc
             for (int r = 1; r <= sheet.LastRowNum; r++)
             {
                 var row = sheet.GetRow(r);
+                if (row == null)
+                    continue;
+
                 var key = row.GetCell(0).ToString();
                 for (int c = 1; c < row.LastCellNum; c++)
                 {
