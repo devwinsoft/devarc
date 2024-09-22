@@ -42,6 +42,8 @@ namespace Devarc
 
     public abstract class BaseObject<T> : BaseObject
     {
+        public abstract BaseAbility Ability { get; }
+
         protected abstract void onInitLoad(T ability);
 
         public virtual void Load(T ability)
