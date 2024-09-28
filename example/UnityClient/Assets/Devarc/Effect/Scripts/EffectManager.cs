@@ -91,6 +91,7 @@ namespace Devarc
             {
                 return;
             }
+            _effect.Clear();
             mPool.Push(_effect);
         }
     }

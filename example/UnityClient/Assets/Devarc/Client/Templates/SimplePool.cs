@@ -25,13 +25,7 @@ using UnityEngine;
 
 namespace Devarc
 {
-    public interface ISimpleObject
-    {
-        void OnPoolEvent_Pop();
-        void OnPoolEvent_Push();
-    }
-
-    public class SimplePool<T> where T : MonoBehaviour, ISimpleObject
+    public class SimplePool<T> where T : MonoBehaviour
     {
         public Transform Root => mRoot;
         Transform mRoot = null;
@@ -130,7 +124,6 @@ namespace Devarc
             compo.gameObject.name = prefab.name;
             compo.gameObject.SetActive(true);
 
-            compo.OnPoolEvent_Pop();
             return compo;
         }
 
@@ -143,7 +136,6 @@ namespace Devarc
                 return;
             }
             _obj.transform.SetParent(mRoot);
-            _obj.OnPoolEvent_Push();
 
             List<T> list;
             if (mPool.TryGetValue(_obj.name, out list) == false)

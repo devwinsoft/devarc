@@ -4,18 +4,9 @@ using UnityEngine;
 
 namespace Devarc
 {
-    public abstract class BaseEffectPlay : MonoBehaviour, ISimpleObject
+    public abstract class BaseEffectPlay : MonoBehaviour
     {
         public event System.Action<BaseEffectPlay> OnRemove;
-
-        public void OnPoolEvent_Pop()
-        {
-        }
-
-        public void OnPoolEvent_Push()
-        {
-            Clear();
-        }
 
         protected abstract void onPause();
         protected abstract void onResume();
