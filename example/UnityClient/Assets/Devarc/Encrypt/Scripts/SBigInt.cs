@@ -165,6 +165,28 @@ namespace Devarc
             value.mPow = data.mPow;
             return value;
         }
+        public static SBigInt operator +(SBigInt p1, double p2)
+        {
+            return p1 + new SBigInt(p2);
+        }
+
+        public static SBigInt operator -(SBigInt p1, SBigInt p2)
+        {
+            float tmpBase = 0f;
+            int tmpPow = Mathf.Max(p1.mPow, p2.mPow);
+            tmpBase += Mathf.Pow(0.1f, tmpPow - p1.mPow) * p1.mBase;
+            tmpBase -= Mathf.Pow(0.1f, tmpPow - p2.mPow) * p2.mBase;
+
+            var data = getData(tmpBase, tmpPow);
+            var value = new SBigInt();
+            value.mBase = data.mBase;
+            value.mPow = data.mPow;
+            return value;
+        }
+        public static SBigInt operator -(SBigInt p1, double p2)
+        {
+            return p1 - new SBigInt(p2);
+        }
 
         public static SBigInt operator *(SBigInt p1, SBigInt p2)
         {
@@ -174,7 +196,6 @@ namespace Devarc
             value.mPow = data.mPow;
             return value;
         }
-
         public static SBigInt operator *(SBigInt p1, double p2)
         {
             return p1 * new SBigInt(p2);
@@ -188,21 +209,45 @@ namespace Devarc
             value.mPow = data.mPow;
             return value;
         }
-
         public static SBigInt operator /(SBigInt p1, double p2)
         {
             return p1 / new SBigInt(p2);
         }
 
-
         public static bool operator <(SBigInt p1, SBigInt p2)
         {
             return p1.CompareTo(p2) < 0;
         }
-
         public static bool operator >(SBigInt p1, SBigInt p2)
         {
             return p1.CompareTo(p2) > 0;
+        }
+
+        public static bool operator <(SBigInt p1, double p2)
+        {
+            return p1.CompareTo(new SBigInt(p2)) < 0;
+        }
+        public static bool operator >(SBigInt p1, double p2)
+        {
+            return p1.CompareTo(new SBigInt(p2)) > 0;
+        }
+
+        public static bool operator <=(SBigInt p1, SBigInt p2)
+        {
+            return p1.CompareTo(p2) <= 0;
+        }
+        public static bool operator >=(SBigInt p1, SBigInt p2)
+        {
+            return p1.CompareTo(p2) >= 0;
+        }
+
+        public static bool operator <=(SBigInt p1, double p2)
+        {
+            return p1.CompareTo(new SBigInt(p2)) <= 0;
+        }
+        public static bool operator >=(SBigInt p1, double p2)
+        {
+            return p1.CompareTo(new SBigInt(p2)) >= 0;
         }
     }
 }

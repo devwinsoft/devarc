@@ -42,7 +42,7 @@ namespace Devarc
 
     public abstract class BaseObject<T> : BaseObject
     {
-        public abstract BaseAbility Ability { get; }
+        public abstract T Ability { get; }
 
         protected abstract void onInitLoad(T ability);
 
