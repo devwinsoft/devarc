@@ -26,17 +26,23 @@ namespace Devarc
 
         public CBigInt(float _base, int _pow)
         {
-            var tmpBase = 1f;
-            var tmpPow = 0;
+            if (_base == 0)
+            {
+                mBase = 0f;
+                mPow = 0;
+                return;
+            }
+            float tmpBase = 1f;
+            int tmpPow = 0;
             for (int i = 0; i < _pow; i++)
             {
                 tmpBase *= _base;
-                while (tmpBase > 10f)
+                while (Mathf.Abs(tmpBase) > 10f)
                 {
                     tmpBase /= 10f;
                     tmpPow++;
                 }
-                while (tmpBase < 1f)
+                while (Mathf.Abs(tmpBase) < 1f)
                 {
                     tmpBase *= 10f;
                     tmpPow--;
@@ -48,14 +54,20 @@ namespace Devarc
 
         public CBigInt(double value)
         {
-            var tmpBase = value;
-            var tmpPow = 0;
-            while (tmpBase > 10f)
+            if (value == 0)
+            {
+                mBase = 0f;
+                mPow = 0;
+                return;
+            }
+            double tmpBase = value;
+            int tmpPow = 0;
+            while (abs(tmpBase) > 10.0)
             {
                 tmpBase /= 10f;
                 tmpPow++;
             }
-            while (tmpBase < 1f)
+            while (abs(tmpBase) < 1.0)
             {
                 tmpBase *= 10f;
                 tmpPow--;
@@ -91,6 +103,11 @@ namespace Devarc
                     return string.Format("{0:N2} {1}", display, symbol);
                 }
             }
+        }
+
+        static double abs(double value)
+        {
+            return value >= 0 ? value : -value;
         }
 
         string getSymbol()
@@ -152,15 +169,40 @@ namespace Devarc
 
         public int CompareTo(CBigInt other)
         {
+            if (this.mBase > 0)
+            {
+                if (other.mBase <= 0f)
+                    return 1;
+            }
+            else if (this.mBase < 0f)
+            {
+                if (other.mBase >= 0f)
+                    return -1;
+            }
+            else
+            {
+                if (other.mBase > 0f)
+                    return 1;
+                else if (other.mBase < 0f)
+                    return -1;
+                else
+                    return 0;
+            }
+            int result = this.mBase > 0 ? 1 : -1;
             if (this.mPow > other.mPow)
-                return 1;
+                return result;
             if (this.mPow < other.mPow)
-                return -1;
+                return -result;
             if (this.mBase > other.mBase)
-                return 1;
+                return result;
             if (this.mBase < other.mBase)
-                return -1;
+                return -result;
             return 0;
+        }
+
+        public static implicit operator CBigInt(double value)
+        {
+            return new CBigInt(value);
         }
 
         public static CBigInt operator +(CBigInt p1, CBigInt p2)
@@ -176,10 +218,6 @@ namespace Devarc
             value.mPow = data.mPow;
             return value;
         }
-        public static CBigInt operator +(CBigInt p1, double p2)
-        {
-            return p1 + new CBigInt(p2);
-        }
 
         public static CBigInt operator -(CBigInt p1, CBigInt p2)
         {
@@ -194,10 +232,6 @@ namespace Devarc
             value.mPow = data.mPow;
             return value;
         }
-        public static CBigInt operator -(CBigInt p1, double p2)
-        {
-            return p1 - new CBigInt(p2);
-        }
 
         public static CBigInt operator *(CBigInt p1, CBigInt p2)
         {
@@ -206,10 +240,6 @@ namespace Devarc
             value.mBase = data.mBase;
             value.mPow = data.mPow;
             return value;
-        }
-        public static CBigInt operator *(CBigInt p1, double p2)
-        {
-            return p1 * new CBigInt(p2);
         }
 
         public static CBigInt operator /(CBigInt p1, CBigInt p2)
@@ -220,11 +250,6 @@ namespace Devarc
             value.mPow = data.mPow;
             return value;
         }
-        public static CBigInt operator /(CBigInt p1, double p2)
-        {
-            return p1 / new CBigInt(p2);
-        }
-
 
         public static bool operator <(CBigInt p1, CBigInt p2)
         {
@@ -235,15 +260,6 @@ namespace Devarc
             return p1.CompareTo(p2) > 0;
         }
 
-        public static bool operator <(CBigInt p1, double p2)
-        {
-            return p1.CompareTo(new CBigInt(p2)) < 0;
-        }
-        public static bool operator >(CBigInt p1, double p2)
-        {
-            return p1.CompareTo(new CBigInt(p2)) > 0;
-        }
-
         public static bool operator <=(CBigInt p1, CBigInt p2)
         {
             return p1.CompareTo(p2) <= 0;
@@ -251,15 +267,6 @@ namespace Devarc
         public static bool operator >=(CBigInt p1, CBigInt p2)
         {
             return p1.CompareTo(p2) >= 0;
-        }
-
-        public static bool operator <=(CBigInt p1, double p2)
-        {
-            return p1.CompareTo(new CBigInt(p2)) <= 0;
-        }
-        public static bool operator >=(CBigInt p1, double p2)
-        {
-            return p1.CompareTo(new CBigInt(p2)) >= 0;
         }
     }
 }
