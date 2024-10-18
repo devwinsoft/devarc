@@ -97,7 +97,7 @@ namespace Devarc
             for (int c = 0; c < mCurrentHeader.MaxColumn; c++)
             {
                 var data = mCurrentHeader.Get(c);
-                if (data == null)
+                if (data == null || data.fieldType == null)
                     continue;
                 if (data.isList)
                     sw.WriteLine(string.Format("\t\tpublic virtual {0,-12} get_{1}() => {2};", data.fieldType + "[]", data.fieldName, getFunctionStr(data)));
