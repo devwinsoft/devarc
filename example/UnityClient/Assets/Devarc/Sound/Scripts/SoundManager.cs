@@ -40,6 +40,8 @@ namespace Devarc
         public abstract float volume { get; }
         public abstract float cooltime { get; }
         public abstract bool loop { get; }
+        public abstract float area_close { get; }
+        public abstract float area_far { get; }
         public abstract bool isBundle { get; }
     }
 
@@ -54,6 +56,8 @@ namespace Devarc
         public override float volume => data.volume;
         public override float cooltime => data.cooltime;
         public override bool loop => data.loop;
+        public override float area_close => data.area_close;
+        public override float area_far => data.area_far;
         public override bool isBundle => false;
     }
 
@@ -67,6 +71,8 @@ namespace Devarc
         public override float volume => data.volume;
         public override float cooltime => data.cooltime;
         public override bool loop => data.loop;
+        public override float area_close => data.area_close;
+        public override float area_far => data.area_far;
         public override bool isBundle => false;
     }
 

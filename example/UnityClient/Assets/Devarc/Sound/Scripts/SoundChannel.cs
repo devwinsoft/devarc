@@ -25,6 +25,7 @@ namespace Devarc
     public class SoundChannel : MonoBehaviour
     {
         CHANNEL mChannel;
+        bool mIs3d;
         int mNextSEQ = 1;
         List<SoundPlay> mPool = new List<SoundPlay>();
         List<SoundPlay> mPlayList = new List<SoundPlay>();
@@ -65,6 +66,7 @@ namespace Devarc
         public void Init(CHANNEL _channel, int _playCount, bool _3d)
         {
             mChannel = _channel;
+            mIs3d = _3d;
             mNextSEQ = (int)mChannel * 1000;
 
             for (int i = 0; i < _playCount; i++)
@@ -155,6 +157,11 @@ namespace Devarc
             obj.transform.position = pos;
             obj.gameObject.SetActive(true);
             obj.Init(generateSoundSEQ(), soundData.sound_id, groupID, clip, volumn, soundData.loop, wait, fadeIn);
+            if (mIs3d)
+            {
+                obj.mAudio.minDistance = soundData.area_close;
+                obj.mAudio.maxDistance = soundData.area_far;
+            }
             mPlayList.Add(obj);
             mPlayDict.Add(obj.SoundSEQ, obj);
             return obj.SoundSEQ;
