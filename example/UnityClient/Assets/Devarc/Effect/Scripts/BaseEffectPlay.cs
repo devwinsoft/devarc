@@ -16,10 +16,17 @@ namespace Devarc
         public virtual void onAwake() { }
         public abstract void onLateUpdate();
 
+        protected enum STATE
+        {
+            Init,
+            Playing,
+            Paused,
+            Stopped,
+            Removed,
+        }
 
         Vector3 mInitScale = Vector3.one;
-        bool mPlaying = false;
-        bool mRemoved = false;
+        protected STATE mState = STATE.Init;
 
         public virtual void Clear()
         {
@@ -45,48 +52,53 @@ namespace Devarc
 
         public void Init()
         {
-            mPlaying = true;
-            mRemoved = false;
+            mState = STATE.Playing;
             onPlay();
         }
 
         public void Play()
         {
-            if (mRemoved)
+            if (mState == STATE.Playing)
                 return;
-            mPlaying = true;
+            mState = STATE.Playing;
             onPlay();
         }
 
         public void Pause()
         {
-            if (mRemoved)
+            if (mState == STATE.Paused)
                 return;
-            mPlaying = false;
+            mState = STATE.Paused;
             onPause();
         }
 
         public void Resume()
         {
-            if (mRemoved)
+            if (mState != STATE.Paused)
                 return;
-            mPlaying = true;
+            mState = STATE.Playing;
             onResume();
         }
 
         public void Stop()
         {
-            if (mRemoved)
-                return;
-            mPlaying = false;
+            switch (mState)
+            {
+                case STATE.Stopped:
+                case STATE.Removed:
+                    return;
+                default:
+                    break;
+            }
+            mState = STATE.Stopped;
             onStop();
         }
 
         public void Remove()
         {
-            if (mRemoved)
+            if (mState == STATE.Removed)
                 return;
-            mRemoved = true;
+            mState = STATE.Removed;
             OnRemove?.Invoke(this);
             EffectManager.Instance.Remove(this);
         }
@@ -99,9 +111,13 @@ namespace Devarc
 
         private void LateUpdate()
         {
-            if (mPlaying == false)
+            switch (mState)
             {
-                return;
+                case STATE.Paused:
+                case STATE.Removed:
+                    return;
+                default:
+                    break;
             }
             onLateUpdate();
         }
