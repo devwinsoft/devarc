@@ -1259,7 +1259,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 340, y: 17.5}
+  m_AnchoredPosition: {x: 340, y: 0}
   m_SizeDelta: {x: -720, y: -135}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &720812237
@@ -1645,7 +1645,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -600, y: 40}
+  m_AnchoredPosition: {x: -600, y: 0}
   m_SizeDelta: {x: 400, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1080422068
@@ -1798,13 +1798,13 @@ MonoBehaviour:
     EffectID:
       Value: fx_walk
     offset: {x: 0, y: 0, z: 0}
-    rotation: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
     WaitTime: 0
   effectData2:
     EffectID:
       Value: fx_circle
     offset: {x: 0, y: 0, z: 0}
-    rotation: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
     WaitTime: 0
 --- !u!1 &1203824541
 GameObject:
@@ -2692,7 +2692,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -170, y: 40}
+  m_AnchoredPosition: {x: -170, y: 0}
   m_SizeDelta: {x: 300, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2037728619

@@ -51,14 +51,14 @@ namespace Devarc
         }
 
 
-        public BaseEffectPlay CreateEffect(EFFECT_ID effectID, Transform attachTr, Vector3 offset, Vector3 localRotation, EFFECT_ATTACH_TYPE attachType)
+        public BaseEffectPlay CreateEffect(EFFECT_ID effectID, Transform attachTr, Vector3 offset, Vector3 euler, EFFECT_ATTACH_TYPE attachType)
         {
             if (effectID == null || effectID.IsValid == false)
             {
                 return null;
             }
 
-            BaseEffectPlay obj = mPool.Pop(effectID, attachTr, offset, Quaternion.Euler(localRotation));
+            BaseEffectPlay obj = mPool.Pop(effectID, attachTr, offset, Quaternion.Euler(euler));
             if (obj == null)
             {
                 return null;

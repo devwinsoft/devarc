@@ -26,7 +26,7 @@ namespace Devarc
     {
         public EFFECT_ID EffectID;
         public Vector3 offset;
-        public Vector3 rotation;
+        public Vector3 euler;
         public float WaitTime;
     }
 }

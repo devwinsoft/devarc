@@ -9,6 +9,12 @@ namespace Devarc
     [Serializable]
     public class CBigInt : BaseTableElement<CBigInt>, ITableElement<CBigInt>, IComparable, IComparable<CBigInt>
     {
+        public static CBigInt Zero = new CBigInt(0f, 0);
+        public static CBigInt Max = new CBigInt(1f, int.MaxValue);
+        public static CBigInt Min = new CBigInt(-1f, int.MaxValue);
+        public static CBigInt MaxDouble = new CBigInt(double.MaxValue);
+        public static CBigInt MaxFloat = new CBigInt(float.MaxValue);
+
         static string[] symbol_0 = new string[] { "", "K", "M", "G", "T"};
         static string[] symbol_1 = new string[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
 
@@ -32,21 +38,17 @@ namespace Devarc
                 mPow = 0;
                 return;
             }
-            float tmpBase = 1f;
-            int tmpPow = 0;
-            for (int i = 0; i < _pow; i++)
+            float tmpBase = _base;
+            int tmpPow = _pow;
+            while (Mathf.Abs(tmpBase) > 10f)
             {
-                tmpBase *= _base;
-                while (Mathf.Abs(tmpBase) > 10f)
-                {
-                    tmpBase /= 10f;
-                    tmpPow++;
-                }
-                while (Mathf.Abs(tmpBase) < 1f)
-                {
-                    tmpBase *= 10f;
-                    tmpPow--;
-                }
+                tmpBase /= 10f;
+                tmpPow++;
+            }
+            while (Mathf.Abs(tmpBase) < 1f)
+            {
+                tmpBase *= 10f;
+                tmpPow--;
             }
             mBase = tmpBase;
             mPow = tmpPow;
@@ -133,17 +135,25 @@ namespace Devarc
 
         static (float mBase, int mPow) getData(float _base, int _pow)
         {
-            while (_base > 10f)
+            if (_base == 0f)
             {
-                _base /= 10f;
-                _pow++;
+                return (0, 0);
             }
-            while (_base < 1f)
+
+            double tmpBase = _base;
+            int tmpPow = _pow;
+            while (abs(tmpBase) > 10.0)
             {
-                _base *= 10f;
-                _pow--;
+                tmpBase /= 10f;
+                tmpPow++;
             }
-            return (_base, _pow);
+            while (abs(tmpBase) < 1f)
+            {
+                tmpBase *= 10f;
+                tmpPow--;
+            }
+
+            return ((float)tmpBase, tmpPow);
         }
 
         public int CompareTo(object obj)
@@ -200,9 +210,24 @@ namespace Devarc
             return 0;
         }
 
-        public static implicit operator CBigInt(double value)
+        public static implicit operator double(CBigInt obj)
         {
-            return new CBigInt(value);
+            if (obj > SBigInt.MaxDouble)
+            {
+                throw new OverflowException($"OverflowException: value={obj.ToString()}");
+            }
+            double value = obj.mBase.GetValue() * UnityEngine.Mathf.Pow(10f, (float)obj.mPow.GetValue());
+            return value;
+        }
+
+        public static implicit operator float(CBigInt obj)
+        {
+            if (obj > SBigInt.MaxFloat)
+            {
+                throw new OverflowException($"OverflowException: value={obj.ToString()}");
+            }
+            float value = obj.mBase.GetValue() * UnityEngine.Mathf.Pow(10f, (float)obj.mPow.GetValue());
+            return value;
         }
 
         public static CBigInt operator +(CBigInt p1, CBigInt p2)
@@ -244,7 +269,28 @@ namespace Devarc
 
         public static CBigInt operator /(CBigInt p1, CBigInt p2)
         {
+            if (p2.mBase == 0f)
+            {
+                throw new DivideByZeroException();
+            }
+
             var data = getData(p1.mBase / p2.mBase, p1.mPow - p2.mPow);
+            var value = new CBigInt();
+            value.mBase = data.mBase;
+            value.mPow = data.mPow;
+            return value;
+        }
+
+        public static CBigInt operator /(CBigInt p1, float p2)
+        {
+            if (p2 == 0f)
+            {
+                if (p1.mBase >= 0f)
+                    return CBigInt.Max;
+                else
+                    return CBigInt.Min;
+            } 
+            var data = getData(p1.mBase / p2, p1.mPow);
             var value = new CBigInt();
             value.mBase = data.mBase;
             value.mPow = data.mPow;
