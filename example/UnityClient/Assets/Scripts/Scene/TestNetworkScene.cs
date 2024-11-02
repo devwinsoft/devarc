@@ -53,8 +53,6 @@ public class TestNetworkScene : BaseScene
         socketServerAddress.AddOptions(socketServerURLs);
 
         AppManager.authNetwork.Init(authServerAddress.captionText.text, "msgpack", "packet", StaticCompositeResolver.Instance);
-
-        LoginManager.Instance.LogIn(true);
     }
 
 
@@ -63,56 +61,27 @@ public class TestNetworkScene : BaseScene
     }
 
 
-    //public void OnChangeNetwork()
-    //{
-    //    AppManager.authNetwork.Init(authServerAddress.captionText.text, "msgpack", "packet", StaticCompositeResolver.Instance);
-
-    //    C2Auth.RequestSession request = new C2Auth.RequestSession();
-    //    AppManager.authNetwork.Post<C2Auth.RequestSession, Auth2C.NotifySession>(request, (response) =>
-    //    {
-    //        switch (response.errorCode)
-    //        {
-    //            case ErrorType.SUCCESS:
-    //                AppManager.Instance.sessionID = response.sessionID;
-    //                AppManager.Instance.secret = response.secret;
-    //                break;
-    //            default:
-    //                AppManager.Instance.sessionID = string.Empty;
-    //                AppManager.Instance.secret = 0;
-    //                break;
-    //        }
-    //        Debug.Log(JsonUtility.ToJson(response));
-    //    });
-    //}
-
-
     public void OnClick_Google_Signin()
     {
-        LoginManager.Instance.Google_SignIn();
     }
 
     public void OnClick_Google_Signout()
     {
-        LoginManager.Instance.Google_SignOut();
     }
 
 
     public void OnClick_CustomRegister()
     {
-        LoginManager.Instance.Custom_Register(inputID.text, inputPW.text);
     }
 
 
     public void OnClick_CustomSignIn()
     {
-        LoginManager.Instance.Custom_SignIn(inputID.text, inputPW.text);
     }
 
 
     public void OnClick_CustomSignOut()
     {
-        LoginManager.Instance.Custom_SignOut();
-
         //var request = new C2Auth.RequestLogout();
         //AppManager.authNetwork.Post<C2Auth.RequestLogout, Auth2C.NotifyLogout>(request, (response) =>
         //{

@@ -25,7 +25,6 @@ public class AppManager : MonoSingleton<AppManager>
         AssetManager.Create();
         DownloadManager.Create();
         EffectManager.Create();
-        LoginManager.Create();
         SoundManager.Create();
         TableManager.Create();
 
@@ -48,17 +47,6 @@ public class AppManager : MonoSingleton<AppManager>
 
         mGameNetwork = create<GameNetwork>(transform);
         mGameNetwork.InitProtocol(StaticCompositeResolver.Instance);
-
-
-        // Init LoginManager
-        LoginManager.Instance.OnSignIn += (loginType, firstInit) =>
-        {
-            Debug.Log($"Google SignIn: LoginType={loginType}, firstInit={firstInit}");
-        };
-        LoginManager.Instance.OnSignOut += (success) =>
-        {
-            Debug.Log($"SignOut: success={success}");
-        };
 
 
         // Initialize DownloadManager.
