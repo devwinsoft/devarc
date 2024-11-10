@@ -1,22 +1,19 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Devarc
 {
-    public partial class Account
+    public partial class VECTOR3
     {
-        public override Account Parse(string value)
+        public override VECTOR3 Parse(string value)
         {
-            string[] list = value.Split(',');
-            if (list.Length > 1)
-            {
-                Account account = new Account();
-                int.TryParse(list[1], out account.level);
-                account.nickName = list[2];
-                return account;
-            }
-            return null;
+            var list = value.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            VECTOR3 result = new VECTOR3();
+            result.x = list.GetFloat(0);
+            result.y = list.GetFloat(1);
+            result.z = list.GetFloat(2);
+            return result;
         }
     }
 }

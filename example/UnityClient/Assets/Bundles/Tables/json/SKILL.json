@@ -1,4 +1,4 @@
 {"list":[
-{"skill_id":"ATTACK","skillName":"Normal Attack","level":1,"power":10,"account":"1,10,name1","args":"1,2,3","cost":"1.2, 30"}
-,{ "skill_id":"STUN","skillName":"Stun","level":1,"power":20,"account":"2,7,name2","args":"4,5,6","cost":"1.1, 50"}
+{"skill_id":"ATTACK","name_id":"Normal Attack"}
+,{ "skill_id":"STUN","name_id":"Stun"}
 ]}

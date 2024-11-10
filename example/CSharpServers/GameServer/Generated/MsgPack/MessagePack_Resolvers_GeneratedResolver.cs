@@ -47,31 +47,33 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(23)
+            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(25)
             {
-                { typeof(global::Devarc.Account[]), 0 },
-                { typeof(global::Devarc.ErrorType), 1 },
-                { typeof(global::Devarc.GenderType), 2 },
-                { typeof(global::Auth2C.NotifyError), 3 },
-                { typeof(global::Auth2C.NotifyLogin), 4 },
-                { typeof(global::Auth2C.NotifyLogout), 5 },
-                { typeof(global::Auth2C.NotifySession), 6 },
-                { typeof(global::Auth2C.NotifySignin), 7 },
-                { typeof(global::C2Auth.RequestLogin), 8 },
-                { typeof(global::C2Auth.RequestLogout), 9 },
-                { typeof(global::C2Auth.RequestSession), 10 },
-                { typeof(global::C2Auth.RequestSignin), 11 },
-                { typeof(global::C2Game.RequestLogin), 12 },
-                { typeof(global::Devarc.Account), 13 },
-                { typeof(global::Devarc.CHARACTER), 14 },
-                { typeof(global::Devarc.CommonResult), 15 },
-                { typeof(global::Devarc.CustomSigninResult), 16 },
-                { typeof(global::Devarc.GoogleCodeResult), 17 },
-                { typeof(global::Devarc.GoogleRefreshResult), 18 },
-                { typeof(global::Devarc.GoogleSigninResult), 19 },
-                { typeof(global::Devarc.SKILL), 20 },
-                { typeof(global::Devarc.SOUND), 21 },
-                { typeof(global::Game2C.NotifyLogin), 22 },
+                { typeof(global::Devarc.ErrorType), 0 },
+                { typeof(global::Auth2C.NotifyError), 1 },
+                { typeof(global::Auth2C.NotifyLogin), 2 },
+                { typeof(global::Auth2C.NotifyLogout), 3 },
+                { typeof(global::Auth2C.NotifySession), 4 },
+                { typeof(global::Auth2C.NotifySignin), 5 },
+                { typeof(global::C2Auth.RequestLogin), 6 },
+                { typeof(global::C2Auth.RequestLogout), 7 },
+                { typeof(global::C2Auth.RequestSession), 8 },
+                { typeof(global::C2Auth.RequestSignin), 9 },
+                { typeof(global::C2Game.RequestLogin), 10 },
+                { typeof(global::Devarc.AFFECT), 11 },
+                { typeof(global::Devarc.CHARACTER), 12 },
+                { typeof(global::Devarc.CommonResult), 13 },
+                { typeof(global::Devarc.CustomSigninResult), 14 },
+                { typeof(global::Devarc.GoogleCodeResult), 15 },
+                { typeof(global::Devarc.GoogleRefreshResult), 16 },
+                { typeof(global::Devarc.GoogleSigninResult), 17 },
+                { typeof(global::Devarc.PROJECTILE), 18 },
+                { typeof(global::Devarc.SKILL), 19 },
+                { typeof(global::Devarc.SOUND), 20 },
+                { typeof(global::Devarc.UNIT_HERO), 21 },
+                { typeof(global::Devarc.UNIT_MONSTER), 22 },
+                { typeof(global::Devarc.VECTOR3), 23 },
+                { typeof(global::Game2C.NotifyLogin), 24 },
             };
         }
 
@@ -85,29 +87,31 @@ namespace MessagePack.Resolvers
 
             switch (key)
             {
-                case 0: return new global::MessagePack.Formatters.ArrayFormatter<global::Devarc.Account>();
-                case 1: return new MessagePack.Formatters.Devarc.ErrorTypeFormatter();
-                case 2: return new MessagePack.Formatters.Devarc.GenderTypeFormatter();
-                case 3: return new MessagePack.Formatters.Auth2C.NotifyErrorFormatter();
-                case 4: return new MessagePack.Formatters.Auth2C.NotifyLoginFormatter();
-                case 5: return new MessagePack.Formatters.Auth2C.NotifyLogoutFormatter();
-                case 6: return new MessagePack.Formatters.Auth2C.NotifySessionFormatter();
-                case 7: return new MessagePack.Formatters.Auth2C.NotifySigninFormatter();
-                case 8: return new MessagePack.Formatters.C2Auth.RequestLoginFormatter();
-                case 9: return new MessagePack.Formatters.C2Auth.RequestLogoutFormatter();
-                case 10: return new MessagePack.Formatters.C2Auth.RequestSessionFormatter();
-                case 11: return new MessagePack.Formatters.C2Auth.RequestSigninFormatter();
-                case 12: return new MessagePack.Formatters.C2Game.RequestLoginFormatter();
-                case 13: return new MessagePack.Formatters.Devarc.AccountFormatter();
-                case 14: return new MessagePack.Formatters.Devarc.CHARACTERFormatter();
-                case 15: return new MessagePack.Formatters.Devarc.CommonResultFormatter();
-                case 16: return new MessagePack.Formatters.Devarc.CustomSigninResultFormatter();
-                case 17: return new MessagePack.Formatters.Devarc.GoogleCodeResultFormatter();
-                case 18: return new MessagePack.Formatters.Devarc.GoogleRefreshResultFormatter();
-                case 19: return new MessagePack.Formatters.Devarc.GoogleSigninResultFormatter();
-                case 20: return new MessagePack.Formatters.Devarc.SKILLFormatter();
-                case 21: return new MessagePack.Formatters.Devarc.SOUNDFormatter();
-                case 22: return new MessagePack.Formatters.Game2C.NotifyLoginFormatter();
+                case 0: return new MessagePack.Formatters.Devarc.ErrorTypeFormatter();
+                case 1: return new MessagePack.Formatters.Auth2C.NotifyErrorFormatter();
+                case 2: return new MessagePack.Formatters.Auth2C.NotifyLoginFormatter();
+                case 3: return new MessagePack.Formatters.Auth2C.NotifyLogoutFormatter();
+                case 4: return new MessagePack.Formatters.Auth2C.NotifySessionFormatter();
+                case 5: return new MessagePack.Formatters.Auth2C.NotifySigninFormatter();
+                case 6: return new MessagePack.Formatters.C2Auth.RequestLoginFormatter();
+                case 7: return new MessagePack.Formatters.C2Auth.RequestLogoutFormatter();
+                case 8: return new MessagePack.Formatters.C2Auth.RequestSessionFormatter();
+                case 9: return new MessagePack.Formatters.C2Auth.RequestSigninFormatter();
+                case 10: return new MessagePack.Formatters.C2Game.RequestLoginFormatter();
+                case 11: return new MessagePack.Formatters.Devarc.AFFECTFormatter();
+                case 12: return new MessagePack.Formatters.Devarc.CHARACTERFormatter();
+                case 13: return new MessagePack.Formatters.Devarc.CommonResultFormatter();
+                case 14: return new MessagePack.Formatters.Devarc.CustomSigninResultFormatter();
+                case 15: return new MessagePack.Formatters.Devarc.GoogleCodeResultFormatter();
+                case 16: return new MessagePack.Formatters.Devarc.GoogleRefreshResultFormatter();
+                case 17: return new MessagePack.Formatters.Devarc.GoogleSigninResultFormatter();
+                case 18: return new MessagePack.Formatters.Devarc.PROJECTILEFormatter();
+                case 19: return new MessagePack.Formatters.Devarc.SKILLFormatter();
+                case 20: return new MessagePack.Formatters.Devarc.SOUNDFormatter();
+                case 21: return new MessagePack.Formatters.Devarc.UNIT_HEROFormatter();
+                case 22: return new MessagePack.Formatters.Devarc.UNIT_MONSTERFormatter();
+                case 23: return new MessagePack.Formatters.Devarc.VECTOR3Formatter();
+                case 24: return new MessagePack.Formatters.Game2C.NotifyLoginFormatter();
                 default: return null;
             }
         }

@@ -6,7 +6,6 @@ using System.Net.Http.Headers;
 public class TestAssetScene : BaseScene
 {
     public UIDebugLog debugLog;
-    public CHARACTER_ID charID;
     public SKILL_ID skillID;
     public SOUND_ID soundID;
     public EffectDataPlay effectData1;

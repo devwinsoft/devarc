@@ -28,9 +28,8 @@ namespace MessagePack.Formatters.Game2C
             }
 
             global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(2);
+            writer.WriteArrayHeader(1);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.ErrorType>(formatterResolver).Serialize(ref writer, value.errorCode, options);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.Account>(formatterResolver).Serialize(ref writer, value.account, options);
         }
 
         public global::Game2C.NotifyLogin Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -51,9 +50,6 @@ namespace MessagePack.Formatters.Game2C
                 {
                     case 0:
                         ____result.errorCode = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.ErrorType>(formatterResolver).Deserialize(ref reader, options);
-                        break;
-                    case 1:
-                        ____result.account = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.Account>(formatterResolver).Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();

@@ -9,8 +9,6 @@ namespace Game2C
 	{
 		[Key(0)]
 		public ErrorType            errorCode;
-		[Key(1)]
-		public Account              account = new Account();
 	}
 
 };

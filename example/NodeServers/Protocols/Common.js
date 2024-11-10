@@ -1,3 +1,36 @@
+const STAT_TYPE = {
+	None                 : 0,
+};
+Object.freeze(STAT_TYPE);
+
+class VECTOR3
+{
+	/**
+	 * @param {float} x - float
+	 * @param {float} y - float
+	 * @param {float} z - float
+	 */
+	constructor() {
+		this.x = 0;
+		this.y = 0;
+		this.z = 0;
+	}
+	Init(packet) {
+		this.x = packet[0];
+		this.y = packet[1];
+		this.z = packet[2];
+	}
+	ToArray() {
+		const data =
+		[
+			this.x,
+			this.y,
+			this.z,
+		];
+		return data;
+	}
+}
+
 const ErrorType = {
 	SUCCESS              : 0,
 	UNKNOWN              : 1,
@@ -151,45 +184,14 @@ class GoogleRefreshResult
 	}
 }
 
-const GenderType = {
-	None                 : 0,
-	Male                 : 1,
-	Female               : 2,
-};
-Object.freeze(GenderType);
-
-class Account
-{
-	/**
-	 * @param {string} nickName - string
-	 * @param {int} level - int
-	 */
-	constructor() {
-		this.nickName = "";
-		this.level = 0;
-	}
-	Init(packet) {
-		this.nickName = packet[0];
-		this.level = packet[1];
-	}
-	ToArray() {
-		const data =
-		[
-			this.nickName,
-			this.level,
-		];
-		return data;
-	}
-}
-
 module.exports =
-{ ErrorType
+{ STAT_TYPE
+, VECTOR3
+, ErrorType
 , CommonResult
 , CustomSigninResult
 , GoogleCodeResult
 , GoogleSigninResult
 , GoogleRefreshResult
-, GenderType
-, Account
 }
 

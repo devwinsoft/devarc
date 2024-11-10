@@ -23,6 +23,8 @@ namespace Devarc
             return value;
         }
 
+        public static bool IsValid(this string value) => !string.IsNullOrWhiteSpace(value);
+
         public static Transform FindRecursive(this Transform self, string exactName) => self.FindRecursive(child => child.name == exactName);
 
         public static Transform FindRecursive(this Transform self, Func<Transform, bool> selector)
@@ -42,6 +44,40 @@ namespace Devarc
                 }
             }
             return null;
+        }
+
+        static string[] defaultStringArray = new string[0];
+        public static string[] Split(this string value, string token)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return defaultStringArray;
+            }
+            return value.Split(token);
+        }
+
+        public static T[] Split<T>(this string value, string token) where T : struct
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return new T[0];
+            }
+            var list = value.Split(token, StringSplitOptions.RemoveEmptyEntries);
+            T[] result = new T[list.Length];
+            for (int i = 0; i < list.Length; i++)
+            {
+                System.Enum.TryParse<T>(list[i], out result[i]);
+            }
+            return result;
+        }
+
+        public static float GetFloat(this string[] list, int index)
+        {
+            if (list == null || list.Length <= index)
+                return 0;
+            float result = 0;
+            float.TryParse(list[index], out result);
+            return result;
         }
 
         public static Vector2 ToUIPos(this Vector3 worldPos, Camera worldCam, RectTransform canvasTr)

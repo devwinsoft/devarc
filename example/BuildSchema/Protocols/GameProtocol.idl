@@ -12,7 +12,6 @@ namespace Game2C
     public class NotifyLogin
     {
         public ErrorType errorCode;
-        public Account account;
     }
 }
 

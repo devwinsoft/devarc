@@ -3,6 +3,22 @@ using MessagePack;
 
 namespace Devarc
 {
+	public enum STAT_TYPE
+	{
+		None                 = 0,
+	}
+
+	[MessagePackObject]
+	public partial class VECTOR3 : BaseTableElement<VECTOR3>, ITableElement<VECTOR3>
+	{
+		[Key(0)]
+		public float                x;
+		[Key(1)]
+		public float                y;
+		[Key(2)]
+		public float                z;
+	}
+
 	public enum ErrorType
 	{
 		SUCCESS              = 0,
@@ -69,22 +85,6 @@ namespace Devarc
 		public string               refresh_token;
 		[Key(3)]
 		public int                  expires_in;
-	}
-
-	public enum GenderType
-	{
-		None                 = 0,
-		Male                 = 1,
-		Female               = 2,
-	}
-
-	[MessagePackObject]
-	public partial class Account : BaseTableElement<Account>, ITableElement<Account>
-	{
-		[Key(0)]
-		public string               nickName;
-		[Key(1)]
-		public int                  level;
 	}
 
 };

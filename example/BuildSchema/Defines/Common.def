@@ -1,3 +1,16 @@
+public enum STAT_TYPE
+{
+    None,
+}
+
+public class VECTOR3
+{
+    public float x;
+    public float y;
+    public float z;
+}
+
+
 public enum ErrorType
 {
     SUCCESS          = 0,
@@ -45,17 +58,4 @@ public class GoogleRefreshResult
     public string access_token;
     public string refresh_token;
     public int expires_in;
-}
-
-public enum GenderType
-{
-    None,
-    Male,
-    Female,
-}
-
-public class Account
-{
-    public string nickName;
-    public int level;
 }

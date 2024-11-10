@@ -1,13 +1,12 @@
 const msgpack = require('msgpack-lite');
 const Common = require('./Common.js');
 const ErrorType = Common.ErrorType;
+const VECTOR3 = Common.VECTOR3;
 const CommonResult = Common.CommonResult;
 const CustomSigninResult = Common.CustomSigninResult;
 const GoogleCodeResult = Common.GoogleCodeResult;
 const GoogleSigninResult = Common.GoogleSigninResult;
 const GoogleRefreshResult = Common.GoogleRefreshResult;
-const GenderType = Common.GenderType;
-const Account = Common.Account;
 const mHandlers = {};
 class RequestSession
 {

@@ -40,13 +40,13 @@ namespace Devarc
         }
     }
 
-    public abstract class BaseObject<T> : BaseObject
+    public abstract class BaseObject<ABILITY> : BaseObject
     {
-        public abstract T Ability { get; }
+        public abstract ABILITY Ability { get; }
 
-        protected abstract void onInitLoad(T ability);
+        protected abstract void onInitLoad(ABILITY ability);
 
-        public virtual void Load(T ability)
+        public virtual void Load(ABILITY ability)
         {
             onInitLoad(ability);
             foreach (var controller in mControllers)

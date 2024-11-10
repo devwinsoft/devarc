@@ -28,17 +28,9 @@ namespace MessagePack.Formatters.Devarc
             }
 
             global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(10);
+            writer.WriteArrayHeader(2);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.skill_id, options);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.skillName, options);
-            writer.Write(value.level);
-            writer.Write(value.power);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.Account>(formatterResolver).Serialize(ref writer, value.account, options);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.Account[]>(formatterResolver).Serialize(ref writer, value.classTest, options);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<int[]>(formatterResolver).Serialize(ref writer, value.args, options);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<CBigInt>(formatterResolver).Serialize(ref writer, value.cost, options);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<CFloat>(formatterResolver).Serialize(ref writer, value.cFloat, options);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<CInt>(formatterResolver).Serialize(ref writer, value.cInt, options);
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.name_id, options);
         }
 
         public global::Devarc.SKILL Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -61,31 +53,7 @@ namespace MessagePack.Formatters.Devarc
                         ____result.skill_id = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
                         break;
                     case 1:
-                        ____result.skillName = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
-                        break;
-                    case 2:
-                        ____result.level = reader.ReadInt32();
-                        break;
-                    case 3:
-                        ____result.power = reader.ReadInt32();
-                        break;
-                    case 4:
-                        ____result.account = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.Account>(formatterResolver).Deserialize(ref reader, options);
-                        break;
-                    case 5:
-                        ____result.classTest = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.Account[]>(formatterResolver).Deserialize(ref reader, options);
-                        break;
-                    case 6:
-                        ____result.args = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<int[]>(formatterResolver).Deserialize(ref reader, options);
-                        break;
-                    case 7:
-                        ____result.cost = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<CBigInt>(formatterResolver).Deserialize(ref reader, options);
-                        break;
-                    case 8:
-                        ____result.cFloat = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<CFloat>(formatterResolver).Deserialize(ref reader, options);
-                        break;
-                    case 9:
-                        ____result.cInt = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<CInt>(formatterResolver).Deserialize(ref reader, options);
+                        ____result.name_id = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();

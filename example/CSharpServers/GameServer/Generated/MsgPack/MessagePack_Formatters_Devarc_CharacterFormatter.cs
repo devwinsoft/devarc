@@ -32,7 +32,7 @@ namespace MessagePack.Formatters.Devarc
             writer.Write(value.character_id);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.charName, options);
             writer.Write(value.age);
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.GenderType>(formatterResolver).Serialize(ref writer, value.gender, options);
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<GenderType>(formatterResolver).Serialize(ref writer, value.gender, options);
         }
 
         public global::Devarc.CHARACTER Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -61,7 +61,7 @@ namespace MessagePack.Formatters.Devarc
                         ____result.age = reader.ReadInt32();
                         break;
                     case 3:
-                        ____result.gender = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Devarc.GenderType>(formatterResolver).Deserialize(ref reader, options);
+                        ____result.gender = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<GenderType>(formatterResolver).Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();
