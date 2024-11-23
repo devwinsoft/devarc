@@ -18,6 +18,7 @@
 //
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Channels;
 using UnityEngine;
 
 
@@ -37,7 +38,6 @@ namespace Devarc
         public abstract string sound_id { get; }
         public abstract string key { get; }
         public abstract string path { get; }
-        public abstract float volume { get; }
         public abstract float cooltime { get; }
         public abstract bool loop { get; }
         public abstract float area_close { get; }
@@ -53,7 +53,6 @@ namespace Devarc
         public override string sound_id => data.sound_id;
         public override string key => addressKey;
         public override string path => data.path;
-        public override float volume => data.volume;
         public override float cooltime => data.cooltime;
         public override bool loop => data.loop;
         public override float area_close => data.area_close;
@@ -68,7 +67,6 @@ namespace Devarc
         public override string sound_id => data.sound_id;
         public override string key => data.key;
         public override string path => data.path;
-        public override float volume => data.volume;
         public override float cooltime => data.cooltime;
         public override bool loop => data.loop;
         public override float area_close => data.area_close;
@@ -80,6 +78,19 @@ namespace Devarc
     {
         public SoundChannel[] Channels => mChannels;
         SoundChannel[] mChannels = new SoundChannel[(int)CHANNEL.MAX];
+
+        public SoundChannel this[CHANNEL channel]
+        {
+            get
+            {
+                int index = (int)channel;
+                if (index < 0 || index >= mChannels.Length)
+                {
+                    return null;
+                }
+                return mChannels[index];
+            }
+        }
 
         Dictionary<string, List<SoundData>> mSoundDatas = new Dictionary<string, List<SoundData>>();
 
@@ -205,37 +216,37 @@ namespace Devarc
             }
         }
 
-        public bool IsPlaying(CHANNEL channel)
+        public bool IsMuted(CHANNEL channel)
         {
-            return mChannels[(int)channel].IsPlaying;
+            return this[channel].IsMuted;
         }
 
-        public int PlaySound(CHANNEL channel, int index)
+        public bool IsPlaying(CHANNEL channel)
         {
-            {
-                var tableData = Table.SOUND_BUNDLE.Get(index);
-                if (tableData != null)
-                    return PlaySound(channel, tableData.sound_id, 0, 0f, Vector3.zero);
-            }
-            {
-                var tableData = Table.SOUND_RESOURCE.Get(index);
-                if (tableData != null)
-                    return PlaySound(channel, tableData.sound_id, 0, 0f, Vector3.zero);
-            }
-            return 0;
+            return this[channel].IsPlaying;
         }
 
         public int PlaySound(CHANNEL channel, string soundID)
         {
-            return PlaySound(channel, soundID, 0, 0f, Vector3.zero);
+            return PlaySound(channel, soundID, 1f, 0, 0f, Vector3.zero);
+        }
+
+        public int PlaySound(CHANNEL channel, string soundID, float volumn)
+        {
+            return PlaySound(channel, soundID, volumn, 0, 0f, Vector3.zero);
         }
 
         public int PlaySound(CHANNEL channel, string soundID, Vector3 pos)
         {
-            return PlaySound(channel, soundID, 0, 0f, pos);
+            return PlaySound(channel, soundID, 1f, 0, 0f, pos);
         }
 
-        public int PlaySound(CHANNEL channel, string soundID, int groupID, float fadeIn, Vector3 pos)
+        public int PlaySound(CHANNEL channel, string soundID, float volumn, Vector3 pos)
+        {
+            return PlaySound(channel, soundID, volumn, 0, 0f, pos);
+        }
+
+        public int PlaySound(CHANNEL channel, string soundID, float volumn, int groupID, float fadingTime, Vector3 pos)
         {
             if (string.IsNullOrEmpty(soundID))
                 return 0;
@@ -254,7 +265,11 @@ namespace Devarc
                 Debug.LogError($"[SoundManager] Cannot find audio clip: sound_id={soundID}, path={soundData.path}");
                 return 0;
             }
-            var obj = mChannels[(int)channel];
+            var obj = this[channel];
+            if (obj == null)
+            {
+                return 0;
+            }
             if (obj.IsCooltime(groupID, soundData.sound_id))
             {
                 return 0;
@@ -263,23 +278,27 @@ namespace Devarc
             {
                 obj.StartCooltime(groupID, soundID, soundData.cooltime);
             }
-            return obj.Play(groupID, clip, soundData.volume, soundData, 0f, fadeIn, pos);
+            return obj.Play(groupID, clip, volumn, soundData, 0f, fadingTime, pos);
         }
 
-
-        public void FadeOut(CHANNEL channel, float _fadeOutTime)
+        public void Mute(CHANNEL channel, bool muted)
         {
-            mChannels[(int)channel].FadeOutAll(_fadeOutTime);
+            this[channel]?.Mute(muted);
+        }
+
+        public void FadeOut(CHANNEL channel, float _fadingTime)
+        {
+            this[channel]?.FadeOutAll(_fadingTime);
         }
 
         public void Stop(CHANNEL channel, int _soundSEQ)
         {
-            mChannels[(int)channel].Stop(_soundSEQ);
+            this[channel]?.Stop(_soundSEQ);
         }
 
         public void StopAll(CHANNEL channel)
         {
-            mChannels[(int)channel].StopAll();
+            this[channel]?.StopAll();
         }
 
         void createChannel(CHANNEL _channel, int _pool, bool _3d)

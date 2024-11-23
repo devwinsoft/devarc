@@ -24,9 +24,13 @@ namespace Devarc
 {
     public class SoundChannel : MonoBehaviour
     {
+        public bool IsMuted => mMuted;
+        bool mMuted = false;
+
         CHANNEL mChannel;
         bool mIs3d;
         int mNextSEQ = 1;
+
         List<SoundPlay> mPool = new List<SoundPlay>();
         List<SoundPlay> mPlayList = new List<SoundPlay>();
         Dictionary<int, SoundPlay> mPlayDict = new Dictionary<int, SoundPlay>();
@@ -136,7 +140,7 @@ namespace Devarc
         }
 
 
-        public int Play(int groupID, AudioClip clip, float volumn, SoundData soundData, float wait, float fadeIn, Vector3 pos)
+        public int Play(int groupID, AudioClip clip, float volumn, SoundData soundData, float wait, float fadingTime, Vector3 pos)
         {
             SoundPlay obj = null;
             if (mPool.Count > 0)
@@ -156,7 +160,7 @@ namespace Devarc
             }
             obj.transform.position = pos;
             obj.gameObject.SetActive(true);
-            obj.Init(generateSoundSEQ(), soundData.sound_id, groupID, clip, volumn, soundData.loop, wait, fadeIn);
+            obj.Init(generateSoundSEQ(), soundData.sound_id, groupID, clip, volumn, soundData.loop, mMuted, wait, fadingTime);
             if (mIs3d)
             {
                 obj.mAudio.minDistance = soundData.area_close;
@@ -198,6 +202,16 @@ namespace Devarc
             {
                 SoundPlay sound = mPlayList[i];
                 stop(sound);
+            }
+        }
+
+        public void Mute(bool muted)
+        {
+            mMuted = muted;
+            for (int i = mPlayList.Count - 1; i >= 0; i--)
+            {
+                SoundPlay sound = mPlayList[i];
+                sound.Mute(muted);
             }
         }
 

@@ -1,5 +1,5 @@
 {"list":[
-{"index":10001,"sound_id":"SKILL_ATTACK","path":"Sounds/snd_explosion","loop":"FALSE","volume":1,"cooltime":0.05,"area_close":20,"area_far":50}
-,{ "index":10002,"sound_id":"SKILL_HEAL","path":"Sounds/snd_heal","loop":"FALSE","volume":1,"cooltime":0.05,"area_close":20,"area_far":50}
-,{ "index":10003,"sound_id":"VOICE_DAMAGE","path":"Sounds/snd_explosion","loop":"FALSE","volume":1,"cooltime":0.05,"area_close":20,"area_far":50}
+{"index":10001,"sound_id":"SKILL_ATTACK","path":"Sounds/snd_explosion","loop":"FALSE","cooltime":0.05,"area_close":20,"area_far":50}
+,{ "index":10002,"sound_id":"SKILL_HEAL","path":"Sounds/snd_heal","loop":"FALSE","cooltime":0.05,"area_close":20,"area_far":50}
+,{ "index":10003,"sound_id":"VOICE_DAMAGE","path":"Sounds/snd_explosion","loop":"FALSE","cooltime":0.05,"area_close":20,"area_far":50}
 ]}

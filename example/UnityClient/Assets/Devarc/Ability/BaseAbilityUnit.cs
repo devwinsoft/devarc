@@ -26,14 +26,6 @@ namespace Devarc
         protected int mLevel = 0;
 
         public abstract UNIT tableData { get; }
-        public abstract BaseAbilityUnit clone();
-
-        public BaseAbilityUnit Clone()
-        {
-            BaseAbilityUnit obj = clone();
-            obj.mUID = mUID;
-            obj.mParentUID = mParentUID;
-            return obj;
-        }
+        public abstract BaseAbilityUnit Clone();
     }
 }

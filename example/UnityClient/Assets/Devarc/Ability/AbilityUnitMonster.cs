@@ -9,7 +9,7 @@ namespace Devarc
         public override UNIT tableData => mTable;
         UNIT_MONSTER mTable = null;
 
-        public override BaseAbilityUnit clone()
+        public override BaseAbilityUnit Clone()
         {
             var obj = new AbilityUnitMonster();
             obj.mUID = mUID;

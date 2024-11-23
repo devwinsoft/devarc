@@ -16,6 +16,7 @@
 //
 // @author Hyoung Joon, Kim (maoshy@nate.com)
 //
+using System.Threading;
 using UnityEngine;
 
 namespace Devarc
@@ -53,19 +54,21 @@ namespace Devarc
 
         public AudioSource mAudio;
 
+        bool mMuted;
         float mVolumn;
         float mWaitTime;
         float mFadingTime; // fade-in / fade-out time
         float mElapsedTime = 0f;
 
-        public void Init(int _soundSEQ, string _soundID, int _group, AudioClip _clip, float _volumn, bool _loop, float _waitTime, float _fadeInTime)
+        public void Init(int _soundSEQ, string _soundID, int _group, AudioClip _clip, float _volumn, bool _loop, bool _muted, float _waitTime, float _fadingTime)
         {
             mSoundSEQ = _soundSEQ;
             mSoundID = _soundID;
             mGroupID = _group;
+            mMuted = _muted;
             mVolumn = _volumn;
             mWaitTime = _waitTime;
-            mFadingTime = _fadeInTime;
+            mFadingTime = _fadingTime;
             mAudio.clip = _clip;
             mAudio.loop = _loop;
             mAudio.volume = _volumn;
@@ -91,17 +94,22 @@ namespace Devarc
             else
             {
                 State = SOUND_PLAY_STATE.PLAY;
-                mAudio.volume = mVolumn;
+                mAudio.volume = mMuted ? 0f : mVolumn;
                 mAudio.Play();
             }
         }
-
 
         public void FadeOut(float _fadeOutTime)
         {
             State = SOUND_PLAY_STATE.FADE_OUT;
             mFadingTime = _fadeOutTime;
-            mAudio.volume = mVolumn;
+            mAudio.volume = mMuted ? 0f : mVolumn;
+        }
+
+        public void Mute(bool muted)
+        {
+            mMuted = muted;
+            mAudio.volume = mMuted ? 0f : mVolumn;
         }
 
         public void Stop()
@@ -129,7 +137,7 @@ namespace Devarc
                     if (mFadingTime < mElapsedTime)
                     {
                         State = SOUND_PLAY_STATE.PLAY;
-                        mAudio.volume = mVolumn;
+                        mAudio.volume = mMuted ? 0f : mVolumn;
                     }
                     else
                     {
@@ -139,7 +147,10 @@ namespace Devarc
                 case SOUND_PLAY_STATE.FADE_OUT:
                     if (mFadingTime < mElapsedTime)
                         return true;
-                    mAudio.volume = mVolumn * Mathf.Max(0f, 1f - mElapsedTime / mFadingTime);
+                    if (mMuted)
+                        mAudio.volume = 0f;
+                    else
+                        mAudio.volume = mVolumn * Mathf.Max(0f, 1f - mElapsedTime / mFadingTime);
                     break;
                 case SOUND_PLAY_STATE.PLAY:
                     if (Application.isFocused)

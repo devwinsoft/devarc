@@ -9,7 +9,6 @@ namespace Devarc
 		public string               sound_id;
 		public string               path;
 		public string               loop;
-		public string               volume;
 		public string               cooltime;
 		public string               area_close;
 		public string               area_far;
@@ -18,7 +17,6 @@ namespace Devarc
 		public virtual string       get_sound_id() => (sound_id);
 		public virtual string       get_path() => (path);
 		public virtual bool         get_loop() => GetBool(loop);
-		public virtual float        get_volume() => GetFloat(volume);
 		public virtual float        get_cooltime() => GetFloat(cooltime);
 		public virtual float        get_area_close() => GetFloat(area_close);
 		public virtual float        get_area_far() => GetFloat(area_far);
@@ -43,12 +41,10 @@ namespace Devarc
 		[Key(3)]
 		public bool                 loop;
 		[Key(4)]
-		public float                volume;
-		[Key(5)]
 		public float                cooltime;
-		[Key(6)]
+		[Key(5)]
 		public float                area_close;
-		[Key(7)]
+		[Key(6)]
 		public float                area_far;
 
 		public void Initialize(_SOUND_BUNDLE data)
@@ -57,7 +53,6 @@ namespace Devarc
 			sound_id = data.get_sound_id();
 			path = data.get_path();
 			loop = data.get_loop();
-			volume = data.get_volume();
 			cooltime = data.get_cooltime();
 			area_close = data.get_area_close();
 			area_far = data.get_area_far();
@@ -72,7 +67,6 @@ namespace Devarc
 		public string               sound_id;
 		public string               path;
 		public string               loop;
-		public string               volume;
 		public string               cooltime;
 		public string               area_close;
 		public string               area_far;
@@ -82,7 +76,6 @@ namespace Devarc
 		public virtual string       get_sound_id() => (sound_id);
 		public virtual string       get_path() => (path);
 		public virtual bool         get_loop() => GetBool(loop);
-		public virtual float        get_volume() => GetFloat(volume);
 		public virtual float        get_cooltime() => GetFloat(cooltime);
 		public virtual float        get_area_close() => GetFloat(area_close);
 		public virtual float        get_area_far() => GetFloat(area_far);
@@ -109,12 +102,10 @@ namespace Devarc
 		[Key(4)]
 		public bool                 loop;
 		[Key(5)]
-		public float                volume;
-		[Key(6)]
 		public float                cooltime;
-		[Key(7)]
+		[Key(6)]
 		public float                area_close;
-		[Key(8)]
+		[Key(7)]
 		public float                area_far;
 
 		public void Initialize(_SOUND_RESOURCE data)
@@ -124,7 +115,6 @@ namespace Devarc
 			sound_id = data.get_sound_id();
 			path = data.get_path();
 			loop = data.get_loop();
-			volume = data.get_volume();
 			cooltime = data.get_cooltime();
 			area_close = data.get_area_close();
 			area_far = data.get_area_far();

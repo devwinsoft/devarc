@@ -64,6 +64,17 @@ public class TestAssetScene : BaseScene
         SoundManager.Instance.PlaySound(CHANNEL.EFFECT, soundID);
     }
 
+    public void OnClick_Mute()
+    {
+        if (SoundManager.Instance.IsMuted(CHANNEL.EFFECT))
+        {
+            SoundManager.Instance.Mute(CHANNEL.EFFECT, false);
+        }
+        else
+        {
+            SoundManager.Instance.Mute(CHANNEL.EFFECT, true);
+        }
+    }
 
     public void OnClick_GotoNetworkTest()
     {
