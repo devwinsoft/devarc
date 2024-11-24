@@ -41,6 +41,7 @@ namespace Devarc
         public static bool IsCreated() => mInstance != null;
 
         static T mInstance;
+        protected Transform mTransform;
 
         public static T Create()
         {
@@ -90,6 +91,7 @@ namespace Devarc
         {
             DontDestroyOnLoad(gameObject);
             mInstance = this as T;
+            mTransform = transform;
             onAwake();
         }
 
