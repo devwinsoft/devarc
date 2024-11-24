@@ -1,112 +1,138 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Devarc;
 
-public class UIManager : MonoSingleton<UIManager>
+namespace Devarc
 {
-    List<UIFrame> mFrames = new List<UIFrame>();
-    Dictionary<Type, List<UIPanel>> mPanels = new Dictionary<Type, List<UIPanel>>();
-    bool mLockCursor = false;
-    bool mInitialized = false;
-
-    public void Init()
+    public class UIManager : PrefabSingleton<UIManager>
     {
-        if (mInitialized)
-            return;
-        mInitialized = true;
-        foreach (var frame in mFrames)
-        {
-            frame.Init();
-        }
-    }
+        static List<UILayout> msLayouts = new List<UILayout>();
 
-    public void ShowCursor(bool value)
-    {
-        if (mLockCursor == true)
+        Dictionary<Type, List<UIPanel>> mPanels = new Dictionary<Type, List<UIPanel>>();
+        bool mLockCursor = false;
+        bool mInitialized = false;
+
+        public void Init()
         {
-            return;
+            if (mInitialized)
+                return;
+            mInitialized = true;
+
+            foreach (var obj in msLayouts)
+            {
+                obj.Init();
+            }
         }
 
-        if (value)
+        public void ShowCursor(bool value)
         {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            if (mLockCursor == true)
+            {
+                return;
+            }
+
+            if (value)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
-        else
+
+
+        public UILayout CreateLayout(string asset_name)
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            UILayout obj = AssetManager.Instance.CreateObject<UILayout>(asset_name, mTransform);
+            if (mInitialized)
+            {
+                obj.Init();
+            }
+            msLayouts.Add(obj);
+            return obj;
         }
-    }
 
-
-    public UIFrame CreateFrame(string asset_name)
-    {
-        UIFrame obj = AssetManager.Instance.CreateObject<UIFrame>(asset_name, mTransform);
-        return obj;
-    }
-
-    public UIFrame CreateFrame<T>(string asset_name, Transform attachTr)
-    {
-        var prefab = AssetManager.Instance.GetAsset<GameObject>(asset_name);
-        if (prefab == null) return null;
-
-        var prefabTr = prefab.GetComponent<RectTransform>();
-        if (prefabTr == null) return null;
-
-        UIFrame frame = AssetManager.Instance.CreateObject<UIFrame>(asset_name, mTransform);
-        var rectTransform = frame.GetComponent<RectTransform>();
-        rectTransform.SetParent(attachTr);
-        rectTransform.anchoredPosition = prefabTr.anchoredPosition;
-        rectTransform.localScale = Vector3.one;
-
-        mFrames.Add(frame);
-        if (mInitialized)
+        public void RegisterLayout(UILayout obj)
         {
-            frame.Init();
+            if (mInitialized)
+            {
+                obj.Init();
+            }
+            msLayouts.Add(obj);
         }
-        return frame;
-    }
 
-    public void RemoveFrame(UIFrame frame)
-    {
-        mFrames.Remove(frame);
-        frame.Clear();
-        GameObject.Destroy(frame.gameObject);
-    }
-
-    public T Pop<T>(string asset_name) where T : UIPanel
-    {
-        T obj = null;
-        List<UIPanel> list = null;
-        if (mPanels.TryGetValue(typeof(T), out list) && list.Count > 0)
+        public void RemoveLayout(UILayout obj)
         {
-            obj = list[0] as T;
-            list.RemoveAt(0);
+            obj.Clear();
+            msLayouts.Remove(obj);
+            Destroy(obj.gameObject);
         }
-        else
-        {
-            obj = AssetManager.Instance.CreateObject<T>(asset_name, mTransform);
-        }
-        return obj;
-    }
 
-    public void Push<T>(T obj) where T : UIPanel
-    {
-        var type = typeof(T);
-        Push(type, obj);
-    }
-
-    public void Push(Type type, UIPanel obj)
-    {
-        List<UIPanel> list = null;
-        if (mPanels.TryGetValue(type, out list) == false)
+        public UIFrame CreateFrame<T>(string asset_name, Transform attachTr)
         {
-            list = new List<UIPanel>(32);
-            mPanels.Add(type, list);
+            var prefab = AssetManager.Instance.GetAsset<GameObject>(asset_name);
+            if (prefab == null) return null;
+
+            var prefabFrame = prefab.GetComponent<UIFrame>();
+            if (prefabFrame == null) return null;
+
+            var prefabTr = prefab.GetComponent<RectTransform>();
+            if (prefabTr == null) return null;
+
+            var obj = Instantiate(prefab, attachTr);
+            var frame = obj.GetComponent<UIFrame>();
+            var rectTransform = frame.GetComponent<RectTransform>();
+            rectTransform.anchoredPosition = prefabTr.anchoredPosition;
+            rectTransform.localScale = Vector3.one;
+
+            if (mInitialized)
+            {
+                frame.Init();
+            }
+            return frame;
         }
-        obj.Clear();
-        list.Add(obj);
+
+        public void RemoveFrame(UIFrame frame)
+        {
+            frame.Clear();
+            GameObject.Destroy(frame.gameObject);
+        }
+
+        public T Pop<T>(string asset_name) where T : UIPanel
+        {
+            T obj = null;
+            List<UIPanel> list = null;
+            if (mPanels.TryGetValue(typeof(T), out list) && list.Count > 0)
+            {
+                obj = list[0] as T;
+                list.RemoveAt(0);
+            }
+            else
+            {
+                obj = AssetManager.Instance.CreateObject<T>(asset_name, mTransform);
+            }
+            return obj;
+        }
+
+        public void Push<T>(T obj) where T : UIPanel
+        {
+            var type = typeof(T);
+            Push(type, obj);
+        }
+
+        public void Push(Type type, UIPanel obj)
+        {
+            List<UIPanel> list = null;
+            if (mPanels.TryGetValue(type, out list) == false)
+            {
+                list = new List<UIPanel>(32);
+                mPanels.Add(type, list);
+            }
+            obj.Clear();
+            list.Add(obj);
+        }
     }
 }
