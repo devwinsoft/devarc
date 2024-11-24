@@ -28,11 +28,8 @@ namespace Devarc
     }
 
 
-    public class DownloadManager : MonoSingleton<DownloadManager>
+    public abstract class BaseDownloadManager : MonoSingleton<DownloadManager>
     {
-        public event DownloadPatchCallback OnPatch;
-        public event DownloadProgressCallback OnProgress;
-        public event DownloadResultCallback OnResult;
         public event DownloadErrorCallback OnError;
 
         PatchInfo mPathInfo = new PatchInfo();
@@ -45,18 +42,17 @@ namespace Devarc
                 mPatchList.Add(addressableKey);
         }
 
-
-        public void BeginPatch()
+        public void Patch(DownloadPatchCallback callback)
         {
-            StartCoroutine(beginPatch());
+            StartCoroutine(PatchProc(callback));
         }
 
-        IEnumerator beginPatch()
+        public IEnumerator PatchProc(DownloadPatchCallback callback)
         {
             if (mPatchList.Count == 0)
             {
                 Debug.LogWarning($"[DownloadManager::BeginPatch] Patch list is empty.");
-                OnPatch?.Invoke(mPathInfo);
+                callback?.Invoke(mPathInfo);
                 yield break;
             }
 
@@ -82,21 +78,21 @@ namespace Devarc
                 }
                 Addressables.Release(getDownloadSize);
             }
-            OnPatch?.Invoke(mPathInfo);
+            callback?.Invoke(mPathInfo);
         }
 
 
-        public void BeginDownload()
+        public void Download(DownloadProgressCallback progress, DownloadResultCallback callback)
         {
-            StartCoroutine(beginDownload());
+            StartCoroutine(DownloadProc(progress, callback));
         }
 
-        IEnumerator beginDownload()
+        public IEnumerator DownloadProc(DownloadProgressCallback progress, DownloadResultCallback result)
         {
             if (mPathInfo.totalSize == 0)
             {
                 Debug.Log($"[DownloadManager::BeginDownload] There is no data to patch.");
-                OnResult?.Invoke();
+                result?.Invoke();
                 yield break;
             }
 
@@ -116,12 +112,15 @@ namespace Devarc
                 }
                 Addressables.Release(downloadHandle);
 
-                float progress = (float)downloadSize / (float)mPathInfo.totalSize;
-                OnProgress?.Invoke(progress);
+                float v = (float)downloadSize / (float)mPathInfo.totalSize;
+                progress?.Invoke(v);
             }
-            OnResult?.Invoke();
+            result?.Invoke();
         }
+    }
 
+    public partial class DownloadManager : BaseDownloadManager
+    {
     }
 }
 

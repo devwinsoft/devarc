@@ -40,13 +40,25 @@ public class TestAssetScene : BaseScene
         SoundManager.Instance.UnloadResource();
 
         // Unload bundle assets...
-        AppManager.Instance.UnloadBundles();
+        DownloadManager.Instance.UnloadBundles();
     }
 
 
     public void OnClick_Download()
     {
-        DownloadManager.Instance.BeginPatch();
+        DownloadManager.Instance.Patch((info) =>
+        {
+            Debug.LogFormat("Start to download contents: {0:N0} kb", (float)(info.totalSize / 1000f));
+            DownloadManager.Instance.Download(
+                (progress) =>
+                {
+                },
+                () =>
+                {
+                    Debug.Log($"Download completed.");
+                    StartCoroutine(DownloadManager.Instance.LoadBundles());
+                });
+        });
     }
 
     public void OnClick_PlayEffect1()
