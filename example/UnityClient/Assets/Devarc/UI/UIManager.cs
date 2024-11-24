@@ -8,9 +8,17 @@ namespace Devarc
     {
         static List<UILayout> msLayouts = new List<UILayout>();
 
+        public Camera uiCamera => mCamera;
+        Camera mCamera = null;
         Dictionary<Type, List<UIPanel>> mPanels = new Dictionary<Type, List<UIPanel>>();
         bool mLockCursor = false;
         bool mInitialized = false;
+
+        protected override void onAwake()
+        {
+            base.onAwake();
+            mCamera = GetComponentInChildren<Camera>();
+        }
 
         public void Init()
         {
