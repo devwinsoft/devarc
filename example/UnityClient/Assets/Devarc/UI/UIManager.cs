@@ -1,15 +1,17 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Devarc
 {
     public class UIManager : PrefabSingleton<UIManager>
     {
-        static List<UILayout> msLayouts = new List<UILayout>();
+        static List<UICanvas> mLayouts = new List<UICanvas>();
 
         public Camera uiCamera => mCamera;
         Camera mCamera = null;
+        RectTransform mRectTransform;
         Dictionary<Type, List<UIPanel>> mPanels = new Dictionary<Type, List<UIPanel>>();
         bool mLockCursor = false;
         bool mInitialized = false;
@@ -18,6 +20,7 @@ namespace Devarc
         {
             base.onAwake();
             mCamera = GetComponentInChildren<Camera>();
+            mRectTransform = gameObject.SafeGetComponent<RectTransform>();
         }
 
         public void Init()
@@ -26,7 +29,7 @@ namespace Devarc
                 return;
             mInitialized = true;
 
-            foreach (var obj in msLayouts)
+            foreach (var obj in mLayouts)
             {
                 obj.Init();
             }
@@ -52,64 +55,34 @@ namespace Devarc
         }
 
 
-        public UILayout CreateLayout(string asset_name)
+        public UICanvas CreateCanvas(string asset_name)
         {
-            UILayout obj = AssetManager.Instance.CreateObject<UILayout>(asset_name, mTransform);
+            UICanvas obj = AssetManager.Instance.CreateObject<UICanvas>(asset_name, mTransform);
             if (mInitialized)
             {
                 obj.Init();
             }
-            msLayouts.Add(obj);
+            mLayouts.Add(obj);
             return obj;
         }
 
-        public void RegisterLayout(UILayout obj)
+        public void RegisterCanvas(UICanvas obj)
         {
             if (mInitialized)
             {
                 obj.Init();
             }
-            msLayouts.Add(obj);
+            mLayouts.Add(obj);
         }
 
-        public void RemoveLayout(UILayout obj)
+        public void Remove(UICanvas obj)
         {
             obj.Clear();
-            msLayouts.Remove(obj);
+            mLayouts.Remove(obj);
             Destroy(obj.gameObject);
         }
 
-        public UIFrame CreateFrame<T>(string asset_name, Transform attachTr)
-        {
-            var prefab = AssetManager.Instance.GetAsset<GameObject>(asset_name);
-            if (prefab == null) return null;
-
-            var prefabFrame = prefab.GetComponent<UIFrame>();
-            if (prefabFrame == null) return null;
-
-            var prefabTr = prefab.GetComponent<RectTransform>();
-            if (prefabTr == null) return null;
-
-            var obj = Instantiate(prefab, attachTr);
-            var frame = obj.GetComponent<UIFrame>();
-            var rectTransform = frame.GetComponent<RectTransform>();
-            rectTransform.anchoredPosition = prefabTr.anchoredPosition;
-            rectTransform.localScale = Vector3.one;
-
-            if (mInitialized)
-            {
-                frame.Init();
-            }
-            return frame;
-        }
-
-        public void RemoveFrame(UIFrame frame)
-        {
-            frame.Clear();
-            GameObject.Destroy(frame.gameObject);
-        }
-
-        public T Pop<T>(string asset_name) where T : UIPanel
+        public T CreatePanel<T>(string asset_name) where T : UIPanel
         {
             T obj = null;
             List<UIPanel> list = null;
@@ -122,16 +95,17 @@ namespace Devarc
             {
                 obj = AssetManager.Instance.CreateObject<T>(asset_name, mTransform);
             }
+            obj.transform.localScale = Vector3.one;
             return obj;
         }
 
-        public void Push<T>(T obj) where T : UIPanel
+        public void Remove<T>(T obj) where T : UIPanel
         {
             var type = typeof(T);
-            Push(type, obj);
+            Remove(type, obj);
         }
 
-        public void Push(Type type, UIPanel obj)
+        public void Remove(Type type, UIPanel obj)
         {
             List<UIPanel> list = null;
             if (mPanels.TryGetValue(type, out list) == false)
@@ -141,6 +115,8 @@ namespace Devarc
             }
             obj.Clear();
             list.Add(obj);
+            obj.rectTransform.SetParent(transform);
+            obj.gameObject.SetActive(false);
         }
     }
 }

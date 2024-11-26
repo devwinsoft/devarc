@@ -19,7 +19,7 @@ public class UI_Button : MonoBehaviour
         entry_down.eventID = EventTriggerType.PointerDown;
         entry_down.callback.AddListener((evt) =>
         {
-            mRectTransform.localScale = 0.875f * mInitScale;
+            mRectTransform.localScale = 0.925f * mInitScale;
         });
         mTrigger.triggers.Add(entry_down);
 
