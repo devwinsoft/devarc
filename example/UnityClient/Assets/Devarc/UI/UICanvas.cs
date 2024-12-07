@@ -5,10 +5,12 @@ using UnityEngine;
 
 namespace Devarc
 {
-    public abstract class UICanvas : PrefabSingleton<UICanvas>
+    public abstract class UICanvas : MonoBehaviour
     {
         public abstract void Clear();
-        public abstract void onInit();
+        protected abstract void onInit();
+        protected abstract void onAwake();
+        protected abstract void onDestroy();
 
         public Canvas canvas => mCanvas;
         Canvas mCanvas;
@@ -71,6 +73,7 @@ namespace Devarc
         private void Awake()
         {
             mCanvas = GetComponent<Canvas>();
+            onAwake();
         }
 
         private void Start()
@@ -91,9 +94,78 @@ namespace Devarc
 
         private void OnDestroy()
         {
+            onDestroy();
             if (UIManager.IsCreated())
             {
                 UIManager.Instance.Remove(this);
+            }
+        }
+    }
+
+
+    public abstract class UICanvas<T> : UICanvas where T : UICanvas
+    {
+        public static T Instance => mInstance;
+        static T mInstance;
+        protected Transform mTransform;
+
+        public static bool IsCreated() => mInstance != null;
+
+        public static T CreateFromResource(string resourcePath)
+        {
+            if (IsCreated())
+            {
+                return mInstance;
+            }
+
+            var prefab = Resources.Load<GameObject>(resourcePath);
+            if (prefab == null)
+            {
+                Debug.LogError($"[{typeof(T).Name}::Create] Cannot find prefab: resourcePath={resourcePath}");
+                return null;
+            }
+            var obj = Instantiate(prefab);
+            var compo = obj.GetComponent<T>();
+            return compo;
+        }
+
+        public static T Create(string assetName)
+        {
+            if (IsCreated())
+            {
+                return mInstance;
+            }
+
+            var prefab = AssetManager.Instance.GetAsset<GameObject>(assetName);
+            if (prefab == null)
+            {
+                Debug.LogError($"[{typeof(T).Name}::Create] Cannot find prefab: fileName={assetName}");
+                return null;
+            }
+            var obj = Instantiate(prefab);
+            var compo = obj.GetComponent<T>();
+            return compo;
+        }
+
+        public static void Delete()
+        {
+            if (mInstance != null)
+            {
+                GameObject.Destroy(mInstance.gameObject);
+            }
+        }
+
+        protected override void onAwake()
+        {
+            mInstance = this as T;
+            mTransform = transform;
+        }
+
+        protected override void onDestroy()
+        {
+            if (mInstance == this)
+            {
+                mInstance = null;
             }
         }
     }

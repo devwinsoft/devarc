@@ -5,5 +5,10 @@ using UnityEngine;
 public abstract class UIFrame : MonoBehaviour
 {
     public abstract void Clear();
-    public abstract void Init();
+    protected abstract void onInit();
+
+    public void Init()
+    {
+        onInit();
+    }
 }
