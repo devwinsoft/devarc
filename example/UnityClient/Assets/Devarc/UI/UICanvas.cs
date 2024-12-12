@@ -27,7 +27,7 @@ namespace Devarc
             foreach (var frame in list)
             {
                 mFrames.Add(frame);
-                frame.Init();
+                frame.Init(this);
             }
             onInit();
         }
@@ -58,7 +58,7 @@ namespace Devarc
             }
             if (mInitialized)
             {
-                frame.Init();
+                frame.Init(this);
             }
             return frame;
         }
@@ -80,14 +80,6 @@ namespace Devarc
         {
             if (UIManager.IsCreated())
             {
-                switch (mCanvas.renderMode)
-                {
-                    case RenderMode.ScreenSpaceCamera:
-                        mCanvas.worldCamera = UIManager.Instance.uiCamera;
-                        break;
-                    default:
-                        break;
-                }
                 UIManager.Instance.RegisterCanvas(this);
             }
         }
