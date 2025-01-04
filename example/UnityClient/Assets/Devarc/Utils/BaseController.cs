@@ -12,6 +12,12 @@ namespace Devarc
         protected abstract void onInitAwake();
         protected abstract void onInitLoad();
         protected abstract void onPlayStart();
+        protected virtual void onLateUpdate() { }
+
+        private void LateUpdate()
+        {
+            onLateUpdate();
+        }
 
         public void InitLoad()
         {

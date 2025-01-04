@@ -1,14 +1,20 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Devarc
 {
-    public abstract class BaseFsmController<STATE, FSM, OWNER> : BaseController<OWNER>
+    public abstract class SimpleFsmController<STATE, FSM, OWNER> : MonoBehaviour
         where STATE : struct, IConvertible
-        where FSM : BaseFsmObject<STATE, OWNER>
-        where OWNER : BaseObject
+        where FSM : SimpleFsmObject<STATE, OWNER>
+        where OWNER : MonoBehaviour 
     {
+        protected abstract void onInit();
+
+        public OWNER Owner => mOwner;
+        OWNER mOwner = null;
+
         public STATE CurrentStateType => mCurrentState != null ? mCurrentState.State : default(STATE);
         public FSM CurrentState => mCurrentState;
         FSM mCurrentState = null;
@@ -22,15 +28,21 @@ namespace Devarc
         List<TRANS> mChangingStates = new List<TRANS>();
         bool mIsChanging = false;
 
-        public override void Clear()
+        void LateUpdate()
+        {
+            mCurrentState?.Tick();
+        }
+
+        public virtual void Clear()
         {
             mCurrentState = null;
             mIsChanging = false;
         }
 
-        protected override void onLateUpdate()
+        public void Init(OWNER owner)
         {
-            mCurrentState?.Tick();
+            mOwner = owner;
+            onInit();
         }
 
         public FSM Get(STATE state)
@@ -49,11 +61,11 @@ namespace Devarc
             updateState();
         }
 
-        protected void registerState(OWNER owner, FSM state)
+        protected void registerState(FSM state)
         {
             if (mStates.TryAdd(state.State, state))
             {
-                state.Init(owner);
+                state.Init(mOwner);
             }
         }
 
@@ -85,5 +97,6 @@ namespace Devarc
             }
             mIsChanging = false;
         }
+
     }
 }

@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace Devarc
 {
-    public abstract class BaseFsmObject<STATE, OWNER> : MonoBehaviour
+    public abstract class SimpleFsmObject<STATE, OWNER>
         where STATE : struct, IConvertible
-        where OWNER : BaseObject
+        where OWNER : MonoBehaviour
     {
         public abstract STATE State { get; }
         protected virtual void onInit() { }
