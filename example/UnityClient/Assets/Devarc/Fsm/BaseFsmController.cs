@@ -17,6 +17,7 @@ namespace Devarc
         class TRANS
         {
             public STATE state;
+            public bool cancel;
             public object[] args;
         }
         List<TRANS> mChangingStates = new List<TRANS>();
@@ -33,17 +34,28 @@ namespace Devarc
             mCurrentState?.Tick();
         }
 
-        public FSM Get(STATE state)
+        public virtual FSM Get(STATE state)
         {
             FSM obj = null;
             mStates.TryGetValue(state, out obj);
             return obj;
         }
 
+        public void Cancel()
+        {
+            TRANS data = new TRANS();
+            data.state = default(STATE);
+            data.cancel = true;
+            data.args = null;
+            mChangingStates.Add(data);
+            updateState();
+        }
+
         public void ChangeState(STATE state, params object[] args)
         {
             TRANS data = new TRANS();
             data.state = state;
+            data.cancel = false;
             data.args = args;
             mChangingStates.Add(data);
             updateState();
@@ -69,19 +81,19 @@ namespace Devarc
                 var data = mChangingStates[i];
                 mChangingStates.RemoveAt(i);
 
-                FSM fsm = Get(data.state);
-                if (fsm == null)
+                FSM fsm = null;
+                if (data.cancel == false)
                 {
-                    Debug.LogError($"Cannot find FSM: key={data.state}");
-                    continue;
+                    fsm = Get(data.state);
+                    if (fsm == null)
+                    {
+                        Debug.LogError($"Cannot find FSM: key={data.state}");
+                        continue;
+                    }
                 }
-
-                if (mCurrentState != null)
-                {
-                    mCurrentState.Exit();
-                }
+                mCurrentState?.Exit(data.cancel);
                 mCurrentState = fsm;
-                mCurrentState.Enter(data.args);
+                mCurrentState?.Enter(data.args);
             }
             mIsChanging = false;
         }

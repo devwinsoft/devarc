@@ -14,11 +14,6 @@ namespace Devarc
         protected abstract void onPlayStart();
         protected virtual void onLateUpdate() { }
 
-        private void LateUpdate()
-        {
-            onLateUpdate();
-        }
-
         public void InitLoad()
         {
             onInitLoad();
@@ -27,6 +22,11 @@ namespace Devarc
         public void PlayStart()
         {
             onPlayStart();
+        }
+
+        private void LateUpdate()
+        {
+            onLateUpdate();
         }
     }
 

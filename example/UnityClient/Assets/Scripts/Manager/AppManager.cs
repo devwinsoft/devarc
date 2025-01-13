@@ -27,7 +27,7 @@ public class AppManager : MonoSingleton<AppManager>
         EffectManager.Create();
         SoundManager.Create();
         TableManager.Create();
-        UIManager.Create("UIManager");
+        UIManager.CreateFromResource("UIManager");
 
         // Initialize TableManager,
         TableManager.Instance.OnError += (errorType, args) =>

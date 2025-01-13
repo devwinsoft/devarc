@@ -38,6 +38,12 @@ namespace Devarc
             controller.InitAwake(this);
             return controller;
         }
+
+        protected void register<T>(T controller) where T : BaseController
+        {
+            mControllers.Add(controller);
+            controller.InitAwake(this);
+        }
     }
 
     public abstract class BaseObject<ABILITY> : BaseObject

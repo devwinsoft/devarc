@@ -6,6 +6,7 @@ namespace Devarc
 {
     public class EffectPlayAnim : BaseEffectPlay
     {
+        public bool playOnStart;
         public SimpleAnimList animDatas;
 
         protected SimpleAnimator Controller
@@ -75,6 +76,11 @@ namespace Devarc
 
         public override void onLateUpdate()
         {
+        }
+
+        private void Start()
+        {
+            Play();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Devarc
 
         public static bool IsCreated() => mInstance != null;
 
-        public static T Create(string resourcePath)
+        public static T CreateFromResource(string resourcePath)
         {
             if (IsCreated())
             {

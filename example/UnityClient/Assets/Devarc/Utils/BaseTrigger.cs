@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Devarc
 {
-    public class BaseTrigger<KEY>
+    public class BaseTrigger<KEY> where KEY : struct, IConvertible
     {
         public delegate bool FUNCTION(System.Object[] args);
         public delegate void FUNCTION_TIMER(System.Object[] args);

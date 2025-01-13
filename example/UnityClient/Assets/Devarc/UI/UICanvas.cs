@@ -23,7 +23,7 @@ namespace Devarc
             if (mInitialized) return;
             mInitialized = true;
 
-            var list = GetComponentsInChildren<UIFrame>();
+            var list = GetComponentsInChildren<UIFrame>(true);
             foreach (var frame in list)
             {
                 mFrames.Add(frame);

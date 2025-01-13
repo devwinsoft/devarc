@@ -11,7 +11,7 @@ namespace Devarc
         protected virtual void onInit() { }
         protected abstract void onEnter(object[] args);
         protected abstract void onExit();
-        protected virtual void onTick() { }
+        protected virtual void onTick(float deltaTime, float elapsedTime) { }
 
         public virtual void Clear()
         {
@@ -19,6 +19,7 @@ namespace Devarc
 
         public OWNER Owner => mOwner;
         protected OWNER mOwner = null;
+        float mElapseTime = 0f;
 
         public void Init(OWNER unit)
         {
@@ -28,6 +29,7 @@ namespace Devarc
 
         public virtual void Enter(object[] args)
         {
+            mElapseTime = 0f;
             onEnter(args);
         }
 
@@ -38,7 +40,9 @@ namespace Devarc
 
         public void Tick()
         {
-            onTick();
+            var deltaTime = Time.deltaTime;
+            mElapseTime += deltaTime;
+            onTick(deltaTime, mElapseTime);
         }
     }
 }

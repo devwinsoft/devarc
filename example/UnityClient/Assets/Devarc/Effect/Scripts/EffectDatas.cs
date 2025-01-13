@@ -13,6 +13,12 @@ namespace Devarc
                 return string.Empty;
             return obj.Value;
         }
+        public static implicit operator EFFECT_ID(string value)
+        {
+            EFFECT_ID obj = new EFFECT_ID();
+            obj.Value = value;
+            return obj;
+        }
         public bool IsValid
         {
             get { return !string.IsNullOrEmpty(Value); }

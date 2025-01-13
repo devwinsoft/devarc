@@ -16,7 +16,7 @@ namespace Devarc
         yield return TableManager.Instance.LoadBundleString("lstring-bin", TableFormatType.BIN, SystemLanguage.English);
 #endif
 
-            yield return EffectManager.Instance.LoadBundle("effect");
+            yield return AssetManager.Instance.LoadBundleAssets<GameObject>("effect");
             yield return SoundManager.Instance.LoadBundle("sound");
             //yield return SoundManager.Instance.LoadBundleSounds("voice", SystemLanguage.English);
 
@@ -47,7 +47,7 @@ namespace Devarc
         TableManager.Instance.UnloadBundleString("lstring-bin");
 #endif
 
-            EffectManager.Instance.UnloadBundle("effect");
+            AssetManager.Instance.UnloadBundleAssets("effect");
             SoundManager.Instance.UnloadBundle("sound");
         }
     }

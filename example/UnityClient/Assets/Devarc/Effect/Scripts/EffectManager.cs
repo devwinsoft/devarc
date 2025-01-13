@@ -10,11 +10,11 @@ namespace Devarc
     {
         World,
         Ground,
-        Unit,
+        Child,
     }
 
 
-    public class EffectManager : MonoSingleton<EffectManager>
+    public partial class EffectManager : MonoSingleton<EffectManager>
     {
         SimplePool<BaseEffectPlay> mPool = new SimplePool<BaseEffectPlay>();
 
@@ -33,32 +33,20 @@ namespace Devarc
             mPool.Clear();
         }
 
-
-        public IEnumerator LoadBundle(string addressKey)
-        {
-            var handle = AssetManager.Instance.LoadBundleAssets<GameObject>(addressKey);
-            yield return handle;
-        }
-
-
-        public void UnloadBundle(string addressKey)
-        {
-            var removeList = AssetManager.Instance.UnloadBundleAssets(addressKey);
-            foreach (var name in removeList)
-            {
-                mPool.Remove(name);
-            }
-        }
-
-
         public BaseEffectPlay CreateEffect(EFFECT_ID effectID, Transform attachTr, Vector3 offset, Vector3 euler, EFFECT_ATTACH_TYPE attachType)
+        {
+            var rotation = Quaternion.Euler(euler);
+            return CreateEffect(effectID, attachTr, offset, rotation, attachType);
+        }
+
+        public BaseEffectPlay CreateEffect(EFFECT_ID effectID, Transform attachTr, Vector3 offset, Quaternion roation, EFFECT_ATTACH_TYPE attachType)
         {
             if (effectID == null || effectID.IsValid == false)
             {
                 return null;
             }
 
-            BaseEffectPlay obj = mPool.Pop(effectID, attachTr, offset, Quaternion.Euler(euler));
+            BaseEffectPlay obj = mPool.Pop(effectID, attachTr, offset, roation);
             if (obj == null)
             {
                 return null;
@@ -74,7 +62,7 @@ namespace Devarc
                         obj.transform.SetParent(mPool.Root, true);
                     }
                     break;
-                case EFFECT_ATTACH_TYPE.Unit:
+                case EFFECT_ATTACH_TYPE.Child:
                     break;
                 default:
                     obj.transform.SetParent(mPool.Root, true);

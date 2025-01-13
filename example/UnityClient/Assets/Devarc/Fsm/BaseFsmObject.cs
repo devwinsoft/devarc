@@ -10,7 +10,7 @@ namespace Devarc
         public abstract STATE State { get; }
         protected virtual void onInit() { }
         protected abstract void onEnter(object[] args);
-        protected abstract void onExit();
+        protected abstract void onExit(bool cancel);
         protected virtual void onTick() { }
 
         public virtual void Clear()
@@ -19,6 +19,7 @@ namespace Devarc
 
         public OWNER Owner => mOwner;
         protected OWNER mOwner = null;
+        protected bool mIsEntered = false;
 
         public void Init(OWNER unit)
         {
@@ -28,12 +29,14 @@ namespace Devarc
 
         public virtual void Enter(object[] args)
         {
+            mIsEntered = true;
             onEnter(args);
         }
 
-        public virtual void Exit()
+        public virtual void Exit(bool cancel)
         {
-            onExit();
+            mIsEntered = false;
+            onExit(cancel);
         }
 
         public void Tick()

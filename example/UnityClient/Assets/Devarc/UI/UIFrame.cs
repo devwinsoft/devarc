@@ -13,6 +13,7 @@ public abstract class UIFrame<T> : UIFrame where T : UICanvas
 {
     protected abstract void onInit();
 
+    public T canvas => mCanvas;
     protected T mCanvas;
 
     public sealed override void Init(UICanvas canvas)

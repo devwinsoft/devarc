@@ -164,6 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fcc28fb755f00b40806e98982af56c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playOnStart: 0
   animDatas:
     list:
     - Clip: {fileID: 7400000, guid: 1d5b345be3ce2e846810d3d7ef3f0eea, type: 2}

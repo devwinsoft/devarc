@@ -23,6 +23,13 @@ namespace Devarc
             return value;
         }
 
+        public static T SafeGetElement<T>(this object[] args, int index)
+        {
+            if (args == null) return default(T);
+            if (index < 0 || index >= args.Length) return default(T);
+            return (T)args[index];
+        }
+
         public static bool IsValid(this string value) => !string.IsNullOrWhiteSpace(value);
 
         public static Transform FindRecursive(this Transform self, string exactName) => self.FindRecursive(child => child.name == exactName);
@@ -80,12 +87,12 @@ namespace Devarc
             return result;
         }
 
-        public static Vector2 ToUIPos(this Vector3 worldPos, Camera worldCam, RectTransform canvasTr)
+        public static Vector2 WorldToScreen(this Vector3 worldPos, Camera worldCam, RectTransform rectTransform)
         {
             Vector2 viewPort = worldCam.WorldToViewportPoint(worldPos);
             Vector2 screenPos = new Vector2(
-            ((viewPort.x * canvasTr.sizeDelta.x) - (canvasTr.sizeDelta.x * 0.5f)),
-            ((viewPort.y * canvasTr.sizeDelta.y) - (canvasTr.sizeDelta.y * 0.5f)));
+            ((viewPort.x * rectTransform.sizeDelta.x) - (rectTransform.sizeDelta.x * 0.5f)),
+            ((viewPort.y * rectTransform.sizeDelta.y) - (rectTransform.sizeDelta.y * 0.5f)));
 
             var anchoredPosition = screenPos;
             return anchoredPosition;
