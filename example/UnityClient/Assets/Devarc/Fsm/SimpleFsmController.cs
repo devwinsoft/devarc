@@ -88,12 +88,13 @@ namespace Devarc
                     continue;
                 }
 
+                STATE lastState = default(STATE);
                 if (mCurrentState != null)
                 {
-                    mCurrentState.Exit();
+                    mCurrentState.Exit(data.state);
                 }
                 mCurrentState = fsm;
-                mCurrentState.Enter(data.args);
+                mCurrentState.Enter(lastState, data.args);
             }
             mIsChanging = false;
         }

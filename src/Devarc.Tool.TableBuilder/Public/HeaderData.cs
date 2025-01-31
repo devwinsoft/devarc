@@ -29,8 +29,9 @@ namespace Devarc
     public class HeaderData
     {
         public string SheetName = string.Empty;
-        public string KeyTypeName = string.Empty;
+        public int KeyIndex = 0;
         public string KeyFieldName = string.Empty;
+        public string KeyTypeName = string.Empty;
         public bool ShowKey = false;
         public string DisplayName = string.Empty;
         public bool IsDataSheet = false;
@@ -94,8 +95,9 @@ namespace Devarc
                         field.isClass = options.Contains("class");
                         if (options.Contains("key"))
                         {
-                            KeyTypeName = field.fieldType;
+                            KeyIndex = c;
                             KeyFieldName = field.fieldName;
+                            KeyTypeName = field.fieldType;
                             if (options.Contains("show"))
                                 ShowKey = true;
                         }

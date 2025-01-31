@@ -106,7 +106,7 @@ namespace Devarc
                 switch (formatType)
                 {
                     case TableFormatType.BIN:
-                        return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.stringDirectory}/bin";
+                        return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.tableDirectory}/bin";
                     default:
                         return $"{Instance.defaultDirectory.bundlePath}/{Instance.defaultDirectory.tableDirectory}/json";
                 }

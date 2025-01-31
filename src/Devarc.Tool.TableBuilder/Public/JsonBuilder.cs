@@ -47,6 +47,9 @@ namespace Devarc
                     var row = sheet.GetRow(r);
                     if (row == null)
                         continue;
+                    var keyCell = row.GetCell(mCurrentHeader.KeyIndex);
+                    if (keyCell == null)
+                        continue;
                     onReadRow(row, sw, isFirstLine);
                     isFirstLine = false;
                 }

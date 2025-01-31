@@ -9,8 +9,8 @@ namespace Devarc
     {
         public abstract STATE State { get; }
         protected virtual void onInit() { }
-        protected abstract void onEnter(object[] args);
-        protected abstract void onExit();
+        protected abstract void onEnter(STATE state, object[] args);
+        protected abstract void onExit(STATE state);
         protected virtual void onTick(float deltaTime, float elapsedTime) { }
 
         public virtual void Clear()
@@ -27,15 +27,15 @@ namespace Devarc
             onInit();
         }
 
-        public virtual void Enter(object[] args)
+        public virtual void Enter(STATE state, object[] args)
         {
             mElapseTime = 0f;
-            onEnter(args);
+            onEnter(state, args);
         }
 
-        public virtual void Exit()
+        public virtual void Exit(STATE state)
         {
-            onExit();
+            onExit(state);
         }
 
         public void Tick()

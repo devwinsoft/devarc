@@ -8,7 +8,7 @@ namespace Devarc
 		public string               unit_id;
 		public string               name_id;
 
-		public virtual int          get_unit_id() => GetInt(unit_id);
+		public virtual string       get_unit_id() => (unit_id);
 		public virtual string       get_name_id() => (name_id);
 	}
 
@@ -19,11 +19,11 @@ namespace Devarc
 
 	[System.Serializable]
 	[MessagePackObject]
-	public partial class UNIT_HERO : ITableData<_UNIT_HERO, int>
+	public partial class UNIT_HERO : ITableData<_UNIT_HERO, string>
 	{
-		public int GetKey() { return unit_id; }
+		public string GetKey() { return unit_id; }
 		[Key(0)]
-		public int                  unit_id;
+		public string               unit_id;
 		[Key(1)]
 		public string               name_id;
 
@@ -40,7 +40,7 @@ namespace Devarc
 		public string               unit_id;
 		public string               name_id;
 
-		public virtual int          get_unit_id() => GetInt(unit_id);
+		public virtual string       get_unit_id() => (unit_id);
 		public virtual string       get_name_id() => (name_id);
 	}
 
@@ -51,11 +51,11 @@ namespace Devarc
 
 	[System.Serializable]
 	[MessagePackObject]
-	public partial class UNIT_MONSTER : ITableData<_UNIT_MONSTER, int>
+	public partial class UNIT_MONSTER : ITableData<_UNIT_MONSTER, string>
 	{
-		public int GetKey() { return unit_id; }
+		public string GetKey() { return unit_id; }
 		[Key(0)]
-		public int                  unit_id;
+		public string               unit_id;
 		[Key(1)]
 		public string               name_id;
 

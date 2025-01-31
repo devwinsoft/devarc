@@ -7,7 +7,7 @@ using UnityEditor;
 using MessagePack;
 namespace Devarc
 {
-	public class _UNIT_HERO_TABLE : TableData<UNIT_HERO, _UNIT_HERO, int>
+	public class _UNIT_HERO_TABLE : TableData<UNIT_HERO, _UNIT_HERO, string>
 	{
 		public _UNIT_HERO_TABLE()
 		{
@@ -51,7 +51,7 @@ namespace Devarc
 #endif
 		}
 	}
-	public class _UNIT_MONSTER_TABLE : TableData<UNIT_MONSTER, _UNIT_MONSTER, int>
+	public class _UNIT_MONSTER_TABLE : TableData<UNIT_MONSTER, _UNIT_MONSTER, string>
 	{
 		public _UNIT_MONSTER_TABLE()
 		{
