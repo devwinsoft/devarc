@@ -12,8 +12,8 @@ namespace Devarc
             yield return TableManager.Instance.LoadBundleTable("table-json", TableFormatType.JSON);
             yield return TableManager.Instance.LoadBundleString("lstring-json", TableFormatType.JSON, SystemLanguage.English);
 #else
-        yield return TableManager.Instance.LoadBundleTable("table-bin", TableFormatType.BIN);
-        yield return TableManager.Instance.LoadBundleString("lstring-bin", TableFormatType.BIN, SystemLanguage.English);
+            yield return TableManager.Instance.LoadBundleTable("table-bin", TableFormatType.BIN);
+            yield return TableManager.Instance.LoadBundleString("lstring-bin", TableFormatType.BIN, SystemLanguage.English);
 #endif
 
             yield return AssetManager.Instance.LoadBundleAssets<GameObject>("effect");
@@ -43,8 +43,8 @@ namespace Devarc
             TableManager.Instance.UnloadBundleTable("table-json");
             TableManager.Instance.UnloadBundleString("lstring-json");
 #else
-        TableManager.Instance.UnloadBundleTable("table-bin");
-        TableManager.Instance.UnloadBundleString("lstring-bin");
+            TableManager.Instance.UnloadBundleTable("table-bin");
+            TableManager.Instance.UnloadBundleString("lstring-bin");
 #endif
 
             AssetManager.Instance.UnloadBundleAssets("effect");
