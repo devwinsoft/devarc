@@ -1,5 +1,5 @@
 const STAT_TYPE = {
-	None                 : 0,
+	None                 = 0,
 };
 Object.freeze(STAT_TYPE);
 
@@ -32,15 +32,15 @@ class VECTOR3
 }
 
 const ErrorType = {
-	SUCCESS              : 0,
-	UNKNOWN              : 1,
-	DATABASE_ERROR       : 2,
-	PROTOCOL_ERROR       : 3,
-	SERVER_ERROR         : 4,
-	SESSION_EXPIRED      : 5,
-	SESSION_REMAIN       : 6,
-	INVALID_PASSWORD     : 7,
-	INVALID_SECRET       : 8,
+	SUCCESS              = 0,
+	UNKNOWN              = 1,
+	DATABASE_ERROR       = 2,
+	PROTOCOL_ERROR       = 3,
+	SERVER_ERROR         = 4,
+	SESSION_EXPIRED      = 5,
+	SESSION_REMAIN       = 6,
+	INVALID_PASSWORD     = 7,
+	INVALID_SECRET       = 8,
 };
 Object.freeze(ErrorType);
 
@@ -72,7 +72,7 @@ class CustomSigninResult
 	 */
 	constructor() {
 		this.errorCode = 0;
-		this.secret = "";
+		this.secret = 0;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -96,7 +96,7 @@ class GoogleCodeResult
 	 */
 	constructor() {
 		this.errorCode = 0;
-		this.code = "";
+		this.code = 0;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -124,11 +124,11 @@ class GoogleSigninResult
 	 */
 	constructor() {
 		this.errorCode = 0;
-		this.account_id = "";
-		this.access_token = "";
-		this.refresh_token = "";
+		this.account_id = 0;
+		this.access_token = 0;
+		this.refresh_token = 0;
 		this.expires_in = 0;
-		this.secret = "";
+		this.secret = 0;
 	}
 	Init(packet) {
 		this.errorCode = packet[0];
@@ -162,8 +162,8 @@ class GoogleRefreshResult
 	 */
 	constructor() {
 		this.errorCode = 0;
-		this.access_token = "";
-		this.refresh_token = "";
+		this.access_token = 0;
+		this.refresh_token = 0;
 		this.expires_in = 0;
 	}
 	Init(packet) {

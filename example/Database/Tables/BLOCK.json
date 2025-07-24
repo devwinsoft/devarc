@@ -1,0 +1,23 @@
+{"list":[
+{"block_id":"block_poison","block_type":"Poison","affect_list":"affect_poison","icon":"icon_poison_1"}
+,{ "block_id":"block_dark_1","block_type":"Dark","affect_list":"affect_dark","icon":"icon_dark_1"}
+,{ "block_id":"block_dark_2","block_type":"Dark","affect_list":"affect_dark","icon":"icon_dark_1"}
+,{ "block_id":"block_dark_3","block_type":"Dark","affect_list":"affect_dark","icon":"icon_dark_1"}
+,{ "block_id":"block_dark_4","block_type":"Dark","affect_list":"affect_dark","icon":"icon_dark_1"}
+,{ "block_id":"block_ice_1","block_type":"Ice","affect_list":"affect_ice","icon":"icon_ice_1"}
+,{ "block_id":"block_ice_2","block_type":"Ice","affect_list":"affect_ice","icon":"icon_ice_1"}
+,{ "block_id":"block_ice_3","block_type":"Ice","affect_list":"affect_ice","icon":"icon_ice_1"}
+,{ "block_id":"block_ice_4","block_type":"Ice","affect_list":"affect_ice","icon":"icon_ice_1"}
+,{ "block_id":"block_fire_1","block_type":"Fire","affect_list":"affect_fire","icon":"icon_fire_1"}
+,{ "block_id":"block_fire_2","block_type":"Fire","affect_list":"affect_fire","icon":"icon_fire_1"}
+,{ "block_id":"block_fire_3","block_type":"Fire","affect_list":"affect_fire","icon":"icon_fire_1"}
+,{ "block_id":"block_fire_4","block_type":"Fire","affect_list":"affect_fire","icon":"icon_fire_1"}
+,{ "block_id":"block_heal_1","block_type":"Heal","affect_list":"affect_heal","icon":"icon_heal_1"}
+,{ "block_id":"block_heal_2","block_type":"Heal","affect_list":"affect_heal","icon":"icon_heal_1"}
+,{ "block_id":"block_heal_3","block_type":"Heal","affect_list":"affect_heal","icon":"icon_heal_1"}
+,{ "block_id":"block_heal_4","block_type":"Heal","affect_list":"affect_heal","icon":"icon_heal_1"}
+,{ "block_id":"block_lightning_1","block_type":"Lightning","affect_list":"affect_lightning","icon":"icon_air_1"}
+,{ "block_id":"block_lightning_2","block_type":"Lightning","affect_list":"affect_lightning","icon":"icon_air_1"}
+,{ "block_id":"block_lightning_3","block_type":"Lightning","affect_list":"affect_lightning","icon":"icon_air_1"}
+,{ "block_id":"block_lightning_4","block_type":"Lightning","affect_list":"affect_lightning","icon":"icon_air_1"}
+]}

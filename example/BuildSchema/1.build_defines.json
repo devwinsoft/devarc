@@ -1,0 +1,38 @@
+{ "list": [
+    {
+        "language":"cs",
+        "sources": [
+            "./Defines/Common.cs"
+        ],
+        "source_outputs": [
+            "../CSharpServers/GameServer/Generated/Defines/",
+            "../UnityClient/Assets/Scripts/Generated/Defines/"
+        ],
+
+        "protocols": [
+            "./Protocols/AuthProtocol.cs",
+            "./Protocols/GameProtocol.cs"
+        ],
+        "protocol_outputs": [
+            "../CSharpServers/GameServer/Generated/Protocols/",
+            "../UnityClient/Assets/Scripts/Generated/Protocols/"
+        ]
+    },
+    {
+        "language":"js",
+        "sources": [
+            "./Defines/Common.cs"
+        ],
+        "source_outputs": [
+            "../NodeServers/Protocols/"
+        ],
+
+        "protocols": [
+            "./Protocols/AuthProtocol.cs",
+            "./Protocols/GameProtocol.cs"
+        ],
+        "protocol_outputs": [
+            "../NodeServers/Protocols/"
+        ]
+    }
+] }

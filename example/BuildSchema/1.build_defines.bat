@@ -1,10 +1,5 @@
-set IDL=..\..\bin\IDL.exe
+..\..\bin\Devarc.Tools.IDL -"1.build_defines.json"
 
-..\..\bin\IDL.exe -cs-def  .\Defines\Common.def
-copy /Y   *.cs    ..\CSharpServers\GameServer\Generated\Defines\
-move /Y   *.cs    ..\UnityClient\Assets\Scripts\Generated\Defines\
-
-..\..\bin\IDL.exe -js-def  .\Defines\Common.def
-move /Y   *.js    ..\NodeServers\Protocols\
+# mpc -i ..\UnityClient\ -o ..\UnityClient\Assets\Scripts\Generated\MsgPack
 
 pause

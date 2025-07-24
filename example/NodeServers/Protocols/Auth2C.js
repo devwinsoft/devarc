@@ -1,37 +1,23 @@
 const msgpack = require('msgpack-lite');
-const Common = require('./Common.js');
-const STAT_TYPE = Common.STAT_TYPE;
-const VECTOR3 = Common.VECTOR3;
-const ErrorType = Common.ErrorType;
-const CommonResult = Common.CommonResult;
-const CustomSigninResult = Common.CustomSigninResult;
-const GoogleCodeResult = Common.GoogleCodeResult;
-const GoogleSigninResult = Common.GoogleSigninResult;
-const GoogleRefreshResult = Common.GoogleRefreshResult;
-const mHandlers = {};
 class NotifySession
 {
 	/**
 	 * @param {string} sessionID - string
 	 * @param {int} secret - int
-	 * @param {ErrorType} errorCode - ErrorType
 	 */
 	constructor() {
-		this.sessionID = "";
+		this.sessionID = 0;
 		this.secret = 0;
-		this.errorCode = 0;
 	}
 	Init(packet) {
 		this.sessionID = packet[0];
 		this.secret = packet[1];
-		this.errorCode = packet[2];
 	}
 	ToArray() {
 		const data =
 		[
 			this.sessionID,
 			this.secret,
-			this.errorCode,
 		];
 		return data;
 	}
@@ -42,24 +28,20 @@ class NotifyLogin
 	/**
 	 * @param {string} sessionID - string
 	 * @param {int} secret - int
-	 * @param {ErrorType} errorCode - ErrorType
 	 */
 	constructor() {
-		this.sessionID = "";
+		this.sessionID = 0;
 		this.secret = 0;
-		this.errorCode = 0;
 	}
 	Init(packet) {
 		this.sessionID = packet[0];
 		this.secret = packet[1];
-		this.errorCode = packet[2];
 	}
 	ToArray() {
 		const data =
 		[
 			this.sessionID,
 			this.secret,
-			this.errorCode,
 		];
 		return data;
 	}
@@ -68,18 +50,14 @@ class NotifyLogin
 class NotifyLogout
 {
 	/**
-	 * @param {ErrorType} errorCode - ErrorType
 	 */
 	constructor() {
-		this.errorCode = 0;
 	}
 	Init(packet) {
-		this.errorCode = packet[0];
 	}
 	ToArray() {
 		const data =
 		[
-			this.errorCode,
 		];
 		return data;
 	}
@@ -90,24 +68,20 @@ class NotifySignin
 	/**
 	 * @param {string} sessionID - string
 	 * @param {int} secret - int
-	 * @param {ErrorType} errorCode - ErrorType
 	 */
 	constructor() {
-		this.sessionID = "";
+		this.sessionID = 0;
 		this.secret = 0;
-		this.errorCode = 0;
 	}
 	Init(packet) {
 		this.sessionID = packet[0];
 		this.secret = packet[1];
-		this.errorCode = packet[2];
 	}
 	ToArray() {
 		const data =
 		[
 			this.sessionID,
 			this.secret,
-			this.errorCode,
 		];
 		return data;
 	}
@@ -116,18 +90,14 @@ class NotifySignin
 class NotifyError
 {
 	/**
-	 * @param {ErrorType} errorCode - ErrorType
 	 */
 	constructor() {
-		this.errorCode = 0;
 	}
 	Init(packet) {
-		this.errorCode = packet[0];
 	}
 	ToArray() {
 		const data =
 		[
-			this.errorCode,
 		];
 		return data;
 	}

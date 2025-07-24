@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <Nullable>enable</Nullable>
+        <LangVersion>13</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="Redis" Version="1.0.3" />
+      <PackageReference Include="ServiceStack" Version="8.8.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Public\" />
+    </ItemGroup>
+
+</Project>

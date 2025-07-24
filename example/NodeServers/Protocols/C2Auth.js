@@ -1,29 +1,15 @@
 const msgpack = require('msgpack-lite');
-const Common = require('./Common.js');
-const STAT_TYPE = Common.STAT_TYPE;
-const VECTOR3 = Common.VECTOR3;
-const ErrorType = Common.ErrorType;
-const CommonResult = Common.CommonResult;
-const CustomSigninResult = Common.CustomSigninResult;
-const GoogleCodeResult = Common.GoogleCodeResult;
-const GoogleSigninResult = Common.GoogleSigninResult;
-const GoogleRefreshResult = Common.GoogleRefreshResult;
-const mHandlers = {};
 class RequestSession
 {
 	/**
-	 * @param {ErrorType} errorCode - ErrorType
 	 */
 	constructor() {
-		this.errorCode = 0;
 	}
 	Init(packet) {
-		this.errorCode = packet[0];
 	}
 	ToArray() {
 		const data =
 		[
-			this.errorCode,
 		];
 		return data;
 	}
@@ -34,24 +20,20 @@ class RequestLogin
 	/**
 	 * @param {string} accountID - string
 	 * @param {string} password - string
-	 * @param {ErrorType} errorCode - ErrorType
 	 */
 	constructor() {
-		this.accountID = "";
-		this.password = "";
-		this.errorCode = 0;
+		this.accountID = 0;
+		this.password = 0;
 	}
 	Init(packet) {
 		this.accountID = packet[0];
 		this.password = packet[1];
-		this.errorCode = packet[2];
 	}
 	ToArray() {
 		const data =
 		[
 			this.accountID,
 			this.password,
-			this.errorCode,
 		];
 		return data;
 	}
@@ -60,18 +42,14 @@ class RequestLogin
 class RequestLogout
 {
 	/**
-	 * @param {ErrorType} errorCode - ErrorType
 	 */
 	constructor() {
-		this.errorCode = 0;
 	}
 	Init(packet) {
-		this.errorCode = packet[0];
 	}
 	ToArray() {
 		const data =
 		[
-			this.errorCode,
 		];
 		return data;
 	}
@@ -82,24 +60,20 @@ class RequestSignin
 	/**
 	 * @param {string} accountID - string
 	 * @param {string} password - string
-	 * @param {ErrorType} errorCode - ErrorType
 	 */
 	constructor() {
-		this.accountID = "";
-		this.password = "";
-		this.errorCode = 0;
+		this.accountID = 0;
+		this.password = 0;
 	}
 	Init(packet) {
 		this.accountID = packet[0];
 		this.password = packet[1];
-		this.errorCode = packet[2];
 	}
 	ToArray() {
 		const data =
 		[
 			this.accountID,
 			this.password,
-			this.errorCode,
 		];
 		return data;
 	}

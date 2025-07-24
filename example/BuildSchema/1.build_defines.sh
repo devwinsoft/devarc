@@ -1,0 +1,1 @@
+../../bin/Devarc.Tools.IDL "1.build_defines.json"

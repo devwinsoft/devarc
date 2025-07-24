@@ -1,0 +1,1 @@
+../../bin/Devarc.Tools.TableBuilder "2.build_tables.json"

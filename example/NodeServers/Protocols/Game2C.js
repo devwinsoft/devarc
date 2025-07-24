@@ -1,14 +1,4 @@
 const msgpack = require('msgpack-lite');
-const Common = require('./Common.js');
-const STAT_TYPE = Common.STAT_TYPE;
-const VECTOR3 = Common.VECTOR3;
-const ErrorType = Common.ErrorType;
-const CommonResult = Common.CommonResult;
-const CustomSigninResult = Common.CustomSigninResult;
-const GoogleCodeResult = Common.GoogleCodeResult;
-const GoogleSigninResult = Common.GoogleSigninResult;
-const GoogleRefreshResult = Common.GoogleRefreshResult;
-const mHandlers = {};
 class NotifyLogin
 {
 	/**

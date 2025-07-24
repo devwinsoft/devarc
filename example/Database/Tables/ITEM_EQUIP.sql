@@ -1,1 +1,0 @@
-truncate `ITEM_EQUIP`;

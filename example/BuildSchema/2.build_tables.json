@@ -1,0 +1,42 @@
+{
+  "config" :
+  {
+    "client_script" : "../UnityClient/Assets/Scripts/Generated/",
+    "client_bundle" : "../UnityClient/Assets/Bundles/Tables/json/",
+    "client_resource" : "../UnityClient/Assets/Resources/Tables/json/",
+    "language_bundle" : "../UnityClient/Assets/Bundles/LStrings/json/",
+    "language_resource" : "../UnityClient/Assets/Resources/LStrings/json/",
+    
+    "server_script" : "../CSharpServers/GameServer/Generated/Tables/",
+    "server_database" : "../Database/Tables/"
+  },
+  
+  "tables" : [
+    {
+      "type" : "common",
+      "files" : [
+        "Tables/ItemTable.xlsx",
+        "Tables/GameTable.xlsx",
+        "Tables/SkillTable.xlsx",
+        "Tables/UnitTable.xlsx"
+      ]
+    },
+    {
+      "type" : "client",
+      "files" : [
+        "Tables/SoundTable.xlsx"
+      ]
+    },
+    {
+      "type" : "server",
+      "files" : [
+      ]
+    },
+    {
+      "type" : "string",
+      "files" : [
+        "Tables/StringTable.xlsx"
+      ]
+    }
+  ]
+}
