@@ -133,8 +133,8 @@ namespace Devarc
             if (string.IsNullOrEmpty(cfg.client_script) == false)
             {
                 var folderName = Path.Combine(cfg.client_script, "Editor");
-                if (Directory.Exists(folderName) == false)
-                    Directory.CreateDirectory(folderName);
+                Utils.EnsureDirectory(folderName);
+
                 var destPath = Path.Combine(folderName, tableCodePath);
                 File.Copy(tableCodePath, destPath, true);
                 Console.WriteLine($"Copy to: {destPath}");

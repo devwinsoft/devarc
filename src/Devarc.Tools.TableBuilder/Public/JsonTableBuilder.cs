@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NPOI.SS.UserModel;
 using System.Text.RegularExpressions;
 using NPOI.HSSF.UserModel;
@@ -69,8 +67,8 @@ namespace Devarc
             if ((exportType & EXPORT_TYPE.Server) != 0)
             {
                 var folderName = cfg.server_database;
-                if (Directory.Exists(folderName) == false)
-                    Directory.CreateDirectory(folderName);
+                Utils.EnsureDirectory(folderName);
+
                 var destPath = Path.Combine(folderName, filePath);
                 File.Copy(filePath, destPath, true);
                 Console.WriteLine($"Copy to: {destPath}");

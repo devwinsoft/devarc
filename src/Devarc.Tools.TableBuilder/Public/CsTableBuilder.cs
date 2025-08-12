@@ -36,8 +36,7 @@ namespace Devarc
             if ((exportType & EXPORT_TYPE.Client) != 0)
             {
                 var folderName = cfg.client_script;
-                if (Directory.Exists(folderName) == false)
-                    Directory.CreateDirectory(folderName);
+                Utils.EnsureDirectory(folderName);
 
                 var destPath = Path.Combine(folderName, fileNameEx);
                 File.Copy(fileNameEx, destPath, true);
@@ -46,9 +45,8 @@ namespace Devarc
             if ((exportType & EXPORT_TYPE.Server) != 0)
             {
                 var folderName = cfg.server_script;
-                if (Directory.Exists(folderName) == false)
-                    Directory.CreateDirectory(folderName);
-                
+                Utils.EnsureDirectory(folderName);
+
                 var destPath = Path.Combine(folderName, fileNameEx);
                 File.Copy(fileNameEx, Path.Combine(folderName, fileNameEx), true);
                 Console.WriteLine($"Copy to: {destPath}");

@@ -72,6 +72,7 @@ namespace Devarc
             File.WriteAllText(data.fileName, sb.ToString());
             foreach (var outputDir in cfg.source_outputs)
             {
+                Utils.EnsureDirectory(outputDir);
                 File.Copy(data.fileName, Path.Combine(outputDir, fileName), true);
             }
             File.Delete(data.fileName);

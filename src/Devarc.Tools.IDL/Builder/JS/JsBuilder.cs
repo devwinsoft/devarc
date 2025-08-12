@@ -75,6 +75,7 @@ namespace Devarc
                 string fileName = $"{sourceData.fileName}.js";
                 foreach (var outputDir in cfg.source_outputs)
                 {
+                    Utils.EnsureDirectory(outputDir);
                     File.Copy(fileName, Path.Combine(outputDir, fileName), true);
                 }
                 File.Delete(fileName);

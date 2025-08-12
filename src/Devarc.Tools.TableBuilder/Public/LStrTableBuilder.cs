@@ -101,8 +101,8 @@ namespace Devarc
                 var folderName = isResource
                     ? Path.Combine(cfg.language_resource, data.language)
                     : Path.Combine(cfg.language_bundle, data.language);
-                if (Directory.Exists(folderName) == false)
-                    Directory.CreateDirectory(folderName);
+                Utils.EnsureDirectory(folderName);
+
                 var destPath = Path.Combine(folderName, filePath);
                 File.Copy(filePath, destPath, true);
                 File.Delete(filePath);
