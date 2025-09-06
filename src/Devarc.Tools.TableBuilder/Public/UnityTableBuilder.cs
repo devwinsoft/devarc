@@ -132,7 +132,7 @@ namespace Devarc
 
             if (string.IsNullOrEmpty(cfg.client_script) == false)
             {
-                var folderName = Path.Combine(cfg.client_script, "Editor");
+                var folderName = Path.Combine(cfg.client_script, "Tables");
                 if (Directory.Exists(folderName) == false)
                     Directory.CreateDirectory(folderName);
                 var destPath = Path.Combine(folderName, tableCodePath);
